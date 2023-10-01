@@ -22,3 +22,10 @@ The initial dependencies can be installed from the  requirements.txt file.
 Copy code:
 pip install -r requirements.txt
 
+Sometimes the Django module doesn't install properly. If so, run: pip install Django
+
+Update the database models before creating a superuser:
+cd aml_application
+python manage.py migrate
+python manage.py makemigrations
+python manage.py createsuperuser
