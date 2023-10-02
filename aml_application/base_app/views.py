@@ -12,4 +12,4 @@ def home(request):
 
 
 def index(request):
-    return render(request, 'base_app/index.html')
+    return render(request, 'index.html')
