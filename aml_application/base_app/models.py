@@ -1,6 +1,22 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    USER_TYPE_CHOICES = [
+        ('tAcsp', 'Trust or Company Service Provider'),
+        ('fiAc', 'Financial Institutions or Casino'),
+        ('lAc', 'Lawyer or Conveyancer'),
+        ('accountants', 'Accountant'),
+        ('rea', 'Real Estate Agent'),
+        ('hvd', 'High Value Dealer'),
+        ('tab', 'TAB New Zealand'),
+        ('vasp', 'Virtual Asset Service Provider'),
+    ]
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
 
 
 class Customer(models.Model):
@@ -10,8 +26,11 @@ class Customer(models.Model):
     address = models.CharField(max_length=200)
     phone = models.IntegerField()
     email = models.EmailField(max_length=50)
+    customer_created_time = models.DateTimeField(auto_now_add=True)
     identity_verified = models.BooleanField(default=False, null=True)
+    identity_verified_time = models.DateTimeField(auto_now_add=True)
     address_verified = models.BooleanField(default=False, null=True)
+    address_verified_time = models.DateTimeField(auto_now_add=True)
     additional_info = models.CharField(max_length=500, null=True)
 
     class Meta:
@@ -29,6 +48,7 @@ class Company(models.Model):
 
     class Meta:
         ordering = ('name',)
+        verbose_name_plural = 'Companies'
 
     def __str__(self):
         return self.name
@@ -50,7 +70,7 @@ class Shareholder(models.Model):
         return self.customer
 
 
-class Active_Sessions(models.Model):
+class Active_Session(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     url = models.URLField(null=False, max_length=200)
