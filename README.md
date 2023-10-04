@@ -29,3 +29,23 @@ cd aml_application
 python manage.py migrate
 python manage.py makemigrations
 python manage.py createsuperuser
+
+### Installing postgreSQL database
+If pgAdmin is installed you should have 'SQL Shell (psql)' installed on your system as well. Run this command and enter the details to login to the postgres instance.
+This should be by default:\
+Server - 'localhost'\
+Database - 'postgres'\
+Port - '5432'\
+Username - 'postgres'
+
+Enter your password then run the following SQL command 
+```SQL
+CREATE DATABASE aml_application
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+```
+Ensure you run migrate and createsuperuser commands again on the new database
+
