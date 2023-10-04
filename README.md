@@ -47,5 +47,7 @@ CREATE DATABASE aml_application
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
 ```
+The postgress password will need to be changed to 'Adminadmin123' using `\password postgres` in the SQL Shell
+
 Ensure you run migrate and createsuperuser commands again on the new database
 
