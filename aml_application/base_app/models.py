@@ -18,6 +18,9 @@ class UserProfile(models.Model):
     ]
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
 
+    def __str__(self):
+        return self.user_type
+
 
 class Customer(models.Model):
     id = models.AutoField(primary_key=True)

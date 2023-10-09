@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-# from .models import
+from .models import UserProfile, User
 from .forms import LoginForm, RegisterForm
 
 
@@ -20,17 +20,19 @@ def login(request):
         form = LoginForm(request.POST)
 
         if form.is_valid():
-            print("Login successful")
-            messages.success(request, 'Login successful')
-            return redirect('/index')
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
 
-        else:
-            print("Login failed")
-            messages.error(request, 'Login failed')
-            return redirect('/login')
+            user = authenticate(request, username=username, password=password)
 
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Login successful')
+                return redirect('/index')
+            else:
+                messages.error(request, 'Login failed')
+                return redirect('/login')
     else:
-        print("not post")
         form = LoginForm(request)
 
     return render(request, 'login.html', {'form': form})
@@ -41,11 +43,21 @@ def register(request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Registration successful')
+            email = form.cleaned_data['email']
+            if User.objects.filter(email=email).exists():
+                messages.error(
+                    request, 'A user with this email address already exists.')
+                return redirect('/register')
 
-            return redirect('/login')
+            user = form.save()
+            user_profile = UserProfile.objects.create(
+                user=user, user_type=form.cleaned_data['userType'])
+            # Manually create a user session after registration
+            request.session['user_id'] = user.id
+
+            messages.success(request, 'Registration successful')
+            return redirect('/index')
     else:
         form = RegisterForm()
 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html', {'form': form, 'messages': messages.get_messages(request)})

@@ -17,7 +17,7 @@ class LoginForm(AuthenticationForm):
 class RegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2')
+        fields = ('email', 'password1', 'password2', 'userType')
 
     def clean_username(self):
         # Override the clean_username method to return the email as the username
