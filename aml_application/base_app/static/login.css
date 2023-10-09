@@ -1,0 +1,8 @@
+.home-body {
+    background-image: url("background-AML.jpg");
+    background-repeat: no-repeat;
+    width:100%;
+    height:850px;
+    background-size: cover;
+    background-position: center center;        
+  }
