@@ -28,6 +28,7 @@ share/python-wheels/
 /.vs
 .vscode
 /.vscode
+aml_application/static/admin
 MANIFEST
 
 # PyInstaller
