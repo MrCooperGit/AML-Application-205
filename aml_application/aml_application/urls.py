@@ -24,5 +24,6 @@ urlpatterns = [
     path('index/', views.index, name='index'),
     # url to customer_due_diligence app
     path('cdd/', include('customer_due_diligence.urls')),
+    path('landing/', include('landing_app.urls')),
     path('admin/', admin.site.urls),
 ]
