@@ -12,11 +12,36 @@
         crossorigin="anonymous"
     />
 </head>
+<!-- This page is the main page for the application, it consists of a sidebar with all the different forms on it, then when clicking on one of them, will create a new tab to the right of it. 
+This tab system shows all the active forms that are currently being filled out.  -->
 <body>
     <div class="container-fluid">
-        <aside class="sidebar">
+        <div class="row">
+            <aside class="sidebar col-md-2" style="background-color:red;">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Dashboard
+                        </a>
+                    </li>
+                </ul>
+            </aside>
             
-        </aside>
+            <section class="content col-md-10" style="background-color:blue;">
+                Content
+            </section>
+        </div>
+            
     </div>
 
 
