@@ -11,6 +11,13 @@
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
         crossorigin="anonymous"
     />
+    <style>
+        .tabs-container .nav-link::after {
+            content: "x";
+            font-weight: bold;
+            margin-left: 5px;
+        }
+    </style>
 </head>
 <!-- This page is the main page for the application, it consists of a sidebar with all the different forms on it, then when clicking on one of them, will create a new tab to the right of it. 
 This tab system shows all the active forms that are currently being filled out.  -->
@@ -38,7 +45,28 @@ This tab system shows all the active forms that are currently being filled out. 
             </aside>
             
             <section class="content col-md-10" style="background-color:blue;">
-                Content
+                <div class="tabs-container">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="">
+                                cddForm get
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/landing/cddForm">
+                                cddForm uri
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                app 3
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="app-container">
+                    {% include app_template_name %}
+                </div>
             </section>
         </div>
             
