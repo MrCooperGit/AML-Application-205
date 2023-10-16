@@ -23,7 +23,9 @@ def index(request, app_name=None):
         # need to render the app template if the app name is valid else redirect to /landing
         if app_name not in app_database:
             return redirect('/landing')
-
+    
+    # user is here if app name is valid
+    
     # format the app_template in preparation for rendering
     app_template_name = f'{app_name}.html'
     
