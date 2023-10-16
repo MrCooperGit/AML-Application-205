@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, Entity
 
 
 class LoginForm(AuthenticationForm):
@@ -17,7 +17,7 @@ class LoginForm(AuthenticationForm):
 class RegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2', 'userType')
+        fields = ('email', 'password1', 'password2', 'userType', 'entity')
 
     def clean_username(self):
         # Override the clean_username method to return the email as the username
@@ -31,9 +31,9 @@ class RegisterForm(UserCreationForm):
         return user
 
     userType = forms.ChoiceField(
-        choices=UserProfile.USER_TYPE_CHOICES,
-        widget=forms.RadioSelect(attrs={
-            'class': 'form-check-input',
+        choices=[('', 'Select Company Type')] + UserProfile.USER_TYPE_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
             'id': 'validationUserType',
             'required': True,
         }))
@@ -55,3 +55,10 @@ class RegisterForm(UserCreationForm):
         'id': 'validationPassword2',
         'required': True,
     }))
+    entity = forms.ModelChoiceField(
+        queryset=Entity.objects.all(),
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'id': 'validationEntity',
+            'required': True,
+        }))

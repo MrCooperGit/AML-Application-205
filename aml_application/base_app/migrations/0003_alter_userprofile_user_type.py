@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='userprofile',
             name='user_type',
-            field=models.CharField(choices=[('tAcsp', 'Trust or Company Service Provider'), ('fiAc', 'Financial Institutions or Casino'), ('lAc', 'Lawyer or Conveyancer'), ('accountants', 'Accountant'), ('rea', 'Real Estate Agent'), ('hvd', 'High Value Dealer'), ('tab', 'TAB New Zealand'), ('vasp', 'Virtual Asset Service Provider')], max_length=20),
+            field=models.CharField(choices=[('tAcsp', 'Trust or Company Service Provider'), ('fiAc', 'Financial Institutions or Casino'), ('lAc', 'Lawyer or Conveyancer'), (
+                'accountants', 'Accountant'), ('rea', 'Real Estate Agent'), ('hvd', 'High Value Dealer'), ('tab', 'TAB New Zealand'), ('vasp', 'Virtual Asset Service Provider')], max_length=20),
         ),
+
     ]

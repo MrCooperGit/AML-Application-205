@@ -4,8 +4,13 @@ from django.template.loader import get_template
 from django.contrib import messages
 from django.views import View
 from reportlab.lib.pagesizes import letter, A4
+from django.conf import settings
+import os
 from django.templatetags.static import static
-from .forms import CustomerDueDiligenceForm
+from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
+
+from .forms import CustomerDueDiligenceForm, CustomerVerificationForm
 from base_app.models import Customer
 
 from reportlab.pdfgen import canvas
@@ -86,9 +91,39 @@ def customer_due_diligence_view(request):
             else:
                 form.save()
                 messages.success(request, 'Customer added successfully')
-                return redirect('/form')
+                return redirect('/cdd/register')
 
     else:
         form = CustomerDueDiligenceForm()
 
     return render(request, 'cddform.html', {'form': form})
+
+
+def customer_verification_view(request):
+    if request.method == 'POST':
+        form = CustomerVerificationForm(request.POST, request.FILES)
+        if form.is_valid():
+            existing_customer = form.cleaned_data['existing_customer']
+
+            if existing_customer:
+                # print(existing_customer)
+                for field_name, uploaded_file in request.FILES.items():
+                    # print("field name:", field_name,
+                    #       "uploaded file", uploaded_file)
+                    if uploaded_file:
+                        # Save the uploaded files to the corresponding fields
+                        setattr(existing_customer, field_name, uploaded_file)
+                # print('prior to save')
+                existing_customer.identity_verified = True
+                existing_customer.address_verified = True
+                existing_customer.save()
+                messages.success(request, 'Customer verified')
+                return redirect('/cdd/verify')
+            else:
+                messages.error(request, 'Please select an existing customer')
+        else:
+            messages.error(request, 'Form is not valid')
+    else:
+        form = CustomerVerificationForm()
+
+    return render(request, 'cddverification.html', {'form': form})
