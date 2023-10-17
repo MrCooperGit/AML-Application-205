@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Customer, Company, Director, Shareholder, Active_Session, UserProfile, Entity
+from .models import Customer, Company, Director, Shareholder, Active_Session, UserProfile, Entity, AvailableApps
 # Register your models here.
 
 
@@ -58,3 +58,8 @@ class EntityAdmin(admin.ModelAdmin):
     list_per_page = 20
     inlines = [CompanyInline, DirectorInline,
                ShareholderInline, ActiveSessionInline, UserProfileInline, CustomerInline]
+
+@admin.register(AvailableApps)
+class AvailableAppsAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_per_page = 20
