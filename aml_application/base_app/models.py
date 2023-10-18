@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Entity(models.Model):
     name = models.CharField(max_length=100)
     users = models.ManyToManyField(User)
-
+    
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Registered Entities'
@@ -107,15 +107,6 @@ class Shareholder(models.Model):
     def __str__(self):
         return self.customer
 
-
-class Active_Session(models.Model):
-    id = models.AutoField(primary_key=True)
-    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    name = models.CharField(max_length=20)
-    open_app = models.URLField(null=False, max_length=200)
-
-    def __str__(self):
-        return self.id
 
 class AvailableApps(models.Model):
     id = models.AutoField(primary_key=True)
