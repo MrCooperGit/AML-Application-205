@@ -107,7 +107,14 @@ class Shareholder(models.Model):
     def __str__(self):
         return self.customer
 
-
+class Active_Session(models.Model):
+    # active session will be for storing forms on an entity level
+    id = models.AutoField(primary_key=True)
+    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.id
+    
 class AvailableApps(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
