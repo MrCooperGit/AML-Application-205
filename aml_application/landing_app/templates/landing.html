@@ -26,42 +26,26 @@ This tab system shows all the active forms that are currently being filled out. 
         <div class="row">
             <aside class="sidebar col-md-2" style="background-color:red;">
                 <ul class="nav flex-column">
+                    {% for app in available_apps %}
                     <li class="nav-item">
-                        <a class="nav-link active" href="/landing/tab/add/cddForm">
-                            add cddForm
+                        <a class="nav-link active" href="/landing/tab/add/{{ app.name }}">
+                            {{ app.display_name }}
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Dashboard
-                        </a>
-                    </li>
+                    {% endfor %}
                 </ul>
             </aside>
             
             <section class="content col-md-10" style="background-color:blue;">
                 <div class="tabs-container">
                     <ul class="nav">
+                    {% for tab in tabs %}
                         <li class="nav-item">
-                            <a class="nav-link active" href="/landing/test_app">
-                                test app
+                            <a class="nav-link {% if tab.is_active %}active{% endif %}" href="/landing/{{ tab.app_id.name }}">
+                                {{ tab.app_id.display_name }}
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/landing/cddForm">
-                                cddForm uri
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                app 3
-                            </a>
-                        </li>
+                    {% endfor %}
                     </ul>
                 </div>
                 <div class="app-container">

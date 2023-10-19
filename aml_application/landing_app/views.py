@@ -28,8 +28,16 @@ def index(request, app_name=None):
     # user is here if app name is valid
     # format the app_template in preparation for rendering
     app_template_name = f'{app_name}.html'
+    
 
-    return render(request, 'landing.html', {'app_template_name': app_template_name})
+    available_apps_obj = AvailableApps.objects.all()
+    user_tabs_obj = UserTab.objects.filter(user=request.user).select_related('app_id')
+
+    return render(request, 'landing.html', {
+        'app_template_name': app_template_name,
+        'available_apps': available_apps_obj,
+        'tabs': user_tabs_obj,
+    })
 
 def add_tab(request, app_name_to_add=None):
     if app_name_to_add is None:
