@@ -53,7 +53,7 @@ def add_tab(request, app_name_to_add=None):
     tab_exists = UserTab.objects.filter(user=request.user).exists()
     if tab_exists:
         # future: ask if you want to start form again
-        redirect(f'/landing/{app_name_to_add}/')
+        return redirect(f'/landing/{app_name_to_add}/')
     
     # add tab to UserTab
     tab = UserTab(user=request.user, app_id=AvailableApps.objects.get(name=app_name_to_add), is_active=True)
