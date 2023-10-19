@@ -3,9 +3,11 @@ from .utils import get_available_apps
 from base_app.models import AvailableApps
 from .models import UserTab
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def index(request, app_name=None):
     
     available_apps = get_available_apps()
@@ -39,6 +41,7 @@ def index(request, app_name=None):
         'tabs': user_tabs_obj,
     })
 
+@login_required
 def add_tab(request, app_name_to_add=None):
     if app_name_to_add is None:
         return redirect('/landing')
