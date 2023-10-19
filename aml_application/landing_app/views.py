@@ -60,4 +60,13 @@ def add_tab(request, app_name_to_add=None):
     tab.save()
     
     return redirect(f'/landing/{app_name_to_add}/')
+
+@login_required
+def delete_tab(request, tab_to_delete=None):
+    if tab_to_delete is None:
+        return redirect('/landing')
     
+    tab = get_object_or_404(UserTab, user=request.user, app_id=AvailableApps.objects.get(name=tab_to_delete))
+    tab.delete()
+    
+    return redirect('/landing')
