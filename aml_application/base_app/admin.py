@@ -62,7 +62,7 @@ class EntityAdmin(admin.ModelAdmin):
 
 @admin.register(AvailableApps)
 class AvailableAppsAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'display_name')
     list_per_page = 20
 
 

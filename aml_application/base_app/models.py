@@ -118,7 +118,8 @@ class Active_Session(models.Model):
 class AvailableApps(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-
+    display_name = models.CharField(max_length=100)
+    
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Available Apps'
