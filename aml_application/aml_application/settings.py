@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import os
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base_app',
     'customer_due_diligence',
+    'risk_assessment',
     'landing_app',
-    'dal',  # Django-autocomplete
-    'dal_select2',  # Django-autocomplete
+
 ]
 
 MIDDLEWARE = [
