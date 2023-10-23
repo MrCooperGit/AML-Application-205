@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'base_app',
     'customer_due_diligence',
     'risk_assessment',
+    'landing_app',
+
 ]
 
 MIDDLEWARE = [
