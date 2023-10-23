@@ -25,6 +25,7 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('index/', views.index, name='index'),
     path('cdd/', include('customer_due_diligence.urls')),
+    path('risk/', include('risk_assessment.urls')),
     path('admin/', admin.site.urls),
 ]
 
