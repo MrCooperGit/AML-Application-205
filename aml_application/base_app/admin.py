@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Customer, Company, Director, Shareholder, Active_Session, UserProfile, Entity
+from .models import Customer, Company, Director, Shareholder, UserProfile, Entity, AvailableApps, Active_Session
+from landing_app.models import UserTab
 # Register your models here.
 
 
@@ -58,3 +59,14 @@ class EntityAdmin(admin.ModelAdmin):
     list_per_page = 20
     inlines = [CompanyInline, DirectorInline,
                ShareholderInline, ActiveSessionInline, UserProfileInline, CustomerInline]
+
+@admin.register(AvailableApps)
+class AvailableAppsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'display_name')
+    list_per_page = 20
+
+
+@admin.register(UserTab)
+class UserTabAdmin(admin.ModelAdmin):
+    list_display = ('id','user', 'app_id', 'is_active')
+    list_per_page = 20
