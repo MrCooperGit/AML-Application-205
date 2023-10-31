@@ -10,6 +10,11 @@ from .forms import LoginForm, RegisterForm
 def home(request):
     return render(request, 'home.html')
 
+def aboutus(request):
+    return render(request, 'aboutus.html')
+
+def contactus(request):
+    return render(request, 'contactus.html')
 
 def index(request):
     return render(request, 'index.html')
