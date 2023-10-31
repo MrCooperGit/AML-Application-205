@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from dal import autocomplete
 
-from .models import UserProfile, User
+from .models import UserProfile, User, Customer
 from .forms import LoginForm, RegisterForm
 
 
@@ -56,7 +57,7 @@ def register(request):
 
             user = form.save()
             user_profile = UserProfile.objects.create(
-                user=user, user_type=form.cleaned_data['userType'])
+                user=user, user_type=form.cleaned_data['userType'], entity=form.cleaned_data['entity'])
             # Manually create a user session after registration
             request.session['user_id'] = user.id
 
