@@ -6,7 +6,7 @@ from .models import UserProfile
 
 class AuthenticationTests(TestCase):
     def test_registration(self):
-        response = self.client.get(reverse('register'))
+        response = self.client.get(reverse('base_app:register'))
         self.assertEqual(response.status_code, 200)
 
         response = self.client.post(
@@ -16,6 +16,7 @@ class AuthenticationTests(TestCase):
                 'password1': 'testpassword',
                 'password2': 'testpassword',
                 'userType': 'tAcsp',
+                'entity': 'test entity',
             }
         )
 
@@ -27,7 +28,8 @@ class AuthenticationTests(TestCase):
         user = User.objects.create_user(
             username='test@example.com',
             email='test@example.com',
-            password='testpassword'
+            password='testpassword',
+            entity='Test entity'
         )
 
         # Log the user in
@@ -40,5 +42,5 @@ class AuthenticationTests(TestCase):
         self.assertTrue(response)
 
         # Optionally, you can check if the user is redirected to the expected URL
-        response = self.client.get('/index/')
+        response = self.client.get('base_app:index/')
         self.assertEqual(response.status_code, 200)
