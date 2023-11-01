@@ -17,13 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from base_app import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('register/', views.register, name='register'),
-    path('login/', views.login, name='login'),
-    path('index/', views.index, name='index'),
+    path('base/', include('base_app.urls')),
     path('cdd/', include('customer_due_diligence.urls')),
     path('risk/', include('risk_assessment.urls')),
     path('admin/', admin.site.urls),

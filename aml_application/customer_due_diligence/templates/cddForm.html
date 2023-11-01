@@ -21,9 +21,11 @@
       <ul class="messages">
         {% for message in messages %}
         <li
-          class="{% if message.tags == 'error' %}alert alert-danger{% elif message.tags == 'success' %}alert alert-success{% else %}alert alert-info{% endif %}"
+          class="{% if message.tags == 'error' %}alert alert-danger alert-dismissible fade show{% elif message.tags == 'success' %}alert alert-success alert-dismissible fade show{% else %}alert alert-info alert-dismissible fade show{% endif %}"
+          role="alert"
         >
           {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </li>
         {% endfor %}
       </ul>

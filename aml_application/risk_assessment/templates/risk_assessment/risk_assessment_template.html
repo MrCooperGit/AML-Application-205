@@ -1,5 +1,56 @@
-<h2>Risk Assessment</h2>
-<form method="post">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit">Submit</button>
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Risk Assessment</title>
+    <!-- Custom styles for this template -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha383-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <h2>Risk Assessment</h2>
+    <form method="post">
+      {% csrf_token %} {% for field in form %}
+      <div class="form-check p-3">
+        <div class="form-check-label">{{ field.label_tag }}</div>
+        <div>{{ field }}</div>
+        {% if form.errors %}
+        <div class="alert alert-error alert-dismissible fade show" role="alert">
+          {{ field.errors }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <!---->
+      {% if form.non_fields_errors %}
+      <div class="d-flex flex-row align-items-center mb-4">
+        <ul class="list-group">
+          {% for field in form %}
+          <li>
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+              {{ field.non_fields_errors }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <button class="btn btn-primary ms-3" type="submit">Submit</button>
+    </form>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

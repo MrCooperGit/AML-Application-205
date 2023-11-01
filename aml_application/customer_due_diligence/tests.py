@@ -2,7 +2,7 @@ from django.test import TestCase
 from .forms import CustomerDueDiligenceForm, CustomerVerificationForm
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
-from base_app.models import Customer
+from base_app.models import Customer, Entity
 
 
 class CustomerDueDiligenceFormTest(TestCase):
@@ -15,6 +15,7 @@ class CustomerDueDiligenceFormTest(TestCase):
             'phone': '1234567890',
             'email': 'john@example.com',
             'additional_info': 'Additional information',
+            'entity': 'Test Entity',
         }
 
         form = CustomerDueDiligenceForm(data=form_data)
@@ -29,6 +30,7 @@ class CustomerDueDiligenceFormTest(TestCase):
             phone='1234567890',
             email='john@example.com',
             additional_info='Additional information',
+            entity=Entity,
         )
 
         form_data = {
@@ -38,6 +40,7 @@ class CustomerDueDiligenceFormTest(TestCase):
             'phone': '1234567890',
             'email': 'john@example.com',
             'additional_info': 'Additional information',
+            'entity': 'Test Entity',
         }
 
         form = CustomerDueDiligenceForm(data=form_data)

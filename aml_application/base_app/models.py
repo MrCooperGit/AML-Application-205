@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 # Create your models here.
 
@@ -18,7 +19,8 @@ class Entity(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='userprofile')
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     USER_TYPE_CHOICES = [
         ('tAcsp', 'Trust or Company Service Provider'),
@@ -34,6 +36,54 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user_type
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=20, default='first_name')
+    last_name = models.CharField(max_length=20, default='last_name')
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    # Add other required fields
+
+    # clash in the reverse accessor names for the groups and user_permissions fields between the auth.User model (Django's built-in User model) and your base_app.CustomUser model
+    permissions = (
+        ("view_customuser", "Can view custom users"),
+    )
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name=('groups'),
+        blank=True,
+        help_text=('The groups this user belongs to.'),
+        related_name='custom_users',  # Custom related_name
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name=('user permissions'),
+        blank=True,
+        help_text=('Specific permissions for this user.'),
+        related_name='custom_users_permissions',  # Custom related_name
+    )
+
+    class Meta:
+        ordering = ('last_name',)
+
+    def __str__(self):
+        return self.email
 
 
 class Customer(models.Model):
