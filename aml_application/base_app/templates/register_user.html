@@ -33,37 +33,36 @@
                     </ul>
                     {% endif %}
 
-                    <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Sign up</p>
+                    <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">New User</p>
 
                     <form
                       class="mx-1 mx-md-4 needs-validation mt-3"
-                      novalidate
                       method="post"
-                      action="{% url 'base_app:register' %}"
+                      action="{% url 'base_app:register-user' %}"
                     >
                       {% csrf_token %}
 
                       <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fa fa-envelope fa-lg me-3 fa-fw mb-4"></i>
+                        <div class="form-outline flex-fill mb-0">
+                          {{ form.email }}
+                          <label class="form-label ms-2" for="validationEmail">Email</label>
+                        </div>
+                      </div>
+
+                      <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fa fa-university fa-lg me-3 fa-fw mb-4"></i>
                         <div class="form-outline flex-fill mb-0">
-                          {{ form.userType }}
-                          <label class="form-label ms-2" for="validationUserType">Your Company Type</label>
+                          {{ form.first_name }}
+                          <label class="form-label ms-2" for="validationFirstName">First Name</label>
                         </div>
                       </div>
 
                       <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fa fa-users fa-lg me-3 fa-fw mb-4"></i>
                         <div class="form-outline flex-fill mb-0">
-                          {{ form.entity }}
-                          <label class="form-label ms-2" for="validationEntity">Your Company Name</label>
-                        </div>
-                      </div>
-
-                      <div class="d-flex flex-row align-items-center mb-4">
-                        <i class="fa fa-envelope fa-lg me-3 fa-fw mb-4"></i>
-                        <div class="form-outline flex-fill mb-0">
-                          {{ form.email }}
-                          <label class="form-label ms-2" for="validationEmail">Your Email</label>
+                          {{ form.last_name }}
+                          <label class="form-label ms-2" for="validationLastName">Last Name</label>
                         </div>
                       </div>
 
@@ -85,23 +84,17 @@
 
                       {% if form.errors or form.non_fields_errors %}
                       <div class="d-flex flex-row align-items-center mb-4">
-                        <ul class="list-group">
-                          {% for field in form %} {{ field.errors}} {% endfor %}
+                        <ul class="list-unstyled">
+                          <li class="alert alert-danger fade show" role="alert">
+                            {% for field in form %} {% if field.errors %}
+                            <strong>{{ field.label }}:</strong>{{ field.errors }} {% endif %}{% endfor %}
+                          </li>
                         </ul>
                       </div>
                       {% endif %}
 
-                      <div class="form-check d-flex justify-content-center mb-5">
-                        <input class="form-check-input me-2" type="checkbox" value="" id="invalidCheck" required />
-                        <label class="form-check-label" for="invalidCheck">
-                          I agree all statements in
-                          <a href="#!">Terms of service</a>
-                        </label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
-                      </div>
-
                       <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                        <button type="submit" class="btn btn-lg" style="background-color: #0085ff">Register</button>
+                        <button type="submit" class="btn btn-lg" style="background-color: #0085ff">Submit</button>
                       </div>
                     </form>
                   </div>
@@ -114,7 +107,6 @@
     </section>
 
     <script>
-      // JavaScript for disabling form submissions if there are invalid fields
       (() => {
         "use strict";
 
@@ -126,7 +118,18 @@
           form.addEventListener(
             "submit",
             (event) => {
-              if (!form.checkValidity()) {
+              let isValid = true;
+
+              // Check if any of the form fields are empty
+              form.querySelectorAll("input, select, textarea").forEach((field) => {
+                if (!field.value) {
+                  isValid = false;
+                  // Optionally, you can add error styling to the field
+                  field.classList.add("is-invalid");
+                }
+              });
+
+              if (!isValid) {
                 event.preventDefault();
                 event.stopPropagation();
               }
