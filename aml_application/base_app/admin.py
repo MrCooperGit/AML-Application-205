@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Customer, Company, Director, Shareholder, UserProfile, Entity, AvailableApps, Active_Session
+from .models import Customer, CustomUser, Company, Director, Shareholder, Active_Session, UserProfile, Entity, AvailableApps, Active_Session
+from risk_assessment.models import RiskAssessment
 from landing_app.models import UserTab
-# Register your models here.
 
 
 class CustomUserAdmin(UserAdmin):
@@ -20,6 +20,11 @@ admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
 
+class RiskAssessmentInline(admin.TabularInline):
+    model = RiskAssessment
+    extra = 0
+
+
 class CustomerInline(admin.TabularInline):
     model = Customer
     extra = 0
@@ -31,8 +36,15 @@ class UserProfileInline(admin.TabularInline):
     extra = 0
 
 
+class CustomUserInline(admin.TabularInline):
+    list_display = ('email', 'first_name', 'last_name', 'entity')
+    model = CustomUser
+    extra = 0
+
+
 class CompanyInline(admin.TabularInline):
     list_display = ('name', 'company_registration_num', 'address')
+    exclude = ('password', 'groups', 'user_permissions')
     model = Company
     extra = 0
 
@@ -57,8 +69,8 @@ class EntityAdmin(admin.ModelAdmin):
     list_display = ('name',)
     exclude = ('users',)
     list_per_page = 20
-    inlines = [CompanyInline, DirectorInline,
-               ShareholderInline, ActiveSessionInline, UserProfileInline, CustomerInline]
+    inlines = [RiskAssessmentInline, CompanyInline, DirectorInline,
+               ShareholderInline, ActiveSessionInline, UserProfileInline, CustomUserInline, CustomerInline]
 
 @admin.register(AvailableApps)
 class AvailableAppsAdmin(admin.ModelAdmin):
@@ -70,3 +82,4 @@ class AvailableAppsAdmin(admin.ModelAdmin):
 class UserTabAdmin(admin.ModelAdmin):
     list_display = ('id','user', 'app_id', 'is_active')
     list_per_page = 20
+

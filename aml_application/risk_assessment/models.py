@@ -1,29 +1,35 @@
 from django.db import models
+from base_app.models import Entity
 
 
 class RiskAssessment(models.Model):
-    offer_anonymity = models.BooleanField(
-        verbose_name='Do you offer anonymity to your customers?')
-    offer_large_value_services = models.BooleanField(
-        verbose_name='Do you offer services for the movement of large values and/or volumes of funds?')
-    offer_services_outside_NZ = models.BooleanField(
-        verbose_name='Are your services available to customers outside New Zealand?')
-    blacklisted_countries = models.BooleanField(
-        verbose_name='Do your customers offer services to blacklisted countries?')
-    blacklisted_countries_list = models.TextField(
-        verbose_name='If yes, please specify which countries.')
-    cash_intensive = models.BooleanField(
-        verbose_name='Are any of your customer’s services cash intensive?')
-    customer_services = models.BooleanField(
-        verbose_name='Do your customers offer services for specific company types?')
-    customer_service_types = models.TextField(
-        verbose_name='If yes, please specify which types of companies.')
-    trust_services = models.BooleanField(
-        verbose_name='Do your customers offer trust services?')
-    remittance_services = models.BooleanField(
-        verbose_name='Do you offer services for money remittance?')
-    virtual_assets_services = models.BooleanField(
-        verbose_name='Do you offer services involving virtual/digital assets?')
+    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
+
+    offer_anonymity = models.BooleanField(default=False,
+                                          verbose_name='Do you or your clients offer anonymity to customers?')
+
+    offer_large_value_services = models.BooleanField(default=False,
+                                                     verbose_name='Do you or your clients offer services for the movement of large values or volumes of funds?')
+
+    offer_services_black_list = models.BooleanField(
+        default=False, verbose_name='Do you or your clients offer services to any of the following countries? \nNorth Korea, Iran or Myanmar')
+    offer_services_grey_list = models.BooleanField(
+        default=False, verbose_name='Do you or your clients offer services to any of the following countries? \nAlbania, Barbados, Burkina Faso,'
+        'Cameroon, Cayman Islands, Croatia, Democratic Republic of Congo, Gibraltar, Haiti, Jamaica, Jordan, Mali, Mozambique, Nigeria, Panama,'
+        'Philippines, Senegal, South Africa, South Sudan, Syria, Tanzania, Türkiye, Uganda, UAE, Uganda, Vietnam or Yemen')
+    offer_services_outside_NZ = models.BooleanField(default=False,
+                                                    verbose_name='Do you or your clients offer services to customers outside New Zealand?')
+
+    cash_intensive = models.BooleanField(default=False,
+                                         verbose_name="Are yours or any of your client's services cash intensive?")
+    company_services = models.BooleanField(default=False,
+                                           verbose_name='Do you or your clients offer services for registering companies?')
+    trust_services = models.BooleanField(default=False,
+                                         verbose_name='Do you or your clients offer trust services?')
+    remittance_services = models.BooleanField(default=False,
+                                              verbose_name='Do you or your clients offer services for money remittance?')
+    virtual_assets_services = models.BooleanField(default=False,
+                                                  verbose_name='Do you or your clients offer services involving virtual/digital assets?')
 
     def __str__(self):
         return f"Risk Assessment for {self.date}"

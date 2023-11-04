@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpRequest
-from django.template.loader import get_template
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views import View
 from reportlab.lib.pagesizes import letter, A4
-from django.conf import settings
 import os
 from django.templatetags.static import static
 from django.core.exceptions import ValidationError
@@ -41,6 +40,7 @@ class GeneratePDF(View):
         return render(request, 'pdf_form.html', {'form': form})
 
 
+@login_required
 def view_pdf(request):
     # Create a response object for viewing
     response = HttpResponse(content_type='application/pdf')
@@ -52,6 +52,7 @@ def view_pdf(request):
     return response
 
 
+@login_required
 def download_pdf(request):
     # Create a response object for downloading
     response = HttpResponse(content_type='application/pdf')
@@ -63,6 +64,7 @@ def download_pdf(request):
     return response
 
 
+@login_required
 def generate_pdf_content(response):
     # Create a PDF canvas
     p = canvas.Canvas(response, pagesize=letter)
@@ -79,6 +81,7 @@ def generate_pdf_content(response):
     return response
 
 
+@login_required
 def customer_due_diligence_view(request):
     if request.method == 'POST':
         form = CustomerDueDiligenceForm(request.POST)
@@ -99,6 +102,7 @@ def customer_due_diligence_view(request):
     return render(request, 'cddform.html', {'form': form})
 
 
+@login_required
 def customer_verification_view(request):
     if request.method == 'POST':
         form = CustomerVerificationForm(request.POST, request.FILES)

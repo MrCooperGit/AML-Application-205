@@ -1,19 +1,26 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from .forms import RiskAssessmentForm
+from .models import RiskAssessment
 
 # Create your views here.
 
 
+@login_required
 def home(request):
     return render(request, 'risk_assessment/home.html')
 
 
+@login_required
 def risk_assessment_view(request):
+    print(request.user.userprofile)
+
     if request.method == 'POST':
         form = RiskAssessmentForm(request.POST)
         if form.is_valid():
-            # Process the form data as needed
-            form.save()  # This will save the user's responses to the database
+            risk_assessment = form.save(commit=False)
+            risk_assessment.entity = request.user.userprofile.entity
+            risk_assessment.save()
     else:
         form = RiskAssessmentForm()
 
