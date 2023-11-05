@@ -17,15 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from base_app import views
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('base/', include('base_app.urls')),
     path('cdd/', include('customer_due_diligence.urls')),
     path('risk/', include('risk_assessment.urls')),
     path('landing/', include('landing_app.urls')),
-    path('aboutus/', include('aboutus.urls')),
-    path('contactus/', include('contactus.urls')),
-    path('home/', include('home.urls')),
+    path('home/', views.home, name='home'),
+    path('aboutus/', views.aboutus, name='aboutus'),
+    path('contactus/', views.contactus, name='contactus'),
     path('admin/', admin.site.urls),
 ]
 
