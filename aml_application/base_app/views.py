@@ -12,11 +12,14 @@ from .forms import LoginForm, RegisterForm, CustomUserCreationForm
 def home(request):
     return render(request, 'home.html')
 
+
 def aboutus(request):
     return render(request, 'aboutus.html')
 
+
 def contactus(request):
     return render(request, 'contactus.html')
+
 
 def index(request):
     return render(request, 'index.html')
@@ -72,7 +75,13 @@ def register(request):
 
             user = form.save()
 
-            login(request, user)
+            if user:
+                messages.success(
+                    request, 'Registration successful. You are already logged in (likely superuser)')
+
+            else:
+                login(request, user)
+
             messages.success(request, 'Registration successful')
             return redirect('base_app:index')
     else:
@@ -82,23 +91,22 @@ def register(request):
 
 
 @login_required
-@require_entity
 def register_user(request):
+    print(f'User\'s Entity= {request.user.userprofile.entity}')
     if request.method == 'POST':
         # Pre-fill the 'entity' field with the logged-in user's entity
         form = CustomUserCreationForm(
             request.POST, initial={'entity': request.user.userprofile.entity})
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            return redirect('base_app:index')
+            messages.success(
+                request, f"{request.user.userprofile.first_name} {request.user.userprofile.last_name}'s account created successfully")
+            return redirect('base_app:register_user')
     else:
         # Pre-fill the 'entity' field with the logged-in user's entity
         form = CustomUserCreationForm(
             initial={
                 'entity': request.user.userprofile.entity,
-                'first_name': '',
-                'last_name': '',
             }
         )
 

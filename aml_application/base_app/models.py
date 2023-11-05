@@ -9,7 +9,7 @@ from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, 
 class Entity(models.Model):
     name = models.CharField(max_length=100)
     users = models.ManyToManyField(User)
-    
+
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Registered Entities'
@@ -51,9 +51,9 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=20, default='first_name')
-    last_name = models.CharField(max_length=20, default='last_name')
 
     objects = CustomUserManager()
 
@@ -157,22 +157,24 @@ class Shareholder(models.Model):
     def __str__(self):
         return self.customer
 
+
 class Active_Session(models.Model):
     # active session will be for storing forms on an entity level
     id = models.AutoField(primary_key=True)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return self.id
-    
+
+
 class AvailableApps(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     display_name = models.CharField(max_length=100)
-    
+
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Available Apps'
-        
+
     def __str__(self):
-        return self.name 
+        return self.name

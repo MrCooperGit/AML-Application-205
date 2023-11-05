@@ -26,9 +26,12 @@
                 <div class="row justify-content-center">
                   <div class="col-md-12 col-lg-10 col-xl-8 order-2 order-lg-1">
                     {% if messages %}
-                    <ul class="messages">
+                    <ul class="messages list-unstyled">
                       {% for message in messages %}
-                      <li class="{{ message.tags }}">{{ message }}</li>
+                      <li class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </li>
                       {% endfor %}
                     </ul>
                     {% endif %}
@@ -138,5 +141,6 @@
         });
       })();
     </script>
+    <script src="{% static 'bootstrap-5.3.2/js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
   </body>
 </html>

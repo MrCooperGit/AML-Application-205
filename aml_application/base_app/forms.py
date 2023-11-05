@@ -68,9 +68,9 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ('email', 'password1', 'password2',
-                  'entity', 'first_name', 'last_name',)
+                  'first_name', 'last_name', 'entity',)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, entity, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].widget.attrs.update({'class': 'form-control'})
         self.fields['first_name'].widget.attrs.update(
@@ -78,3 +78,4 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+        self.fields['entity'].initial = entity

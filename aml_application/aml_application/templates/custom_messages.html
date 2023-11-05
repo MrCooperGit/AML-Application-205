@@ -1,4 +1,4 @@
-{% messages %}
+{% if messages %}
 <ul class="messages list-unstyled">
   {% for message in messages %}
   <li
@@ -8,5 +8,5 @@
     {{ message }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </li>
-  {% endfor %}
+  {% endfor %}{% endif %}
 </ul>
