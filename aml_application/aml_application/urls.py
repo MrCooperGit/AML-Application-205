@@ -23,8 +23,9 @@ urlpatterns = [
     path('cdd/', include('customer_due_diligence.urls')),
     path('risk/', include('risk_assessment.urls')),
     path('landing/', include('landing_app.urls')),
-     path('aboutus/', views.aboutus, name='aboutus'),
-    path('contactus/', views.contactus, name='contactus'),
+    path('aboutus/', include('aboutus.urls')),
+    path('contactus/', include('contactus.urls')),
+    path('home/', include('home.urls')),
     path('admin/', admin.site.urls),
 ]
 
