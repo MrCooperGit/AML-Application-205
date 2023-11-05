@@ -1256,10 +1256,11 @@ contact
 
 .contact-us {
   padding: 160px 0px;
-  background-image: url(../images/contact-bg.png);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+  /* background-image: url(../images/contact-bg.png); */
+
+  background: rgb(2,0,36) !important;
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 11%, rgba(0,212,255,1) 100%) !important;
+  
 }
 
 .contact-us .section-heading h2,
@@ -1496,6 +1497,8 @@ responsive
   .contact-us {
     margin-top: 60px;
     padding: 120px 0px;
+    background: rgb(2,0,36);
+background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 11%, rgba(0,212,255,1) 100%);
   }
   .contact-us .section-heading {
     text-align: center;
