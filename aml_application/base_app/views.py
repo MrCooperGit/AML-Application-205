@@ -92,22 +92,33 @@ def register(request):
 
 @login_required
 def register_user(request):
-    print(f'User\'s Entity= {request.user.userprofile.entity}')
+    print(f'User\'s Entity= "{request.user.userprofile.entity}"')
     if request.method == 'POST':
         # Pre-fill the 'entity' field with the logged-in user's entity
         form = CustomUserCreationForm(
             request.POST, initial={'entity': request.user.userprofile.entity})
+
         if form.is_valid():
+            print("Form is valid")
             user = form.save()
             messages.success(
-                request, f"{request.user.userprofile.first_name} {request.user.userprofile.last_name}'s account created successfully")
+                request, f"{user.first_name} {user.last_name}'s account created successfully")
             return redirect('base_app:register_user')
+        else:
+            messages.error(
+                request, "Form is invalid. Please correct the errors.")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+                    print(f"{field}: {errors}")
+            print("Form is invalid")
+            print(form.errors.items())
+            # print(form)
     else:
         # Pre-fill the 'entity' field with the logged-in user's entity
+        print("Method post but form not valid")
+        # Make sure this is correctly provided
         form = CustomUserCreationForm(
-            initial={
-                'entity': request.user.userprofile.entity,
-            }
-        )
+            request.POST, initial={'entity': request.user.userprofile.entity})
 
     return render(request, 'register_user.html', {'form': form})

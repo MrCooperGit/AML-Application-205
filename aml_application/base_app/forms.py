@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from .models import UserProfile, Entity, CustomUser
 
@@ -70,12 +71,14 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('email', 'password1', 'password2',
                   'first_name', 'last_name', 'entity',)
 
+        widgets = {
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'password1': forms.PasswordInput(attrs={'class': ''}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-outline flex-fill mb-0'}),
+        }
+
     def __init__(self, entity, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['email'].widget.attrs.update({'class': 'form-control'})
-        self.fields['first_name'].widget.attrs.update(
-            {'class': 'form-control'})
-        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
         self.fields['entity'].initial = entity
