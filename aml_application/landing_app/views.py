@@ -5,8 +5,6 @@ from .models import UserTab
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-
 @login_required
 def index(request, app_name=None):
     
@@ -40,6 +38,7 @@ def index(request, app_name=None):
         'app_template_name': app_template_name,
         'available_apps': available_apps_obj,
         'tabs': user_tabs_obj,
+        'user': request.user,
     })
 
 @login_required
