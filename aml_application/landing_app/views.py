@@ -32,12 +32,20 @@ def index(request, app_name=None):
     
 
     available_apps_obj = AvailableApps.objects.all()
-    user_tabs_obj = UserTab.objects.filter(user=request.user).select_related('app_id')
-
+    open_user_tabs_obj = UserTab.objects.filter(user=request.user).select_related('app_id')
+    
+    # setting the active tab in the database
+    for tab in open_user_tabs_obj:
+        if tab.app_id.name == app_name:
+            tab.is_active = True
+        else:
+            tab.is_active = False
+        tab.save()
+    
     return render(request, 'landing.html', {
         'app_template_name': app_template_name,
         'available_apps': available_apps_obj,
-        'tabs': user_tabs_obj,
+        'tabs': open_user_tabs_obj,
         'user': request.user,
     })
 
