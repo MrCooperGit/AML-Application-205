@@ -1,13 +1,17 @@
 from django import forms
-from django.contrib.auth.decorators import login_required
 from .models import RiskAssessment
+
+YES_NO_CHOICES = (
+    ('Yes', 'Yes'),
+    ('No', 'No'),
+)
 
 
 class RiskAssessmentForm(forms.ModelForm):
-    offer_anonymity = forms.BooleanField(
+    offer_anonymity = forms.ChoiceField(
         label=RiskAssessment._meta.get_field('offer_anonymity').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
-            'class': 'form-check-inline'}),
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={'class': 'form-check-inline'}),
     )
     offer_large_value_services = forms.BooleanField(
         label=RiskAssessment._meta.get_field(
@@ -65,13 +69,3 @@ class RiskAssessmentForm(forms.ModelForm):
         model = RiskAssessment
         fields = '__all__'
         exclude = ['entity']
-
-    # set the value of 'entity' to that of the logged in user
-    # def __init__(self, *args, **kwargs):
-    #     user = kwargs.pop('user', None)
-    #     super(RiskAssessmentForm, self).__init__(*args, **kwargs)
-
-    #     if user:
-    #         self.fields['entity'].initial = user.entity.name
-    #     else:
-    #         print("No entity found for user")

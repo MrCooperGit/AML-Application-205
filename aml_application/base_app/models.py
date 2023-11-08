@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.conf import settings
+
 
 # Create your models here.
 
@@ -9,7 +11,7 @@ from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, 
 class Entity(models.Model):
     name = models.CharField(max_length=100)
     users = models.ManyToManyField(User)
-    
+
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Registered Entities'
@@ -18,9 +20,26 @@ class Entity(models.Model):
         return self.name
 
 
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(email, password, **extra_fields)
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name='userprofile')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='userprofile')
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     USER_TYPE_CHOICES = [
         ('tAcsp', 'Trust or Company Service Provider'),
@@ -38,22 +57,11 @@ class UserProfile(models.Model):
         return self.user_type
 
 
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=20, default='first_name')
-    last_name = models.CharField(max_length=20, default='last_name')
 
     objects = CustomUserManager()
 
@@ -157,22 +165,24 @@ class Shareholder(models.Model):
     def __str__(self):
         return self.customer
 
+
 class Active_Session(models.Model):
     # active session will be for storing forms on an entity level
     id = models.AutoField(primary_key=True)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return self.id
-    
+
+
 class AvailableApps(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     display_name = models.CharField(max_length=100)
-    
+
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Available Apps'
-        
+
     def __str__(self):
-        return self.name 
+        return self.name
