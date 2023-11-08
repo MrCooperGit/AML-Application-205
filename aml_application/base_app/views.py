@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .decorators import require_entity
 from dal import autocomplete
 
-from .models import UserProfile, User, Customer
-from .forms import LoginForm, RegisterForm, CustomUserCreationForm
+from .models import Entity, User
+from .forms import CustomLoginForm, RegisterForm, CustomUserCreationForm
 
 
 def home(request):
@@ -25,39 +24,28 @@ def index(request):
     return render(request, 'index.html')
 
 
-def login(request):
+def custom_login_view(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = CustomLoginForm(request.POST)
         # print(form)
 
         if form.is_valid():
-            print(form.cleaned_data)
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            messages.error(
-                request, 'The username or password is incorrect', extra_tags='no_clear_messages')
 
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=email, password=password)
             print(user)
+
             if user is not None:
-                print("user not none")
                 login(request, user)
                 return redirect('base_app:index')
             else:
                 messages.error(
-                    request, 'The username or password is incorrect', extra_tags='no_clear_messages')
-                # request.do_not_clear_messages = True
-                print("not authenticated")
-                return redirect('base_app:login')
+                    request, 'The username or password is incorrect')
         else:
-            if form.errors:
-                print(form.errors)
-                print("There are errors")
-                errors = form.errors
-                print(errors)
-            print("Form not valid")
+            messages.error(request, "Form invalid. Check form errors")
     else:
-        form = LoginForm(request=request)
+        form = CustomLoginForm()
 
     return render(request, 'login.html', {'form': form})
 
@@ -67,58 +55,33 @@ def register(request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data['email']
-            if User.objects.filter(email=email).exists():
-                messages.error(
-                    request, 'A user with this email address already exists.')
-                return redirect('base_app:register')
+            if request.user.is_authenticated:
+                logout(request)
 
             user = form.save()
+            login(request, user)
 
-            if user:
-                messages.success(
-                    request, 'Registration successful. You are already logged in (likely superuser)')
-
-            else:
-                login(request, user)
-
-            messages.success(request, 'Registration successful')
-            return redirect('base_app:index')
+            return render(request, 'registration_success.html')
     else:
+        if request.user.is_authenticated:
+            logout(request)
         form = RegisterForm()
 
-    return render(request, 'register.html', {'form': form, 'messages': messages.get_messages(request)})
+    return render(request, 'register.html', {'form': form})
 
 
 @login_required
 def register_user(request):
-    print(f'User\'s Entity= "{request.user.userprofile.entity}"')
     if request.method == 'POST':
-        # Pre-fill the 'entity' field with the logged-in user's entity
-        form = CustomUserCreationForm(
-            request.POST, initial={'entity': request.user.userprofile.entity})
+        form = CustomUserCreationForm(request.POST)
 
         if form.is_valid():
-            print("Form is valid")
+            user = form.save(commit=False)
+            user.entity = request.user.userprofile.entity
             user = form.save()
             messages.success(
-                request, f"{user.first_name} {user.last_name}'s account created successfully")
-            return redirect('base_app:register_user')
-        else:
-            messages.error(
-                request, "Form is invalid. Please correct the errors.")
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-                    print(f"{field}: {errors}")
-            print("Form is invalid")
-            print(form.errors.items())
-            # print(form)
+                request, f"{user.first_name.capitalize()} {user.last_name.capitalize()}'s account created successfully")
     else:
-        # Pre-fill the 'entity' field with the logged-in user's entity
-        print("Method post but form not valid")
-        # Make sure this is correctly provided
-        form = CustomUserCreationForm(
-            request.POST, initial={'entity': request.user.userprofile.entity})
+        form = CustomUserCreationForm()
 
     return render(request, 'register_user.html', {'form': form})

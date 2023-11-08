@@ -7,3 +7,14 @@
   </li>
   {% endfor %}{% endif %}
 </ul>
+
+{% if form.errors %}
+<div class="d-flex flex-row align-items-center mb-4">
+  <ul class="list-unstyled">
+    <li class="alert alert-danger fade show" role="alert">
+      {% for field in form %} {% if field.errors %}
+      <strong>{{ field.label }}:</strong>{{ field.errors }} {% endif %}{% endfor %}
+    </li>
+  </ul>
+</div>
+{% endif %}

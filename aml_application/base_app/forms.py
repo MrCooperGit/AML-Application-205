@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 from .models import UserProfile, Entity, CustomUser
 
 
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.EmailInput(attrs={
+class CustomLoginForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control',
     }))
 
@@ -18,7 +18,8 @@ class LoginForm(AuthenticationForm):
 class RegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2', 'userType', 'entity')
+        fields = ('email', 'password1', 'password2',
+                  'userType', 'entity',)
 
     def clean_username(self):
         # Override the clean_username method to return the email as the username
@@ -64,6 +65,12 @@ class RegisterForm(UserCreationForm):
             'required': True,
         }))
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already in use.")
+        return email
+
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -71,14 +78,28 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('email', 'password1', 'password2',
                   'first_name', 'last_name', 'entity',)
 
-        widgets = {
-            'email': forms.TextInput(attrs={'class': 'form-control'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'password1': forms.PasswordInput(attrs={'class': ''}),
-            'password2': forms.PasswordInput(attrs={'class': 'form-outline flex-fill mb-0'}),
-        }
+    email = forms.EmailField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    first_name = forms.CharField(
+        max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(
+        max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    entity = forms.ModelChoiceField(
+        queryset=Entity.objects.all(),
+        empty_label=None,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False
+    )
 
-    def __init__(self, entity, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['entity'].initial = entity
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already in use.")
+        return email

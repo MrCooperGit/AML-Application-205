@@ -12,10 +12,7 @@
       crossorigin="anonymous"
     />
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="{% static 'login.css' %}" />
   </head>
 
@@ -39,104 +36,78 @@
                     </ul>
                     {% endif %}
 
-
-
-                    <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Sign up</p>
+                    <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-2">Sign up</p>
 
                     <form
                       class="mx-1 mx-md-4 needs-validation mt-3"
                       novalidate
                       method="post"
                       action="{% url 'base_app:register' %}"
-
                     >
                       {% csrf_token %}
 
-                      <div class="d-flex flex-row form-check">
-                        {% for radio in form.userType|slice:"0:2" %}
-                        <div class="form-check">{{ radio }}</div>
-                        {% endfor %}
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fa fa-institution fa-lg me-3 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0 mt-2">
+                          {{ form.userType }}
+                          <label class="form-label" for="validationEmail">Primary service type</label>
+                        </div>
                       </div>
 
-                      <div class="d-flex flex-row form-check">
-                        {% for radio in form.userType|slice:"2:5" %}
-                        <div class="form-check">{{ radio }}</div>
-                        {% endfor %}
-                      </div>
-
-                      <div class="d-flex flex-row form-check">
-                        {% for radio in form.userType|slice:"5:8" %}
-                        <div class="form-check">{{ radio }}</div>
-                        {% endfor %}
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fa fa-institution fa-lg me-3 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0 mt-2">
+                          {{ form.entity }}
+                          <label class="form-label" for="validationEmail">Select your Entity (debugging/marking only)</label>
+                        </div>
                       </div>
 
                       <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fa fa-envelope fa-lg me-3 fa-fw"></i>
-                        <div class="form-outline flex-fill mb-0">
+                        <div class="form-outline flex-fill mb-0 mt-2">
                           {{ form.email }}
-                          <label class="form-label" for="validationEmail"
-                            >Your Email</label
-                          >
+                          <label class="form-label" for="validationEmail">Your Email</label>
                         </div>
                       </div>
 
                       <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fa fa-lock fa-lg me-3 fa-fw"></i>
-                        <div class="form-outline flex-fill mb-0">
+                        <div class="form-outline flex-fill mb-0 mt-2">
                           {{ form.password1 }}
-                          <label class="form-label" for="validationPassword1"
-                            >Password</label
-                          >
+                          <label class="form-label" for="validationPassword1">Password</label>
                         </div>
                       </div>
 
                       <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fa fa-key fa-lg me-3 fa-fw"></i>
-                        <div class="form-outline flex-fill mb-0">
+                        <div class="form-outline flex-fill mb-0 mt-2">
                           {{ form.password2 }}
-                          <label class="form-label" for="validationPassword2"
-                            >Repeat your password</label
-                          >
+                          <label class="form-label" for="validationPassword2">Repeat your password</label>
                         </div>
                       </div>
 
-                      {% if form.errors or form.non_fields_errors %}
+                      {% if form.errors %}
                       <div class="d-flex flex-row align-items-center mb-4">
-                        <ul class="list-group">
-                          {% for field in form %} {{ field.errors}} {% endfor %}
+                        <ul class="list-unstyled">
+                          <li class="alert alert-danger fade show" role="alert">
+                            {% for field in form %} {% if field.errors %}
+                            <strong>{{ field.label }}:</strong>{{ field.errors }} {% endif %}{% endfor %}
+                          </li>
                         </ul>
                       </div>
                       {% endif %}
 
-                      <div
-                        class="form-check d-flex justify-content-center mb-5"
-                      >
-                        <input
-                          class="form-check-input me-2"
-                          type="checkbox"
-                          value=""
-                          id="invalidCheck"
-                          required
-                        />
+                      <div class="form-check d-flex justify-content-center mb-5">
+                        <input class="form-check-input me-2" type="checkbox" value="" id="invalidCheck" required />
                         <label class="form-check-label" for="invalidCheck">
                           I agree all statements in
                           <a href="#!">Terms of service</a>
                         </label>
-                        <div class="invalid-feedback">
-                          You must agree before submitting.
-                        </div>
+                        <div class="invalid-feedback">You must agree before submitting.</div>
                       </div>
 
-                      <div
-                        class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"
-                      >
-                        <button
-                          type="submit"
-                          class="btn btn-lg"
-                          style="background-color: #0085ff"
-                        >
-                          Register
-                        </button>
+                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                        <button type="submit" class="btn btn-lg" style="background-color: #0085ff">Register</button>
                       </div>
                     </form>
                   </div>

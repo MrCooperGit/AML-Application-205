@@ -20,14 +20,6 @@ admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
 
-class CustomUserModel(admin.ModelAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'entity')
-    search_fields = ('email', 'first_name', 'last_name', 'entity__name')
-
-
-admin.site.register(CustomUser, CustomUserModel)
-
-
 class RiskAssessmentInline(admin.TabularInline):
     model = RiskAssessment
     extra = 0
