@@ -30,21 +30,22 @@ class CustomerDueDiligenceForm(forms.ModelForm):
 
 
 class CustomerVerificationForm(forms.ModelForm):
-    existing_customer = forms.ModelChoiceField(
-        queryset=Customer.objects.all(),
-        empty_label="Select an existing customer",
-        required=True,
+    existing_customers = forms.ModelChoiceField(
+        queryset=Customer.objects.none(),
+        required=False,
     )
 
     class Meta:
         model = Customer
         fields = [
-            'existing_customer',
+            'existing_customers',
             'proof_of_address',
             'proof_of_identity',
         ]
 
-        widgets = {
-            'proof_of_address': forms.ClearableFileInput(attrs={'multiple': False}),
-            'proof_of_identity': forms.ClearableFileInput(attrs={'multiple': False}),
-        }
+    def __init__(self, *args, **kwargs):
+        existing_customers = kwargs.pop('existing_customers', None)
+        super().__init__(*args, **kwargs)
+
+        if existing_customers is not None:
+            self.fields['existing_customers'].queryset = existing_customers
