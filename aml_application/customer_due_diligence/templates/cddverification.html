@@ -9,10 +9,7 @@
       crossorigin="anonymous"
     />
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   </head>
   <body>
     <h1>Customer Verification</h1>
@@ -21,16 +18,14 @@
       {% csrf_token %} {{ form.as_p }}
       <!---->
       {% if messages %}
-      <ul class="messages">
+      <ul class="messages list-unstyled">
         {% for message in messages %}
-        <li
-          class="{% if message.tags == 'error' %}alert alert-danger{% elif message.tags == 'success' %}alert alert-success{% else %}alert alert-info{% endif %}"
-        >
+        <li class="alert {{message.tags}} alert-dismissible fade show" role="alert">
           {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </li>
-        {% endfor %}
+        {% endfor %}{% endif %}
       </ul>
-      {% endif %}
 
       <input type="submit" value="Submit" />
     </form>

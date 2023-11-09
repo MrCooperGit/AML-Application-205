@@ -1,5 +1,5 @@
 from django import forms
-from base_app.models import Customer
+from base_app.models import Customer, Entity
 # from datetime import datetime
 
 
@@ -13,12 +13,20 @@ class CustomerDueDiligenceForm(forms.ModelForm):
             'phone',
             'email',
             'additional_info',
+            'entity',
         ]
-        widgets = {
-            'date_of_birth': forms.DateInput(attrs={'type': 'date', 'input_formats': ['%Y-%m-%d']}),
-        }
 
-    additional_info = forms.CharField(required=False),
+    full_name = forms.CharField(),
+    date_of_birth = forms.DateField(input_formats=['dd-MM-yyyy']),
+    address = forms.CharField(),
+    phone = forms.IntegerField(),
+    email = forms.EmailField(),
+    additional_info = forms.CharField(),
+    entity = forms.ModelChoiceField(
+        queryset=Entity.objects.all(),
+        empty_label=None,
+        required=False
+    )
 
 
 class CustomerVerificationForm(forms.ModelForm):

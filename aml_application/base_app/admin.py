@@ -23,6 +23,8 @@ admin.site.register(User, CustomUserAdmin)
 class RiskAssessmentInline(admin.TabularInline):
     model = RiskAssessment
     extra = 0
+    list_display = ['offer_anonymity', 'offer_large_value_services', 'offer_services_black_list', 'offer_services_grey_list',
+                    'offer_services_outside_NZ', 'cash_intensive', 'company_services', 'trust_services', 'remittance_services', 'virtual_assets_services']
 
 
 class CustomerInline(admin.TabularInline):

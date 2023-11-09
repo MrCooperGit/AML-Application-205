@@ -4,9 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views import View
 from reportlab.lib.pagesizes import letter, A4
-import os
 from django.templatetags.static import static
-from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 
 from .forms import CustomerDueDiligenceForm, CustomerVerificationForm
@@ -85,18 +83,30 @@ def generate_pdf_content(response):
 def customer_due_diligence_view(request):
     if request.method == 'POST':
         form = CustomerDueDiligenceForm(request.POST)
+
         if form.is_valid():
+            customer = form.save(commit=False)
+            customer.entity = request.user.userprofile.entity
+
             full_name = form.cleaned_data['full_name']
             date_of_birth = form.cleaned_data['date_of_birth']
+            email = form.cleaned_data['email']
+
             if Customer.objects.filter(full_name=full_name, date_of_birth=date_of_birth).exists():
                 messages.error(
                     request, 'A customer with that full name and date of birth already exists')
+            elif Customer.objects.filter(email=email,).exists():
+                messages.error(
+                    request, 'A customer with that email already exists')
             else:
                 form.save()
                 messages.success(request, 'Customer added successfully')
-                return redirect('/cdd/register')
-
+                return redirect('cdd:register')
+        else:
+            return render(request, 'cddform.html', {'form': form})
     else:
+        additional_info = request.POST.get('additional_info')
+        print(additional_info, "|")
         form = CustomerDueDiligenceForm()
 
     return render(request, 'cddform.html', {'form': form})
@@ -121,8 +131,7 @@ def customer_verification_view(request):
                 existing_customer.identity_verified = True
                 existing_customer.address_verified = True
                 existing_customer.save()
-                messages.success(request, 'Customer verified')
-                return redirect('/cdd/verify')
+                return render(request, 'cdd_form_submitted.html')
             else:
                 messages.error(request, 'Please select an existing customer')
         else:

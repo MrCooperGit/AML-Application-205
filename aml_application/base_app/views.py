@@ -12,6 +12,11 @@ def home(request):
     return render(request, 'home.html')
 
 
+def logout_button(request):
+    logout(request)
+    return render(request, 'home.html')
+
+
 def aboutus(request):
     return render(request, 'aboutus.html')
 

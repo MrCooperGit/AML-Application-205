@@ -9,59 +9,64 @@ YES_NO_CHOICES = (
 
 class RiskAssessmentForm(forms.ModelForm):
     offer_anonymity = forms.ChoiceField(
-        label=RiskAssessment._meta.get_field('offer_anonymity').verbose_name,
+        label='Do you or your clients offer anonymity to customers?',
         choices=YES_NO_CHOICES,
         widget=forms.RadioSelect(attrs={'class': 'form-check-inline'}),
     )
-    offer_large_value_services = forms.BooleanField(
-        label=RiskAssessment._meta.get_field(
-            'offer_large_value_services').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    offer_large_value_services = forms.ChoiceField(
+        label='Do you or your clients offer services for the movement of large values or volumes of funds?',
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'class': 'form-check-inline'}),
     )
-    offer_services_black_list = forms.BooleanField(
-        label=RiskAssessment._meta.get_field(
-            'offer_services_black_list').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    offer_services_black_list = forms.ChoiceField(
+        label='Do you or your clients offer services to any of the following countries? \nNorth Korea, Iran or Myanmar',
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'class': 'form-check-inline'}),
     )
-    offer_services_grey_list = forms.BooleanField(
-        label=RiskAssessment._meta.get_field(
-            'offer_services_grey_list').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    offer_services_grey_list = forms.ChoiceField(
+        label='Do you or your clients offer services to any of the following countries? \nAlbania, Barbados, Burkina Faso,'
+        'Cameroon, Cayman Islands, Croatia, Democratic Republic of Congo, Gibraltar, Haiti, Jamaica, Jordan, Mali, Mozambique, Nigeria, Panama,'
+        'Philippines, Senegal, South Africa, South Sudan, Syria, Tanzania, Türkiye, Uganda, UAE, Uganda, Vietnam or Yemen',
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'class': 'form-check-inline'}),
     )
-    offer_services_outside_NZ = forms.BooleanField(
-        label=RiskAssessment._meta.get_field(
-            'offer_services_outside_NZ').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    offer_services_outside_NZ = forms.ChoiceField(
+        label='Do you or your clients offer services to customers outside New Zealand?',
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'class': 'form-check-inline'}),
     )
-    cash_intensive = forms.BooleanField(
-        label=RiskAssessment._meta.get_field('cash_intensive').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    cash_intensive = forms.ChoiceField(
+        label="Are yours or any of your client's services cash intensive?",
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'class': 'form-check-inline'}),
     )
-    company_services = forms.BooleanField(
-        label=RiskAssessment._meta.get_field('company_services').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    company_services = forms.ChoiceField(
+        label='Do you or your clients offer services for registering companies?',
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'class': 'form-check-inline'}),
     )
-    trust_services = forms.BooleanField(
-        label=RiskAssessment._meta.get_field('trust_services').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    trust_services = forms.ChoiceField(
+        label='Do you or your clients offer trust services?',
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'class': 'form-check-inline'}),
     )
-    remittance_services = forms.BooleanField(
-        label=RiskAssessment._meta.get_field(
-            'remittance_services').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    remittance_services = forms.ChoiceField(
+        label='Do you or your clients offer services for money remittance?',
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'class': 'form-check-inline'}),
     )
-    virtual_assets_services = forms.BooleanField(
-        label=RiskAssessment._meta.get_field(
-            'virtual_assets_services').verbose_name,
-        widget=forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')], attrs={
+    virtual_assets_services = forms.ChoiceField(
+        label='Do you or your clients offer services involving virtual/digital assets?',
+        choices=YES_NO_CHOICES,
+        widget=forms.RadioSelect(attrs={
             'type': 'checkbox', 'class': 'form-check-inline'}),
     )
 

@@ -13,8 +13,7 @@ urlpatterns = [
     path('landing/', include('landing_app.urls')),
     path('aboutus/', views.aboutus, name='aboutus'),
     path('contactus/', views.contactus, name='contactus'),
-    path('logout/', LogoutView.as_view(),
-         name='logout', kwargs={'next_page': '/'}),
+    path('logout/', views.logout_button, name='logout'),
     path('admin/', admin.site.urls),
 ]
 
