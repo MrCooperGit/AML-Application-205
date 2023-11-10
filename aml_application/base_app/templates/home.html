@@ -11,250 +11,256 @@
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
     />
-   
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-     
     />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <title>AML Application</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
-    
-  </head>
-  
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}" />
+
     <link rel="stylesheet" href="{% static 'home.css' %}" />
   </head>
-  
-<body>
 
-
-  <!-- ***** Preloader End ***** -->
-
-  <!-- ***** Header Area Start ***** -->
-  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <nav class="main-nav">
-            <!-- ***** Logo Start ***** -->
-            <a  class="logo">
-              <h4>AML <span> Solutions</span></h4>
-            </a>
-            <!-- ***** Logo End ***** -->
-            <!-- ***** Menu Start ***** -->
-            <ul class="nav"> 
-              <li class="scroll-to-section"><a href="{% url 'home' %}">Home</a></li>
-              <li class="scroll-to-section"><a href="{% url 'aboutus' %}">About Us</a></li>
-
-             <!-- <li class="scroll-to-section"><a href="#services">Services</a></li> -->
-              <!-- <li class="scroll-to-section"><a href="#portfolio">Portfolio</a></li> -->
-              <!-- <li class="scroll-to-section"><a href="#blog">Resources</a></li>  -->
-              <li class="scroll-to-section"><a href="{% url 'contactus' %}">Contact Us</a></li> 
-              <li class="scroll-to-section"><a href="{% url 'base_app:register' %}">Sign up</a></li>
-              <li class="scroll-to-section"><a href="{% url 'base_app:login' %}">Log in</a></li>
-
-              <li class="scroll-to-section"><div class="main-red-button"><a href="{% url 'contactus' %}"">Contact Now</a></div></li> 
-            </ul>        
-            <a class='menu-trigger'>
+  <body>
+    <!-- ***** Preloader End ***** -->
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <nav class="main-nav">
+              <!-- ***** Logo Start ***** -->
+              <a class="logo">
+                <h4>AML <span> Solutions</span></h4>
+              </a>
+              <!-- ***** Logo End ***** -->
+              <!-- ***** Menu Start ***** -->
+              <ul class="nav">
+                <li class="scroll-to-section"><a href="{% url 'home' %}">Home</a></li>
+                <li class="scroll-to-section"><a href="{% url 'aboutus' %}">About Us</a></li>
+                <!-- <li class="scroll-to-section"><a href="#services">Services</a></li> -->
+                <!-- <li class="scroll-to-section"><a href="#portfolio">Portfolio</a></li> -->
+                <!-- <li class="scroll-to-section"><a href="#blog">Resources</a></li>  -->
+                <li class="scroll-to-section"><a href="{% url 'contactus' %}">Contact Us</a></li>
+                {% if user.is_authenticated %}
+                <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li class="scroll-to-section"><a href="{% url 'base_app:login' %}">Login</a></li>
+                <li class="scroll-to-section"><a href="{% url 'base_app:register' %}">Sign Up</a></li>
+                {% endif %}
+              </ul>
+              <a class="menu-trigger">
                 <span>Menu</span>
+              </a>
+              <!-- ***** Menu End ***** -->
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-6 align-self-center">
+                <div class="left-content header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
+                  <!-- <h6>Manage your entire AML compliance from one platform</h6> -->
+                  <h2>Manage your <em>AML compliance</em> from <span>one platform</span></h2>
+                  <p>
+                    Looking after Anti-Money Laundering (AML) and Countering the Financing of Terrorism (CFT) can sometimes
+                    feel like a trip to the dentist - painful and expensive.
+                  </p>
+
+                  <p>But it doesn’t have to be.</p>
+
+                  <p>
+                    AML Solutions is New Zealand’s first AML platform - owned and operated right here in Aotearoa - that
+                    gives you total control of all your AML obligations in one place. With AML Solutions, you’ll achieve
+                    total compliance, cut costs, reduce risk, and sleep better.
+                  </p>
+
+                  <p>
+                    It’s a one-stop-shop for helping you manage your AML/CFT programme end-to-end. Compliance just got easier
+                    with an umbrella view of your tasks on a single cloud-based platform.
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                  <!-- <img src="assets/images/banner-right-image.png" alt="team meeting"> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="portfolio" class="our-portfolio section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 offset-lg-0">
+            <div class="section-heading wow bounceIn" data-wow-duration="1s" data-wow-delay="0.2s">
+              <h2>Solving compliance problems across different sectors</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3 col-sm-6">
+            <a href="#">
+              <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+                <div class="hidden-content">
+                  <h4>Accountants</h4>
+                  <p>Captured under AML legislation? We've got you covered with AML Software for Accountants.</p>
+                </div>
+                <div class="showed-content">
+                  Accountants
+                  <img src="assets/images/portfolio-image.png" alt="" />
+                </div>
+              </div>
             </a>
-            <!-- ***** Menu End ***** -->
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
-  <!-- ***** Header Area End ***** -->
-
-  <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="row">
-            <div class="col-lg-6 align-self-center">
-              <div class="left-content header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
-                <!-- <h6>Manage your entire AML compliance from one platform</h6> -->
-                <h2>Manage your <em>AML compliance</em> from <span>one platform</span></h2>
-                <p>Looking after Anti-Money Laundering (AML) and Countering the Financing of Terrorism (CFT) can sometimes feel like a trip to the dentist - painful and expensive.</p>
-               
-                <p>But it doesn’t have to be.</p>
-                 
-                <p>AML Solutions is New Zealand’s first AML platform - owned and operated right here in Aotearoa - that gives you total control of all your AML obligations in one place. With AML Solutions, you’ll achieve total compliance, cut costs, reduce risk, and sleep better.</p>
-                  
-                <p>It’s a one-stop-shop for helping you manage your AML/CFT programme end-to-end. Compliance just got easier with an umbrella view of your tasks on a single cloud-based platform.</p>
-                
-                 
-                </form>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <a href="#">
+              <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.4s">
+                <div class="hidden-content">
+                  <h4>Law Firms</h4>
+                  <p>The easy way to maintain confidence and compliance in your Law firm.</p>
+                </div>
+                <div class="showed-content">
+                  Law Firms
+                  <img src="assets/images/portfolio-image.png" alt="" />
+                </div>
               </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
-                <!-- <img src="assets/images/banner-right-image.png" alt="team meeting"> -->
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <a href="#">
+              <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.5s">
+                <div class="hidden-content">
+                  <h4>Financial Services</h4>
+                  <p>Record & manage client information the easy way with AML Solutions for financial services.</p>
+                </div>
+                <div class="showed-content">
+                  Financial Services
+                  <img src="assets/images/portfolio-image.png" alt="" />
+                </div>
               </div>
-            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <a href="#">
+              <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+                <div class="hidden-content">
+                  <h4>Real Estate</h4>
+                  <p>A complete AML/CFT solution for Real Estate.</p>
+                </div>
+                <div class="showed-content">
+                  Real Estate
+                  <img src="assets/images/portfolio-image.png" alt="" />
+                </div>
+              </div>
+            </a>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-
-
-  <div id="portfolio" class="our-portfolio section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12 offset-lg-0">
-          <div class="section-heading  wow bounceIn" data-wow-duration="1s" data-wow-delay="0.2s">
-            <h2>Solving compliance problems across different sectors</h2>
+    <div id="blog" class="our-blog section">
+      <div class="container">
+        <div class="row my-5 py-5">
+          <div class="col-lg-6 wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.25s">
+            <div class="section-heading">
+              <h2>AML/CFT <em>News </em> and <span> Updates</span></h2>
+            </div>
+          </div>
+          <div class="col-lg-6 wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.25s">
+            <div class="top-dec">
+              <img src="assets/images/blog-dec.png" alt="" />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-3 col-sm-6">
-          <a href="#">
-            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.3s">
-              <div class="hidden-content">
-                <h4>Accountants</h4>
-                <p>Captured under AML legislation? We've got you covered with AML Software for Accountants.</p>
-               </div>
-              <div class="showed-content">
-                Accountants
-                <img src="assets/images/portfolio-image.png" alt="">
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-          <a href="#">
-            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.4s">
-              <div class="hidden-content">
-                <h4>Law Firms</h4>
-                <p>The easy way to maintain confidence and compliance in your Law firm.</p>
-                </div>
-              <div class="showed-content">
-                Law Firms
-                <img src="assets/images/portfolio-image.png" alt="">
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-          <a href="#">
-            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.5s">
-              <div class="hidden-content">
-                <h4>Financial Services</h4>
-                <p>Record & manage client information the easy way with AML Solutions for financial services.</p>
-              </div>
-              <div class="showed-content">
-                Financial Services
-                <img src="assets/images/portfolio-image.png" alt="">
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-          <a href="#">
-            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.6s">
-              <div class="hidden-content">
-                <h4>Real Estate</h4>
-                <p>A complete AML/CFT solution for Real Estate.</p>
-               </div>
-              <div class="showed-content">
-                Real Estate
-                <img src="assets/images/portfolio-image.png" alt="">
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="row my-5">
+          <div class="col-lg-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.25s">
+            <div class="left-image">
+              <a href="#"><img src="assets/images/big-blog-thumb.jpg" alt="Workspace Desktop" /></a>
+              <div class="info">
+                <div class="inner-content">
+                  <ul>
+                    <li><i class="fa fa-calendar"></i> 25 Oct 2023</li>
+                  </ul>
+                  <a href="#"><h4>Updates on changes to &amp; AML/CFT Act regulations</h4></a>
 
-  <div id="blog" class="our-blog section">
-    <div class="container">
-      <div class="row my-5 py-5">
-        <div class="col-lg-6 wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.25s">
-          <div class="section-heading">
-            <h2>AML/CFT <em>News </em> and <span> Updates</span></h2>
-          </div>
-        </div>
-        <div class="col-lg-6 wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.25s">
-          <div class="top-dec">
-            <img src="assets/images/blog-dec.png" alt="">
-          </div>
-        </div>
-      </div>
-      <div class="row my-5">
-        <div class="col-lg-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.25s">
-          <div class="left-image">
-            <a href="#"><img src="assets/images/big-blog-thumb.jpg" alt="Workspace Desktop"></a>
-            <div class="info">
-              <div class="inner-content">
-                <ul>
-                  <li><i class="fa fa-calendar"></i> 25 Oct 2023</li>
-                </ul>
-                <a href="#"><h4>Updates on changes to &amp; AML/CFT Act regulations</h4></a>
-                
-                <p>https://www.dia.govt.nz/AML-CFT-Update-on-changes-to-AML-CFT-Act-regulations</p>
-                <div class="main-blue-button">
-                  <a href="#">Discover More</a>
+                  <p>https://www.dia.govt.nz/AML-CFT-Update-on-changes-to-AML-CFT-Act-regulations</p>
+                  <div class="main-blue-button">
+                    <a href="#">Discover More</a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-lg-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.25s">
-          <div class="right-list">
-            <ul>
-              <li>
-                <div class="left-content align-self-center">
-                  <span><i class="fa fa-calendar"></i> 30 Sep 2023</span>
-                  <a href="#"><h4>List of Jurisdictions under &amp; Increased Monitoring</h4></a>
-                  <p>https://www.dia.govt.nz/AML-CFT-List-of-Jurisdictions-under-Increased-Monitoring</p>
-                </div>
-                <div class="right-image">
-                  <a href="#"><img src="assets/images/blog-thumb-01.jpg" alt=""></a>
-                </div>
-              </li>
-              <li>
-                <div class="left-content align-self-center">
-                  <span><i class="fa fa-calendar"></i> 27 Aug 2023</span>
-                  <a href="#"><h4>Regulatory changes – Anti-Money Laundering & &amp; Countering Financing of Terrorism Act 2009</h4></a>
-                  <p>https://www.dia.govt.nz/AML-CFT-Regulatory-and-Legislative-Changes-Anti-Money-Laundering-and-Counter-Financing-of-Terrorism</p>
-                </div>
-                <div class="right-image">
-                  <a href="#"><img src="assets/images/blog-thumb-01.jpg" alt=""></a>
-                </div>
-              </li>
-              <li>
-                <div class="left-content align-self-center">
-                  <span><i class="fa fa-calendar"></i> 06 July 2023</span>
-                  <a href="#"><h4>Common areas of &amp; non-compliance</h4></a>
-                  <p>https://www.dia.govt.nz/AML-CFT-Common-areas-of-non-compliance</p>
-                </div>
-                <div class="right-image">
-                  <a href="#"><img src="assets/images/blog-thumb-01.jpg" alt=""></a>
-                </div>
-              </li>
-            </ul>
+          <div class="col-lg-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.25s">
+            <div class="right-list">
+              <ul>
+                <li>
+                  <div class="left-content align-self-center">
+                    <span><i class="fa fa-calendar"></i> 30 Sep 2023</span>
+                    <a href="#"><h4>List of Jurisdictions under &amp; Increased Monitoring</h4></a>
+                    <p>https://www.dia.govt.nz/AML-CFT-List-of-Jurisdictions-under-Increased-Monitoring</p>
+                  </div>
+                  <div class="right-image">
+                    <a href="#"><img src="assets/images/blog-thumb-01.jpg" alt="" /></a>
+                  </div>
+                </li>
+                <li>
+                  <div class="left-content align-self-center">
+                    <span><i class="fa fa-calendar"></i> 27 Aug 2023</span>
+                    <a href="#"
+                      ><h4>
+                        Regulatory changes – Anti-Money Laundering & &amp; Countering Financing of Terrorism Act 2009
+                      </h4></a
+                    >
+                    <p>
+                      https://www.dia.govt.nz/AML-CFT-Regulatory-and-Legislative-Changes-Anti-Money-Laundering-and-Counter-Financing-of-Terrorism
+                    </p>
+                  </div>
+                  <div class="right-image">
+                    <a href="#"><img src="assets/images/blog-thumb-01.jpg" alt="" /></a>
+                  </div>
+                </li>
+                <li>
+                  <div class="left-content align-self-center">
+                    <span><i class="fa fa-calendar"></i> 06 July 2023</span>
+                    <a href="#"><h4>Common areas of &amp; non-compliance</h4></a>
+                    <p>https://www.dia.govt.nz/AML-CFT-Common-areas-of-non-compliance</p>
+                  </div>
+                  <div class="right-image">
+                    <a href="#"><img src="assets/images/blog-thumb-01.jpg" alt="" /></a>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- <footer>
+    <!-- <footer>
     <div class="container">
       <div class="row">
         <div class="col-lg-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.25s">
@@ -264,60 +270,61 @@
     </div>
   </footer> -->
 
-  
-  <footer class="mainfooter p-3" role="contentinfo" style="background-color: rgb(15, 50, 100); color: white;">
-    <div class="footer-middle">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3 col-sm-6">
-          <!--Column1-->
-          <div class="footer-pad lead ">
-            <h4>Links</h4>
-            <ul class="list-unstyled h6 my-3 lead">
-              <li><a href="{% url 'home' %}" class="text-white">Home</a></li>
-              <li><a href="{% url 'aboutus' %}" class="text-white">About us</a></li>
-              <li><a href="{% url 'contactus' %}" class="text-white">Contact Us</a></li>
+    <footer class="mainfooter p-3" role="contentinfo" style="background-color: rgb(15, 50, 100); color: white">
+      <div class="footer-middle">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3 col-sm-6">
+              <!--Column1-->
+              <div class="footer-pad lead">
+                <h4>Links</h4>
+                <ul class="list-unstyled h6 my-3 lead">
+                  <li><a href="{% url 'home' %}" class="text-white">Home</a></li>
+                  <li><a href="{% url 'aboutus' %}" class="text-white">About us</a></li>
+                  <li><a href="{% url 'contactus' %}" class="text-white">Contact Us</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <h4>Follow Us</h4>
+              <ul class="social-network social-circle my-3">
+                <li>
+                  <a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook text-white lead"></i></a>
+                </li>
+                <li>
+                  <a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin text-white lead"></i></a>
+                </li>
               </ul>
-          </div>
-        </div>
-       
-        
-        <div class="col-md-3">
-          <h4>Follow Us</h4>
-              <ul class="social-network social-circle  my-3">
-               <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook text-white lead" ></i></a></li>
-               <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin text-white lead"></i></a></li>
-              </ul>		
-              
+
               <div class="col-md-3">
                 <h4>Address</h4>
-                    <ul class="social-network social-circle  my-3">
-                     <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook text-white lead" ></i></a></li>
-                     <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin text-white lead"></i></a></li>
-                    </ul>		
+                <ul class="social-network social-circle my-3">
+                  <li>
+                    <a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook text-white lead"></i></a>
+                  </li>
+                  <li>
+                    <a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin text-white lead"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 copy">
+                <p class="text-center text-white">New Azealand, City, Street, 10345. +123556677</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      </div>
-    <div class="row">
-      <div class="col-md-12 copy">
-        <p class="text-center text-white">New Azealand, City, Street, 10345. +123556677</p>
-      </div>
-	</div>
+    </footer>
 
-
-  </div>
-  </div>
-</footer>
-  
-
-  <!-- Scripts -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/owl-carousel.js"></script>
-  <script src="assets/js/animation.js"></script>
-  <script src="assets/js/imagesloaded.js"></script>
-  <script src="assets/js/templatemo-custom.js"></script>
-
-</body>
+    <!-- Scripts -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/owl-carousel.js"></script>
+    <script src="assets/js/animation.js"></script>
+    <script src="assets/js/imagesloaded.js"></script>
+    <script src="assets/js/templatemo-custom.js"></script>
+  </body>
 </html>
-
-
