@@ -1,11 +1,13 @@
 from django.urls import path
-from risk_assessment import views
-from base_app import views as base_views
+from . import views
 
 app_name = 'risk_assessment'
 
 urlpatterns = [
     # all paths preceded by risk/
     path('home/', views.home, name='home'),
-    path('risk-assess/', views.risk_assessment_view, name='risk_assessment_view'),
+    path('view/', views.risk_assessment, name='view'),
+    path('risk-assess/', views.risk_assessment_view, name='risk-assessment-view'),
+    path('risk-pdf/', views.pdf_view, name='risk-pdf'),
+
 ]
