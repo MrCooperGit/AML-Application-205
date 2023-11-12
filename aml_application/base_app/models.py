@@ -114,15 +114,19 @@ class Customer(models.Model):
     additional_info = models.CharField(max_length=500, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.identity_verified:
-            self.identity_verified_time = timezone.now()
-        else:
-            self.identity_verified_time = None
+        update_verification_times = kwargs.pop(
+            'update_verification_times', True)
 
-        if self.address_verified:
-            self.address_verified_time = timezone.now()
-        else:
-            self.address_verified_time = None
+        if update_verification_times:
+            if self.identity_verified:
+                self.identity_verified_time = timezone.now()
+            else:
+                self.identity_verified_time = None
+
+            if self.address_verified:
+                self.address_verified_time = timezone.now()
+            else:
+                self.address_verified_time = None
 
         super(Customer, self).save(*args, **kwargs)
 

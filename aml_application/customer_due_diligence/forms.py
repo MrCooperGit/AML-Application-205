@@ -17,7 +17,7 @@ class CustomerDueDiligenceForm(forms.ModelForm):
         ]
 
     full_name = forms.CharField(),
-    date_of_birth = forms.DateField(input_formats=['dd-MM-yyyy']),
+    date_of_birth = forms.DateField(),
     address = forms.CharField(),
     phone = forms.IntegerField(),
     email = forms.EmailField(),
