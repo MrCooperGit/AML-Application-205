@@ -12,6 +12,11 @@ def home(request):
     return render(request, 'home.html')
 
 
+def logout_button(request):
+    logout(request)
+    return render(request, 'home.html')
+
+
 def aboutus(request):
     return render(request, 'aboutus.html')
 
@@ -38,7 +43,11 @@ def custom_login_view(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('base_app:index')
+                next_url = request.GET.get('next', None)
+                if next_url:
+                    return redirect(next_url)
+                else:
+                    return redirect('base_app:index')
             else:
                 messages.error(
                     request, 'The username or password is incorrect')

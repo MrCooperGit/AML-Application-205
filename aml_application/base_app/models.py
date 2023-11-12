@@ -100,7 +100,7 @@ class Customer(models.Model):
     full_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
     address = models.CharField(max_length=200)
-    phone = models.IntegerField(default=123)
+    phone = models.IntegerField()
     email = models.EmailField(max_length=50)
     customer_created_time = models.DateTimeField(auto_now_add=True)
     identity_verified = models.BooleanField(default=False, null=True)
@@ -111,7 +111,7 @@ class Customer(models.Model):
     proof_of_address = models.FileField(
         upload_to='customer_documents/address/', null=True, blank=True)
     address_verified_time = models.DateTimeField(auto_now_add=True)
-    additional_info = models.CharField(max_length=500, null=True)
+    additional_info = models.CharField(max_length=500, blank=True)
 
     def save(self, *args, **kwargs):
         if self.identity_verified:
