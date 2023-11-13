@@ -1,3 +1,11 @@
+:root {
+    --logo-red: #fe3f40;
+    --logo-blue: #03a4ed;
+    --tab-color: #F05560;
+    --old-tab: #ebb704;
+}
+
+
 .app-container {
     height: 100vh;
     height: -webkit-fill-available;
@@ -22,14 +30,14 @@
 
 .tabs-container .active {
     background: #fff !important;
-    color: #ebb704 !important;
-    border-top: solid 2px #ebb704 !important;
+    color: var(--tab-color) !important;
+    border-top: solid 2px var(--tab-color) !important;
 }
 
 .tabs .nav-item {
     color: #000;
     cursor: pointer;
-    margin-right: 2px;
+    margin-right: 3px;
     font-size: 16px;
     font-weight: bold;
     border-top: solid 2px transparent;
@@ -44,7 +52,7 @@
 }
 
 .tabs-container .active .tab-inner-text {
-    color: #ebb704;
+    color: var(--tab-color);
 }
 
 .nav-link, .nav-item {
@@ -60,3 +68,35 @@
 .close-tab:hover {
     color: #4f4f4f;
 }
+
+.logo {
+    line-height: 100px;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    float: left;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+.logo h4 {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--logo-blue);
+    line-height: 35px;
+    margin-bottom: 0px;
+    float: left;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+.logo h4 span {
+    color: var(--logo-red)
+  }
