@@ -29,7 +29,7 @@ def index(request, app_name=None):
 
     # user is here if app name is valid
     # format the app_template in preparation for rendering
-    app_template_name = f'{app_name}.html'
+    app_template_name = f'landing_app/{app_name}.html'
 
     available_apps_obj = AvailableApps.objects.all()
     open_user_tabs_obj = UserTab.objects.filter(user=request.user).select_related('app_id')
@@ -42,7 +42,7 @@ def index(request, app_name=None):
             tab.is_active = False
         tab.save()
     
-    return render(request, 'landing.html', {
+    return render(request, 'landing_app/landing.html', {
         'app_template_name': app_template_name,
         'available_apps': available_apps_obj,
         'tabs': open_user_tabs_obj,

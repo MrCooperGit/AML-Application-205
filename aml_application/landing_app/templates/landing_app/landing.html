@@ -43,7 +43,7 @@ This tab system shows all the active forms that are currently being filled out. 
                     <li><a class="dropdown-item" rel="noreferrer noopener" target="_blank" href="{% url 'admin:index' %}">Admin Panel</a></li>
                     {% endif %}
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
                 </ul>
             </div>
         </nav>
