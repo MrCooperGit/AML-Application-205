@@ -41,6 +41,8 @@ MESSAGE_TEMPLATE = os.path.join(
     BASE_DIR, 'aml_application\\templates\custom_messages.html')
 # print(MESSAGE_TEMPLATE)
 
+CSRF_COOKIE_SECURE = True
+
 # Application definition
 
 INSTALLED_APPS = [
