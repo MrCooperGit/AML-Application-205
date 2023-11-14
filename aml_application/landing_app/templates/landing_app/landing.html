@@ -16,14 +16,16 @@ This tab system shows all the active forms that are currently being filled out. 
     <div class="app-container d-flex flex-nowrap">
         <nav class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark col-md-2">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">AML app</span>
+                <a class="logo">
+                    <h4 class="px-3b">AML <span> Solutions</span></h4>
+                  </a>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 {% for app in available_apps %}
                 <li class="nav-item">
                     <a href="/landing/tab/add/{{ app.name }}" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                        <!-- <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg> -->
                         {{ app.display_name }}
                     </a>
                 </li>
@@ -41,7 +43,7 @@ This tab system shows all the active forms that are currently being filled out. 
                     <li><a class="dropdown-item" rel="noreferrer noopener" target="_blank" href="{% url 'admin:index' %}">Admin Panel</a></li>
                     {% endif %}
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
                 </ul>
             </div>
         </nav>
@@ -53,7 +55,7 @@ This tab system shows all the active forms that are currently being filled out. 
                             
                             {% for tab in tabs %}
                             <li class="nav-item {% if tab.is_active %}active{% endif %}">
-                                <a class="nav-link p-2" href="/landing/{{ tab.app_id.name }}">
+                                <a class="nav-link p-2 px-3" href="/landing/{{ tab.app_id.name }}">
                                     <span class="tab-inner-text ms-1">
                                         {{ tab.app_id.display_name }}
                                         <span class="close-tab"><i data-delete-tab="/landing/tab/delete/{{tab.app_id.name}}" class="fa fa-times" aria-hidden="true"></i></span>
