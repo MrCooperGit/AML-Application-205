@@ -102,6 +102,8 @@ class Customer(models.Model):
     address = models.CharField(max_length=200)
     phone = models.IntegerField()
     email = models.EmailField(max_length=50)
+    company = models.ForeignKey(
+        'Company', on_delete=models.CASCADE, null=True, blank=True)
     customer_created_time = models.DateTimeField(auto_now_add=True)
     identity_verified = models.BooleanField(default=False, null=True)
     proof_of_identity = models.FileField(
@@ -141,7 +143,7 @@ class Company(models.Model):
     id = models.AutoField(primary_key=True)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    company_registration_num = models.IntegerField(unique=True)
+    company_registration_num = models.BigIntegerField(unique=True)
     address = models.CharField(max_length=200)
 
     class Meta:
@@ -154,20 +156,20 @@ class Company(models.Model):
 
 class Director(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.customer
+        return self.customer.full_name
 
 
 class Shareholder(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.customer
+        return self.customer.full_name
 
 
 class Active_Session(models.Model):

@@ -13,4 +13,6 @@ urlpatterns = [
     path('customer_list/', views.customer_list_view, name='customer_list'),
     path('update/<int:customer_id>/',
          views.update_customer_view, name='update_customer'),
+    path('create_company/', views.create_company,
+         name='create_company_view'),
 ]
