@@ -22,14 +22,11 @@ This tab system shows all the active forms that are currently being filled out. 
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
-                {% for app in available_apps %}
                 <li class="nav-item">
-                    <a href="/landing/tab/add/{{ app.name }}" class="nav-link text-white">
-                        <!-- <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg> -->
-                        {{ app.display_name }}
+                    <a href="{% url "cdd:register"  %}" class="nav-link text-white">
+                        Customer Due Diligence: Register
                     </a>
                 </li>
-                {% endfor %}
             </ul>
             <hr>
             <div class="dropdown">
@@ -47,7 +44,7 @@ This tab system shows all the active forms that are currently being filled out. 
                 </ul>
             </div>
         </nav>
-        <main role="main" class="main-container col-md-10 ml-sm-auto">
+        {% comment %} <main role="main" class="main-container col-md-10 ml-sm-auto">
             <div class="">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
                     <div class="tabs-container">
@@ -73,7 +70,7 @@ This tab system shows all the active forms that are currently being filled out. 
                     </div>
                 </section>
             </div>
-        </main>
+        </main> {% endcomment %}
     </div>
     <script>
     $(document).ready(function() {
