@@ -12,20 +12,20 @@ def index(request, app_name=None):
     open_tabs = UserTab.objects.filter(user=request.user)
     user = request.user
 
-    if app_name is None:
-        # means user is at /landing
-        # need to redirect to /landing/[first app in database]/ if database is not empty else /landing/default_app
-        # this will restart the process and the app name will be set, skipping this if statement
-        if len(open_tabs) > 0:
-            app_name = open_tabs[0].app_id.name
-            return redirect(f'/landing/{app_name}/')
-        else:
-            app_name = 'default_app'
-    else:
-        # means user is at /landing/[app name]
-        # need to render the app template if the app name is valid else redirect to /landing to restart the process
-        if not any(tab.app_id.name == app_name for tab in open_tabs):
-            return redirect('/landing')
+    # if app_name is None:
+    #     # means user is at /landing
+    #     # need to redirect to /landing/[first app in database]/ if database is not empty else /landing/default_app
+    #     # this will restart the process and the app name will be set, skipping this if statement
+    #     if len(open_tabs) > 0:
+    #         app_name = open_tabs[0].app_id.name
+    #         return redirect(f'/landing/{app_name}/')
+    #     else:
+    #         app_name = 'default_app'
+    # else:
+    #     # means user is at /landing/[app name]
+    #     # need to render the app template if the app name is valid else redirect to /landing to restart the process
+    #     if not any(tab.app_id.name == app_name for tab in open_tabs):
+    #         return redirect('/landing')
 
     # user is here if app name is valid
     # format the app_template in preparation for rendering
