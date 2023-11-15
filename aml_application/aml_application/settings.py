@@ -41,6 +41,8 @@ MESSAGE_TEMPLATE = os.path.join(
     BASE_DIR, 'aml_application\\templates\custom_messages.html')
 # print(MESSAGE_TEMPLATE)
 
+CSRF_COOKIE_SECURE = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -75,7 +77,7 @@ LOGIN_URL = 'base_app:login'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'base_app/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -95,18 +97,18 @@ WSGI_APPLICATION = 'aml_application.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'aml_application',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'Adminadmin123',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432',
-    #     # 'OPTIONS': {
-    #     #     'service': 'postgresql',
-    #     #     'passfile': '.my_pgpass',
-    #     # }
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'aml_application',
+        'USER': 'postgres',
+        'PASSWORD': 'Adminadmin123',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        # 'OPTIONS': {
+        #     'service': 'postgresql',
+        #     'passfile': '.my_pgpass',
+        # }
+    }
 }
 
 

@@ -1,0 +1,102 @@
+:root {
+    --logo-red: #fe3f40;
+    --logo-blue: #03a4ed;
+    --tab-color: #F05560;
+    --old-tab: #ebb704;
+}
+
+
+.app-container {
+    height: 100vh;
+    height: -webkit-fill-available;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.main-container {
+    background-color: #a4a39b;
+}
+
+.tabs {
+    list-style-type: none;
+}
+
+.tabs .close-tab {
+    padding-left: 2px;
+    color: black;
+    visibility: hidden;
+}
+
+.tabs-container .active {
+    background: #fff !important;
+    color: var(--tab-color) !important;
+    border-top: solid 2px var(--tab-color) !important;
+}
+
+.tabs .nav-item {
+    color: #000;
+    cursor: pointer;
+    margin-right: 3px;
+    font-size: 16px;
+    font-weight: bold;
+    border-top: solid 2px transparent;
+}
+
+.tabs .nav-item:hover {
+    background: -webkit-linear-gradient(#777, #666);
+}
+
+.tabs .nav-item:hover .close-tab {
+    visibility: visible;
+}
+
+.tabs-container .active .tab-inner-text {
+    color: var(--tab-color);
+}
+
+.nav-link, .nav-item {
+    text-decoration: none;
+}
+
+.tab-inner-text {
+    padding-left: 14px;
+    text-align: center;
+    color: #222;
+}
+
+.close-tab:hover {
+    color: #4f4f4f;
+}
+
+.logo {
+    line-height: 100px;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    float: left;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+.logo h4 {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--logo-blue);
+    line-height: 35px;
+    margin-bottom: 0px;
+    float: left;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+.logo h4 span {
+    color: var(--logo-red)
+  }

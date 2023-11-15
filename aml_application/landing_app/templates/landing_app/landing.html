@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AML APP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/main.css' %}">
+</head>
+<!-- This page is the main page for the application, it consists of a sidebar with all the different forms on it, then when clicking on one of them, will create a new tab to the right of it. 
+This tab system shows all the active forms that are currently being filled out.  -->
+<body>
+    <div class="app-container d-flex flex-nowrap">
+        <nav class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark col-md-2">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <a class="logo">
+                    <h4 class="px-3b">AML <span> Solutions</span></h4>
+                  </a>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="{% url "cdd:register"  %}" class="nav-link text-white">
+                        Customer Due Diligence: Register
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://ui-avatars.com/api/?name={{ user.username|default:user.email}}&background=random&size=128" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>{{ user.username|default:user.email }}</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    {% if user.is_superuser %}
+                    <li><a class="dropdown-item" rel="noreferrer noopener" target="_blank" href="{% url 'admin:index' %}">Admin Panel</a></li>
+                    {% endif %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+                </ul>
+            </div>
+        </nav>
+        {% comment %} <main role="main" class="main-container col-md-10 ml-sm-auto">
+            <div class="">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                    <div class="tabs-container">
+                        <ul class="tabs nav">
+                            
+                            {% for tab in tabs %}
+                            <li class="nav-item {% if tab.is_active %}active{% endif %}">
+                                <a class="nav-link p-2 px-3" href="/landing/{{ tab.app_id.name }}">
+                                    <span class="tab-inner-text ms-1">
+                                        {{ tab.app_id.display_name }}
+                                        <span class="close-tab"><i data-delete-tab="/landing/tab/delete/{{tab.app_id.name}}" class="fa fa-times" aria-hidden="true"></i></span>
+                                    </span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </div>
+                </div>
+                <section class="content p-4" style="background-color:white;">
+                    <div class="app-container">
+                        {% include app_template_name %}
+                    </div>
+                </section>
+            </div>
+        </main> {% endcomment %}
+    </div>
+    <script>
+    $(document).ready(function() {
+        $('.close-tab i').click(function(e) {
+            e.preventDefault();
+            var url = $(this).data('delete-tab');
+                $.ajax({
+                    url: url,
+                    success: function(data) {
+                        location.reload();
+                    }
+                })
+            })
+        })
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

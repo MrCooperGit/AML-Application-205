@@ -1,0 +1,5 @@
+<h2>Create New Company</h2>
+<form method="post" action="{% url 'cdd:create_company_view' %}">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Create Company</button>
+</form>

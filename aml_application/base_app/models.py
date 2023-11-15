@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.conf import settings
+
 
 # Create your models here.
 
@@ -9,7 +11,7 @@ from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, 
 class Entity(models.Model):
     name = models.CharField(max_length=100)
     users = models.ManyToManyField(User)
-    
+
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Registered Entities'
@@ -18,9 +20,26 @@ class Entity(models.Model):
         return self.name
 
 
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(email, password, **extra_fields)
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name='userprofile')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='userprofile')
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     USER_TYPE_CHOICES = [
         ('tAcsp', 'Trust or Company Service Provider'),
@@ -38,22 +57,11 @@ class UserProfile(models.Model):
         return self.user_type
 
 
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=20, default='first_name')
-    last_name = models.CharField(max_length=20, default='last_name')
 
     objects = CustomUserManager()
 
@@ -92,8 +100,10 @@ class Customer(models.Model):
     full_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
     address = models.CharField(max_length=200)
-    phone = models.IntegerField(default=123)
+    phone = models.IntegerField()
     email = models.EmailField(max_length=50)
+    company = models.ForeignKey(
+        'Company', on_delete=models.CASCADE, null=True, blank=True)
     customer_created_time = models.DateTimeField(auto_now_add=True)
     identity_verified = models.BooleanField(default=False, null=True)
     proof_of_identity = models.FileField(
@@ -103,18 +113,22 @@ class Customer(models.Model):
     proof_of_address = models.FileField(
         upload_to='customer_documents/address/', null=True, blank=True)
     address_verified_time = models.DateTimeField(auto_now_add=True)
-    additional_info = models.CharField(max_length=500, null=True)
+    additional_info = models.CharField(max_length=500, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.identity_verified:
-            self.identity_verified_time = timezone.now()
-        else:
-            self.identity_verified_time = None
+        update_verification_times = kwargs.pop(
+            'update_verification_times', True)
 
-        if self.address_verified:
-            self.address_verified_time = timezone.now()
-        else:
-            self.address_verified_time = None
+        if update_verification_times:
+            if self.identity_verified:
+                self.identity_verified_time = timezone.now()
+            else:
+                self.identity_verified_time = None
+
+            if self.address_verified:
+                self.address_verified_time = timezone.now()
+            else:
+                self.address_verified_time = None
 
         super(Customer, self).save(*args, **kwargs)
 
@@ -129,7 +143,7 @@ class Company(models.Model):
     id = models.AutoField(primary_key=True)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    company_registration_num = models.IntegerField(unique=True)
+    company_registration_num = models.BigIntegerField(unique=True)
     address = models.CharField(max_length=200)
 
     class Meta:
@@ -142,37 +156,39 @@ class Company(models.Model):
 
 class Director(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.customer
+        return self.customer.full_name
 
 
 class Shareholder(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.customer
+        return self.customer.full_name
+
 
 class Active_Session(models.Model):
     # active session will be for storing forms on an entity level
     id = models.AutoField(primary_key=True)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return self.id
-    
+
+
 class AvailableApps(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     display_name = models.CharField(max_length=100)
-    
+
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Available Apps'
-        
+
     def __str__(self):
-        return self.name 
+        return self.name

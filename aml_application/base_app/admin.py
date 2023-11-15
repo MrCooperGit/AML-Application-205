@@ -23,11 +23,21 @@ admin.site.register(User, CustomUserAdmin)
 class RiskAssessmentInline(admin.TabularInline):
     model = RiskAssessment
     extra = 0
+    list_display = ['offer_anonymity', 'offer_large_value_services', 'offer_services_black_list', 'offer_services_grey_list',
+                    'offer_services_outside_NZ', 'cash_intensive', 'company_services', 'trust_services', 'remittance_services', 'virtual_assets_services']
 
 
 class CustomerInline(admin.TabularInline):
     model = Customer
     extra = 0
+
+
+class CustomUserInline(admin.TabularInline):
+    model = CustomUser
+    extra = 0
+    fields = ('email', 'first_name', 'last_name',)
+    list_display = ('email', 'first_name', 'last_name',)
+    exclude = ('password', 'groups', 'user_permissions')
 
 
 class UserProfileInline(admin.TabularInline):
@@ -36,15 +46,8 @@ class UserProfileInline(admin.TabularInline):
     extra = 0
 
 
-class CustomUserInline(admin.TabularInline):
-    list_display = ('email', 'first_name', 'last_name', 'entity')
-    model = CustomUser
-    extra = 0
-
-
 class CompanyInline(admin.TabularInline):
     list_display = ('name', 'company_registration_num', 'address')
-    exclude = ('password', 'groups', 'user_permissions')
     model = Company
     extra = 0
 
@@ -70,7 +73,8 @@ class EntityAdmin(admin.ModelAdmin):
     exclude = ('users',)
     list_per_page = 20
     inlines = [RiskAssessmentInline, CompanyInline, DirectorInline,
-               ShareholderInline, ActiveSessionInline, UserProfileInline, CustomUserInline, CustomerInline]
+               ShareholderInline, ActiveSessionInline, CustomUserInline, UserProfileInline, CustomerInline]
+
 
 @admin.register(AvailableApps)
 class AvailableAppsAdmin(admin.ModelAdmin):
@@ -80,6 +84,5 @@ class AvailableAppsAdmin(admin.ModelAdmin):
 
 @admin.register(UserTab)
 class UserTabAdmin(admin.ModelAdmin):
-    list_display = ('id','user', 'app_id', 'is_active')
+    list_display = ('id', 'user', 'app_id', 'is_active')
     list_per_page = 20
-
