@@ -159,3 +159,15 @@ def create_company(request):
     else:
         form = CompanyForm()
         return render(request, 'company_create_form.html', {'form': form})
+
+
+def home_page_view(request):
+    return render(request, 'cdd/base.html')
+
+
+def page1_view(request):
+    return render(request, 'cdd/page1.html')
+
+
+def page2_view(request):
+    return render(request, 'cdd/page2.html')

@@ -1,0 +1,230 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}My Website{% endblock %}</title>
+    <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <script src="{% static 'bootstrap-5.3.2/js/bootstrap.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="{% static 'login.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="row">
+      <div class="col-2">
+        <!-- Sidebar -->
+        <div class="nav flex-column nav-pills me-3" id="sidebar" aria-orientation="vertical">
+          <!-- Sidebar content goes here -->
+          <ul role="tablist">
+            <li>
+              <a class="sidebar-link" href="#page1" onclick="openTabAndSave('Verify Customer', this, '{% url 'cdd:page1'%}')"
+                >Verify Customer</a
+              >
+            </li>
+            <li>
+              <a class="sidebar-link" href="#page2" onclick="openTabAndSave('Check Customer', this, '{% url 'cdd:page2'%}')"
+                >Check Customer</a
+              >
+            </li>
+            <li>
+              <a class="sidebar-link" href="#page3" onclick="openTabAndSave('New Customer', this, '{% url 'cdd:register'%}')"
+                >New Customer</a
+              >
+              <!-- Add more links as needed -->
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="col-10" id="tabs">
+        <!-- Tabs content goes here -->
+        <div class="row">
+          <ul id="tabsList" class="nav nav-tabs" role="tablist"></ul>
+        </div>
+        <div class="row" id="contentContainer">{% block content %}{% endblock %}</div>
+      </div>
+    </div>
+
+    <script>
+      function openTab(pageName, url) {
+        console.log(`Opening tab: ${pageName}, URL: ${url}`);
+
+        // Check if the tab is already open
+        var existingTab = document.getElementById(`${pageName}-tab`);
+
+        // Replace spaces and parentheses with underscores
+        var validPageName = pageName.replace(/[ ()]/g, "_");
+
+        if (!existingTab) {
+          // Create a new tab
+          var tabLink = document.createElement("li");
+          tabLink.innerHTML = `
+            <a class="nav-link text-decoration-none" id="${validPageName}-tab" data-bs-toggle="pill" href="#${pageName}" onclick="loadContent('${pageName}', '${url}')">
+              ${pageName}
+              <button type="button" class="btn-close" aria-label="Close" onclick="closeTab('${pageName}')"></button>
+            </a>
+          `;
+          tabLink.classList.add("nav-item");
+          tabLink.id = `${pageName}-tab`;
+          document.getElementById("tabsList").appendChild(tabLink);
+
+          // Load content for the tab
+          loadContent(pageName, url);
+        } else {
+          // If the tab already exists, find a suitable name
+          var i = 2;
+          var modifiedPageName = `${pageName}-${i}`;
+          while (document.getElementById(`${modifiedPageName}-tab`)) {
+            i++;
+            modifiedPageName = `${pageName}-${i}`;
+          }
+          // Log the ID of the created tab
+          console.log(`Created tab with ID: ${modifiedPageName}-tab`);
+
+          // Create a new tab with the modified name
+          openTab(modifiedPageName, url);
+        }
+      }
+
+      function openTabAndSave(pageName, element, url) {
+        // Save form data for the current page
+        var currentPage = $(".sidebar-link.active").text().trim();
+        // Remove existinf data for current page
+        localStorage.removeItem(currentPage);
+        console.log("Current Page for save (sidebar):", currentPage);
+        saveFormData(currentPage);
+
+        // Remove 'active' class from all sidebar links
+        $(".sidebar-link").removeClass("active");
+
+        // Add 'active' class to the clicked link
+        $(element).addClass("active");
+
+        openTab(pageName, url);
+      }
+
+      // Function to save form data to localStorage
+      function saveFormData(pageName) {
+        localStorage.removeItem(pageName);
+        var formData = {};
+
+        // Iterate through all form elements
+        $("form :input").each(function () {
+          var element = $(this);
+          var fieldName = element.attr("name");
+
+          if (fieldName) {
+            // Check if the field is a datetime field
+            if (element.attr("type") === "datetime") {
+              // Format the datetime field value to "yyyy-MM-ddTHH:mm"
+              var dateValue = element.val();
+              if (dateValue) {
+                var formattedDate = new Date(dateValue).toISOString().slice(0, 16);
+                formData[fieldName] = formattedDate;
+              } else {
+                formData[fieldName] = null;
+              }
+            } else {
+              // For other fields, store the field value as is
+              formData[fieldName] = element.val();
+            }
+          }
+        });
+
+        // Store the form data in localStorage
+        localStorage.setItem(pageName, JSON.stringify(formData));
+
+        // Log the saved data
+        console.log(`Saved data for ${pageName}:`, formData);
+
+        // Check if the data is actually stored in localStorage
+        var storedData = localStorage.getItem(pageName);
+        console.log(`Data stored in localStorage for ${pageName}:`, storedData);
+      }
+
+      // Function to load form data from localStorage
+      function loadFormData(pageName) {
+        // Retrieve the form data from localStorage
+        var storedData = localStorage.getItem(pageName);
+        console.log(`Attempting to load data for ${pageName}. Stored data:`, storedData);
+
+        if (storedData) {
+          // Parse the stored data and populate the form
+          var formData = JSON.parse(storedData);
+
+          // Log the loaded data
+          console.log(`Loaded data for ${pageName}:`, formData);
+
+          // Iterate through all form elements
+          $("form :input").each(function () {
+            var element = $(this);
+            var fieldName = element.attr("name");
+
+            if (fieldName && formData.hasOwnProperty(fieldName)) {
+              // Populate the field with the stored value
+              element.val(formData[fieldName]);
+            }
+          });
+        }
+      }
+
+      // Call saveFormData when leaving the tab
+      $(document).on("hide.bs.tab", ".nav-link", function () {
+        var currentPage = $(".active").text().trim();
+        console.log("Current Page for save:", currentPage);
+        saveFormData(currentPage);
+      });
+
+      // Call loadFormData when switching to a tab
+      $(document).on("shown.bs.tab", ".nav-link", function () {
+        var targetPage = $(this).text().trim();
+        loadFormData(targetPage);
+      });
+
+      function loadContent(pageName, url) {
+        // Fetch content using AJAX
+        $.get(url, function (data) {
+          // Insert the fetched content into the tab
+          var contentContainer = document.getElementById("contentContainer");
+          contentContainer.innerHTML = `<div id="${pageName}">${data}</div>`;
+        });
+      }
+
+      function closeTab(pageName) {
+        // Check if the tab and its content exist
+        var tabElement = document.getElementById(`${pageName}-tab`);
+        var contentElement = document.getElementById(`${pageName}`);
+
+        if (tabElement) {
+          // Remove the tab and its content
+          console.log(`Closing tab: ${pageName}`);
+          tabElement.remove();
+        } else {
+          console.log(`Tab not found for: ${pageName}`);
+        }
+
+        if (contentElement) {
+          // Remove the tab and its content
+          console.log(`Closing tab content: ${pageName}`);
+          contentElement.remove();
+        } else {
+          console.log(`Content not found for: ${pageName}`);
+        }
+
+        // Check if there are no more tabs
+        var remainingTabs = $("#tabsList li").length;
+        if (remainingTabs === 0) {
+          console.log("No more tabs. Redirecting to /cdd/");
+          // Set the URL back to /cdd/
+          window.location.href = "/cdd/";
+        } else {
+          console.log(`Tabs still open. Remaining tabs: ${remainingTabs}`);
+        }
+      }
+    </script>
+  </body>
+</html>

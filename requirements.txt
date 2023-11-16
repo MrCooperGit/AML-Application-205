@@ -8,3 +8,4 @@ sqlparse==0.4.2
 tzdata==2022.1
 reportlab==4.0.5
 django-autocomplete-light==3.9.7
+xhtml2pdf==0.2.13
