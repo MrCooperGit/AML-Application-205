@@ -77,7 +77,12 @@ LOGIN_URL = 'base_app:login'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'base_app', 'templates'),
+            os.path.join(BASE_DIR, 'landing_app', 'templates'),
+            os.path.join(BASE_DIR, 'customer_due_diligence', 'templates'),
+            os.path.join(BASE_DIR, 'risk_assessment', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
