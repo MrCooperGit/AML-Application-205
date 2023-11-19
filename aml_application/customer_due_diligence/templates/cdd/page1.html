@@ -20,7 +20,13 @@
 
                 <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Verify Customer</p>
 
-                <form enctype="multipart/form-data" class="mx-1 mx-md-4 mt-3" method="post" action="{% url 'cdd:verify' %}">
+                <form
+                  data-page="Verify Customer"
+                  enctype="multipart/form-data"
+                  class="mx-1 mx-md-4 mt-3"
+                  method="post"
+                  action="{% url 'cdd:verify' %}"
+                >
                   {% csrf_token %}
 
                   <div class="d-flex flex-row input-group align-items-center mb-4">

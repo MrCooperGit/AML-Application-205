@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}My Website{% endblock %}</title>
     <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
-    <script src="{% static 'bootstrap-5.3.2/js/bootstrap.min.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{% static 'bootstrap-5.3.2/js/bootstrap.min.js' %}"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="{% static 'login.css' %}" rel="stylesheet" />
   </head>
@@ -103,34 +103,34 @@
 
         // Add 'active' class to the clicked link
         $(element).addClass("active");
+        var classes = element.classList;
+
+        if (classes.contains("active")) {
+          console.log(element, "Element has the 'active' class");
+        } else {
+          console.log("Element does not have the 'active' class");
+        }
 
         openTab(pageName, url);
       }
 
       // Function to save form data to localStorage
       function saveFormData(pageName) {
-        localStorage.removeItem(pageName);
         var formData = {};
 
-        // Iterate through all form elements
-        $("form :input").each(function () {
+        // Iterate through all form elements within the identified form
+        $(`form[data-page="${pageName}"] :input`).each(function () {
           var element = $(this);
           var fieldName = element.attr("name");
 
-          if (fieldName) {
-            // Check if the field is a datetime field
-            if (element.attr("type") === "datetime") {
-              // Format the datetime field value to "yyyy-MM-ddTHH:mm"
-              var dateValue = element.val();
-              if (dateValue) {
-                var formattedDate = new Date(dateValue).toISOString().slice(0, 16);
-                formData[fieldName] = formattedDate;
-              } else {
-                formData[fieldName] = null;
-              }
+          // Check if the field is a date field
+          if (element.attr("type") === "date") {
+            // Format the date field value to "yyyy-MM-dd"
+            var dateValue = element.val();
+            if (dateValue) {
+              formData[fieldName] = dateValue;
             } else {
-              // For other fields, store the field value as is
-              formData[fieldName] = element.val();
+              formData[fieldName] = null;
             }
           }
         });
@@ -159,10 +159,21 @@
           // Log the loaded data
           console.log(`Loaded data for ${pageName}:`, formData);
 
+          // Identify the form based on the data-page attribute
+          var formSelector = `form[data-page="${pageName}"]`;
+
           // Iterate through all form elements
-          $("form :input").each(function () {
+          $(formSelector + " :input").each(function () {
             var element = $(this);
             var fieldName = element.attr("name");
+
+            // Update fieldName to match Django's naming convention
+            fieldName = "id_" + fieldName;
+
+            console.log("Element:", element);
+            console.log("Field Name:", fieldName);
+            console.log("Stored Value:", formData[fieldName]);
+            console.log("Element Value:", element.val());
 
             if (fieldName && formData.hasOwnProperty(fieldName)) {
               // Populate the field with the stored value
@@ -174,6 +185,7 @@
 
       // Call saveFormData when leaving the tab
       $(document).on("hide.bs.tab", ".nav-link", function () {
+        $(".sidebar-link").removeClass("active");
         var currentPage = $(".active").text().trim();
         console.log("Current Page for save:", currentPage);
         saveFormData(currentPage);

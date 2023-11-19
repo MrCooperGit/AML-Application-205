@@ -12,6 +12,7 @@ from base_app.models import Customer, Company, Shareholder, Director
 def customer_due_diligence_view(request):
     # set the companies to only those in the current entity
     companies = Company.objects.filter(entity=request.user.userprofile.entity)
+    stored_data = request.GET.get('stored_data', '{}')
 
     if request.method == 'POST':
         form = CustomerDueDiligenceForm(
@@ -57,11 +58,11 @@ def customer_due_diligence_view(request):
                 messages.success(request, 'Customer added successfully')
                 return redirect('cdd:register')
         else:
-            return render(request, 'cddform.html', {'form': form, 'companies': companies})
+            return render(request, 'cddform.html', {'form': form, 'companies': companies, 'stored_data': stored_data})
     else:
         form = CustomerDueDiligenceForm()
 
-    return render(request, 'cddform.html', {'form': form, 'companies': companies})
+    return render(request, 'cddform.html', {'form': form, 'companies': companies, 'stored_data': stored_data})
 
 
 @login_required
