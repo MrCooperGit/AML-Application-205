@@ -5,6 +5,12 @@ from .models import UserTab
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+
+@login_required
+def landing(request):
+    return render(request, 'landing_app/landing.html')
+
+
 @login_required
 def index(request, app_name=None):
 
@@ -32,8 +38,9 @@ def index(request, app_name=None):
     app_template_name = f'landing_app/{app_name}.html'
 
     available_apps_obj = AvailableApps.objects.all()
-    open_user_tabs_obj = UserTab.objects.filter(user=request.user).select_related('app_id')
-    
+    open_user_tabs_obj = UserTab.objects.filter(
+        user=request.user).select_related('app_id')
+
     # setting the active tab in the database
     for tab in open_user_tabs_obj:
         if tab.app_id.name == app_name:
@@ -41,7 +48,7 @@ def index(request, app_name=None):
         else:
             tab.is_active = False
         tab.save()
-    
+
     return render(request, 'landing_app/landing.html', {
         'app_template_name': app_template_name,
         'available_apps': available_apps_obj,

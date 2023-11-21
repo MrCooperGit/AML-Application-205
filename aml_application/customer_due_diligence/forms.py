@@ -87,9 +87,11 @@ class CompanyForm(forms.ModelForm):
 
     entity = forms.ModelChoiceField(
         queryset=Entity.objects.all(),
-        empty_label=None,
-        required=False
-    )
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'id': 'validationEntity',
+            'required': True,
+        }))
 
     widgets = {
         'company_registration_num': forms.TextInput(attrs={'maxlength': 20}),

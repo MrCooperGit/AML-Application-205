@@ -12,293 +12,305 @@
       integrity="sha383-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <script src="{% static 'cdd_scripts.js' %}"></script>
   </head>
 
   <body>
-    <h1>{{entity_name}} Risk Assessment</h1>
-    <h3>Description of Money Laundering and Terrorist Financing</h3>
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1>{{ entity_name }} Risk Assessment</h1>
+        <button onclick="openInNewTabButton()" id="openInNewTabButton" type="button" class="btn btn-primary">
+          View as PDF
+        </button>
+      </div>
 
-    <p>
-      Money laundering is the process by which criminals convert the proceeds of crime to realize and enjoy the financial
-      benefits of their offending. While there are many methods to undertake money laundering, the core principle from a risk
-      perspective is the criminal abuse of vulnerabilities within the financial, legal, and property systems.
-    </p>
+      <h3>Description of Money Laundering and Terrorist Financing</h3>
+      <!-- Rest of your page content... -->
+      <h3>Description of Money Laundering and Terrorist Financing</h3>
 
-    <p>Money laundering is commonly described as having three stages:</p>
+      <p>
+        Money laundering is the process by which criminals convert the proceeds of crime to realize and enjoy the financial
+        benefits of their offending. While there are many methods to undertake money laundering, the core principle from a
+        risk perspective is the criminal abuse of vulnerabilities within the financial, legal, and property systems.
+      </p>
 
-    <ul>
-      <li>
-        <strong>Placement:</strong> Introducing illegal funds into the formal financial and business system (for example
-        depositing cash from drug sales into accounts, co-mingling it with business takings or using it to purchase assets);
-      </li>
+      <p>Money laundering is commonly described as having three stages:</p>
 
-      <li>
-        <strong>Layering:</strong> Moving, dispersing, or disguising illegal funds or assets to conceal their true origin
-        (for example using a network of complex transactions involving multiple banks or accounts, or companies and trusts);
-      </li>
+      <ul>
+        <li>
+          <strong>Placement:</strong> Introducing illegal funds into the formal financial and business system (for example
+          depositing cash from drug sales into accounts, co-mingling it with business takings or using it to purchase
+          assets);
+        </li>
 
-      <li>
-        <strong>Integration:</strong> Investing the disguised funds or assets in further criminal activity or legitimate
-        business, or enjoyed as high-value property assets and luxury goods. At this stage, the funds or assets appear to
-        have been legitimately acquired.
-      </li>
-    </ul>
+        <li>
+          <strong>Layering:</strong> Moving, dispersing, or disguising illegal funds or assets to conceal their true origin
+          (for example using a network of complex transactions involving multiple banks or accounts, or companies and
+          trusts);
+        </li>
 
-    <p>
-      Terrorism financing is the process by which terrorists and sympathizers raise and move funds to conduct terrorist acts
-      and operations. There is a distinction between money laundering and terrorism financing in that terrorism financing may
-      seek to move money from the legitimate economy to use it for a criminal act, while money laundering seeks to move
-      proceeds from a criminal act to the legitimate economy. Nonetheless, many of the methods and financial channels used
-      are the same.
-    </p>
+        <li>
+          <strong>Integration:</strong> Investing the disguised funds or assets in further criminal activity or legitimate
+          business, or enjoyed as high-value property assets and luxury goods. At this stage, the funds or assets appear to
+          have been legitimately acquired.
+        </li>
+      </ul>
 
-    <p>Like money laundering, terrorism financing is generally described as having three stages:</p>
+      <p>
+        Terrorism financing is the process by which terrorists and sympathizers raise and move funds to conduct terrorist
+        acts and operations. There is a distinction between money laundering and terrorism financing in that terrorism
+        financing may seek to move money from the legitimate economy to use it for a criminal act, while money laundering
+        seeks to move proceeds from a criminal act to the legitimate economy. Nonetheless, many of the methods and financial
+        channels used are the same.
+      </p>
 
-    <ul>
-      <li>
-        <strong>Raising funds:</strong> Terrorism financiers raise funds through legitimate earnings, donations and/or
-        criminal offending;
-      </li>
+      <p>Like money laundering, terrorism financing is generally described as having three stages:</p>
 
-      <li>
-        <strong>Transferring funds:</strong> Once raised, funds for terrorist causes need to be moved to the place where they
-        will be used, which often requires funds to be moved internationally. This can be done by physically couriering cash
-        or high-value commodities, moving funds through the international financial system, or alternative mechanisms for
-        moving value;
-      </li>
+      <ul>
+        <li>
+          <strong>Raising funds:</strong> Terrorism financiers raise funds through legitimate earnings, donations and/or
+          criminal offending;
+        </li>
 
-      <li>
-        <strong>Using funds:</strong> Terrorist groups need to use the funds either to commit terrorist acts or to fund
-        ongoing operations. Any use of the funds by a terrorist group to support the organization and its cause is terrorism
-        financing.
-      </li>
-    </ul>
+        <li>
+          <strong>Transferring funds:</strong> Once raised, funds for terrorist causes need to be moved to the place where
+          they will be used, which often requires funds to be moved internationally. This can be done by physically
+          couriering cash or high-value commodities, moving funds through the international financial system, or alternative
+          mechanisms for moving value;
+        </li>
 
-    <h3>Summary of Remaining Vulnerabilities to Money Laundering in New Zealand</h3>
+        <li>
+          <strong>Using funds:</strong> Terrorist groups need to use the funds either to commit terrorist acts or to fund
+          ongoing operations. Any use of the funds by a terrorist group to support the organization and its cause is
+          terrorism financing.
+        </li>
+      </ul>
 
-    <p>
-      The channels that currently offer opportunities to money launderers in New Zealand are those in financial, legal,
-      accounting, real estate, and retail or dealer services that:
-    </p>
+      <h3>Summary of Remaining Vulnerabilities to Money Laundering in New Zealand</h3>
 
-    <ul>
-      <li>Offer anonymity to the offenders,</li>
-      <li>
-        Are available for moving large values and volumes of legitimate funds and which provide a screen for illicit
-        transactions,
-      </li>
-      <li>Are widely available internationally and also have poor AML/CFT controls internationally, and/or</li>
-      <li>Are cash intensive, which are particularly used to disguise drugs proceeds.</li>
-    </ul>
-    <h3>The highest priority observed vulnerabilities for New Zealand are:</h3>
+      <p>
+        The channels that currently offer opportunities to money launderers in New Zealand are those in financial, legal,
+        accounting, real estate, and retail or dealer services that:
+      </p>
 
-    <table border="1" cellpadding="5">
-      <tr>
-        <th>Vulnerability</th>
-        <th>Description</th>
-      </tr>
-      <tr>
-        <td>International Wire Transfers</td>
-        <td>
-          <p>International wire transfers, assessed by the FIU in 2010 as the highest risk.</p>
-          <p>
-            The AML/CFT Act now subjects international wire transfers to greater controls, mitigating identified
-            vulnerabilities.
-          </p>
-          <p>
-            Despite controls, the scale of money moving through these channels continues to present opportunities to money
-            launderers.
-          </p>
-          <p>Prescribed Transaction Reporting introduced in November 2017 has assisted in addressing this vulnerability.</p>
-        </td>
-      </tr>
-      <tr>
-        <td>Alternative Payment Methods</td>
-        <td>
-          <p>
-            Alternative remittance systems, international trade-based transfers, and alternative banking platforms identified
-            as vulnerabilities.
-          </p>
-          <p>
-            Vulnerable to domestic and international criminal proceeds, closely associated with third-party money laundering
-            networks.
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td>New Technology</td>
-        <td>
-          <p>
-            New Zealand’s vulnerability to misuse of new technology related to alternative methods of moving value and funds.
-          </p>
-          <p>
-            Exposure to high-profile new payment technologies, including virtual assets, may not be as high as other
-            countries.
-          </p>
-          <p>
-            Risks relating to transnational money laundering exacerbated by online alternative banking platforms nominally
-            domiciled in New Zealand.
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td>Gatekeeper Professional Services</td>
-        <td>
-          <p>Low levels of AML/CFT controls historically within gatekeeper professional services.</p>
-          <p>Emergence of transnational professional money laundering facilitators and complex networks.</p>
-          <p>Difficulties in identifying beneficial owners of New Zealand companies, charities, and trusts.</p>
-          <p>AML/CFT regime expanded to include gatekeeper professional services to mitigate risks.</p>
-        </td>
-      </tr>
-      <tr>
-        <td>Cash</td>
-        <td>
-          <p>Cash remains the dominant means of transacting for domestic drug crimes.</p>
-          <p>Dealers in high-value goods vulnerable to abuse to place cash proceeds, as does casino gambling.</p>
-          <p>
-            Detection rates for illicit cash in the high-value goods sector expected to improve with the expanded AML/CFT
-            regime.
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td>Businesses</td>
-        <td>
-          <p>Many business industries vulnerable to use as fronts for money laundering.</p>
-          <p>Cash-intensive businesses common for establishing an ostensive origin of cash proceeds.</p>
-          <p>
-            This type of laundering can have anti-competitive effects with negative consequences for legitimate competitors.
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td>High-Value Goods</td>
-        <td>
-          <p>Non-financial assets abused at all stages of money laundering.</p>
-          <p>High-value transportable goods used to store wealth or move value between criminals.</p>
-          <p>Real estate assets vulnerable to abuse in large money laundering transactions.</p>
-        </td>
-      </tr>
-    </table>
+      <ul>
+        <li>Offer anonymity to the offenders,</li>
+        <li>
+          Are available for moving large values and volumes of legitimate funds and which provide a screen for illicit
+          transactions,
+        </li>
+        <li>Are widely available internationally and also have poor AML/CFT controls internationally, and/or</li>
+        <li>Are cash intensive, which are particularly used to disguise drugs proceeds.</li>
+      </ul>
+      <h3>The highest priority observed vulnerabilities for New Zealand are:</h3>
 
-    <h2>Sector risks specific to your individual Risk Assessment</h2>
-    <!-- prettier-ignore -->
-    {% if last_risk_assessment.company_services or last_risk_assessment.trust_services or last_risk_assessment.remittance_services or user_type == "tAcsp" or user_type == "fiAc" or user_type == "lAc" %}
+      <table border="1" cellpadding="5">
+        <tr>
+          <th>Vulnerability</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>International Wire Transfers</td>
+          <td>
+            <p>International wire transfers, assessed by the FIU in 2010 as the highest risk.</p>
+            <p>
+              The AML/CFT Act now subjects international wire transfers to greater controls, mitigating identified
+              vulnerabilities.
+            </p>
+            <p>
+              Despite controls, the scale of money moving through these channels continues to present opportunities to money
+              launderers.
+            </p>
+            <p>
+              Prescribed Transaction Reporting introduced in November 2017 has assisted in addressing this vulnerability.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>Alternative Payment Methods</td>
+          <td>
+            <p>
+              Alternative remittance systems, international trade-based transfers, and alternative banking platforms
+              identified as vulnerabilities.
+            </p>
+            <p>
+              Vulnerable to domestic and international criminal proceeds, closely associated with third-party money
+              laundering networks.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>New Technology</td>
+          <td>
+            <p>
+              New Zealand’s vulnerability to misuse of new technology related to alternative methods of moving value and
+              funds.
+            </p>
+            <p>
+              Exposure to high-profile new payment technologies, including virtual assets, may not be as high as other
+              countries.
+            </p>
+            <p>
+              Risks relating to transnational money laundering exacerbated by online alternative banking platforms nominally
+              domiciled in New Zealand.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>Gatekeeper Professional Services</td>
+          <td>
+            <p>Low levels of AML/CFT controls historically within gatekeeper professional services.</p>
+            <p>Emergence of transnational professional money laundering facilitators and complex networks.</p>
+            <p>Difficulties in identifying beneficial owners of New Zealand companies, charities, and trusts.</p>
+            <p>AML/CFT regime expanded to include gatekeeper professional services to mitigate risks.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>Cash</td>
+          <td>
+            <p>Cash remains the dominant means of transacting for domestic drug crimes.</p>
+            <p>Dealers in high-value goods vulnerable to abuse to place cash proceeds, as does casino gambling.</p>
+            <p>
+              Detection rates for illicit cash in the high-value goods sector expected to improve with the expanded AML/CFT
+              regime.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>Businesses</td>
+          <td>
+            <p>Many business industries vulnerable to use as fronts for money laundering.</p>
+            <p>Cash-intensive businesses common for establishing an ostensive origin of cash proceeds.</p>
+            <p>
+              This type of laundering can have anti-competitive effects with negative consequences for legitimate
+              competitors.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>High-Value Goods</td>
+          <td>
+            <p>Non-financial assets abused at all stages of money laundering.</p>
+            <p>High-value transportable goods used to store wealth or move value between criminals.</p>
+            <p>Real estate assets vulnerable to abuse in large money laundering transactions.</p>
+          </td>
+        </tr>
+      </table>
 
-    <h4>Use of New Zealand Legal Structures</h4>
-    <p>
-      Overseas criminals who seek to abuse New Zealand legal structures are a known money laundering threat. Typically, a New
-      Zealand entity (such as a company, limited partnership, or trust) is used within a complex network of companies and
-      trusts from other jurisdictions as a vehicle for money laundering without any transactions occurring in New Zealand.
-    </p>
-    <p>
-      New Zealand trusts have been less common in requests to the FIU. Nonetheless, there have been some instances, which
-      have confirmed that arrangements such as trusts have the same vulnerabilities to transnational money laundering as
-      companies.
-    </p>
-    <h4>Use of New Zealand Financial System as a Conduit</h4>
-    <p>
-      In the instances where a New Zealand financial institution account was identified, the account was typically associated
-      with a company or business. This indicates that overseas offenders prefer to use New Zealand company accounts rather
-      than personal accounts when moving money through New Zealand.
-    </p>
-    {% endif %} {% if user_type == "lAc" or user_type == "rea" %}
-    <h4>Use of New Zealand Real Estate</h4>
-    <p>
-      Although transnational laundering through real estate has received a high degree of media interest in New Zealand, this
-      typology has not been common in international requests to the FIU. Significant transnational money laundering has been
-      identified in real estate markets in similar countries to New Zealand, such as Australia, the UK and the US.
-    </p>
-    <p>
-      Given the similarities of the New Zealand real estate market to these countries’ markets, it is possible that
-      launderers active in the international market may be similarly attracted to New Zealand. Where cases of misuse of New
-      Zealand real estate by overseas criminals has occurred, these have included offending involving high values of proceeds
-      creating a significant money laundering threat.
-    </p>
-    {% endif %} {% if user_type == "fiAc" or user_type == "tab" or last_risk_assessment.remittance_services %}
-    <h4>Financial sector vulnerability</h4>
-    <p>
-      The financial sector plays a central role in the New Zealand economy and its services cross over with the gatekeeper,
-      cash and international channels for money laundering and terrorism financing. This central role increases financial
-      institutions’ risk exposure.
-    </p>
-    <p>
-      New Zealand has a well-regulated financial sector that operates within the context of New Zealand’s small open economy.
-      Since the mid-1980s New Zealand has transitioned from one of the most regulated economies in the Organisation for
-      Economic Cooperation and Development (OECD) to one of the least, with reform in the financial system focusing on
-      reducing compliance cost while maintaining or enhancing integrity. As a result, New Zealand has a small shadow economy
-      by international standards. For example, 2010 World Bank research placed New Zealand’s shadow economy as the fifth
-      smallest on the list of OECD countries26. This significantly reduces the national money laundering and terrorism
-      financing risk, but potentially increases the criminal incentive to abuse the financial sector.
-    </p>
-    <p>
-      While other vulnerable sectors such as money remitters and casinos are much smaller than banks, they also provide money
-      laundering and terrorism financing opportunities. Each of these sectors are exposed to large numbers of high-risk
-      transactions that offer criminals opportunities to place cash and/or move funds offshore. Casinos can offer criminals
-      an end-to-end laundering opportunity that superficially establishes the origin of funds along with a suite of financial
-      institution-like services. In both of these sectors, it is not uncommon for a number of transactions to be conducted
-      outside a business relationship, which allows criminals to spread suspicious activity across different reporting
-      entities to avoid detection.
-    </p>
-    <p>
-      The understanding of risk in derivatives and brokers/custodians has improved in recent years. Overall, the capital
-      market in New Zealand remains relatively small and although it has grown in recent years, this growth is been driven by
-      managed funds30 which are assessed by the FMA as lower risk.
-    </p>
-    <h5>Bank secrecy</h5>
-    <p>
-      Internationally, banking secrecy has traditionally been one of the major vulnerabilities for money laundering and
-      terrorism financing. New Zealand does not have a reputation for banking secrecy. Bank and other financial accounts do
-      not retain greater privacy rights than personal information held by other entities. The New Zealand Privacy Act 1993
-      specifically allows sharing of information, including financial information, for law enforcement purposes while the
-      AML/CFT Act, the Criminal Proceeds (Recovery) Act 2009 (CPRA) and the Search and Surveillance Act 2012 include
-      provisions to enable agencies to access information for law enforcement purposes.
-    </p>
-    <h5>Modern payment technology</h5>
-    <p>
-      New Zealand’s major payment and settlement systems are electronic and the high value systems settle on a real-time
-      gross basis. These systems are also fully integrated into the major international payment channels. These modern
-      systems are symptomatic, and a driver, of the move away from the cash economy, which helps to reduce the macro-level
-      exposure to cash laundering. However, these systems also allow fast movement of funds and facilitate online activity
-      with less face-to-face interaction increasing opportunities for anonymity.
-    </p>
-    <p>
-      As with legitimate customers, money launderers and terrorism financiers may be attracted by the speed and convenience
-      of new payment technology enabled transactions. Such convenience allows fast layering. Additionally, criminals can
-      exploit the borderless nature of the internet whereby there are difficulties regulating financial services that operate
-      online.
-    </p>
-    <p>
-      Financial payment technology continues to develop rapidly. The emergence of new payment technologies increase the
-      opportunities for money laundering, in particular where they allow criminals to exploit developments that breakdown the
-      barriers posed by international borders, or facilitate new anonymous means of payments between individuals. By
-      contrast, new payments technologies offer opportunities to design in anti-money laundering and countering financing of
-      terrorism (AML/CFT) risk mitigation at the time they are launched. For example some new technologies that have better
-      recordkeeping and supporting systems may be better able to detect unusual or suspicious activity.
-    </p>
-    <p>
-      New payment technologies offered by third parties may exacerbate vulnerabilities in the financial sector by
-      circumventing or obstructing AML/CFT controls. New payment technology may be an attractive means of distancing a money
-      launderer’s activity from a reporting entity for example by presenting new opportunities for non-face-to-face
-      transactions. Alternatively, a third party may offer a new payment facility that places a layer between the money
-      launderer or terrorist financier and the reporting entity.
-    </p>
-    <p>
-      Outside of traditional payment technology, New Zealand has had a mixed uptake of the new payment services identified as
-      high risk internationally. Cash tokens and other bearer negotiable instruments are available and in particular
-      financial institutions may be exposed to open-loop products, such as travel cards, issued by other institutions. Formal
-      virtual asset service providers have only a small presence in New Zealand. Individuals who operate outside of
-      regulations as informal exchanges using bank accounts, expose institutions to risk and provide criminals opportunities
-      to obtain virtual assets for illicit purposes. Mobile phone-based money transfer services have been identified as an
-      emerging issue.
-    </p>
-    {% endif %}
-    <p></p>
+      <h2>Sector risks specific to your individual Risk Assessment</h2>
+      <!-- prettier-ignore -->
+      {% if last_risk_assessment.company_services or last_risk_assessment.trust_services or last_risk_assessment.remittance_services or user_type == "tAcsp" or user_type == "fiAc" or user_type == "lAc" %}
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"
-    ></script>
+      <h4>Use of New Zealand Legal Structures</h4>
+      <p>
+        Overseas criminals who seek to abuse New Zealand legal structures are a known money laundering threat. Typically, a
+        New Zealand entity (such as a company, limited partnership, or trust) is used within a complex network of companies
+        and trusts from other jurisdictions as a vehicle for money laundering without any transactions occurring in New
+        Zealand.
+      </p>
+      <p>
+        New Zealand trusts have been less common in requests to the FIU. Nonetheless, there have been some instances, which
+        have confirmed that arrangements such as trusts have the same vulnerabilities to transnational money laundering as
+        companies.
+      </p>
+      <h4>Use of New Zealand Financial System as a Conduit</h4>
+      <p>
+        In the instances where a New Zealand financial institution account was identified, the account was typically
+        associated with a company or business. This indicates that overseas offenders prefer to use New Zealand company
+        accounts rather than personal accounts when moving money through New Zealand.
+      </p>
+      {% endif %} {% if user_type == "lAc" or user_type == "rea" %}
+      <h4>Use of New Zealand Real Estate</h4>
+      <p>
+        Although transnational laundering through real estate has received a high degree of media interest in New Zealand,
+        this typology has not been common in international requests to the FIU. Significant transnational money laundering
+        has been identified in real estate markets in similar countries to New Zealand, such as Australia, the UK and the US.
+      </p>
+      <p>
+        Given the similarities of the New Zealand real estate market to these countries’ markets, it is possible that
+        launderers active in the international market may be similarly attracted to New Zealand. Where cases of misuse of New
+        Zealand real estate by overseas criminals has occurred, these have included offending involving high values of
+        proceeds creating a significant money laundering threat.
+      </p>
+      {% endif %} {% if user_type == "fiAc" or user_type == "tab" or last_risk_assessment.remittance_services %}
+      <h4>Financial sector vulnerability</h4>
+      <p>
+        The financial sector plays a central role in the New Zealand economy and its services cross over with the gatekeeper,
+        cash and international channels for money laundering and terrorism financing. This central role increases financial
+        institutions’ risk exposure.
+      </p>
+      <p>
+        New Zealand has a well-regulated financial sector that operates within the context of New Zealand’s small open
+        economy. Since the mid-1980s New Zealand has transitioned from one of the most regulated economies in the
+        Organisation for Economic Cooperation and Development (OECD) to one of the least, with reform in the financial system
+        focusing on reducing compliance cost while maintaining or enhancing integrity. As a result, New Zealand has a small
+        shadow economy by international standards. For example, 2010 World Bank research placed New Zealand’s shadow economy
+        as the fifth smallest on the list of OECD countries26. This significantly reduces the national money laundering and
+        terrorism financing risk, but potentially increases the criminal incentive to abuse the financial sector.
+      </p>
+      <p>
+        While other vulnerable sectors such as money remitters and casinos are much smaller than banks, they also provide
+        money laundering and terrorism financing opportunities. Each of these sectors are exposed to large numbers of
+        high-risk transactions that offer criminals opportunities to place cash and/or move funds offshore. Casinos can offer
+        criminals an end-to-end laundering opportunity that superficially establishes the origin of funds along with a suite
+        of financial institution-like services. In both of these sectors, it is not uncommon for a number of transactions to
+        be conducted outside a business relationship, which allows criminals to spread suspicious activity across different
+        reporting entities to avoid detection.
+      </p>
+      <p>
+        The understanding of risk in derivatives and brokers/custodians has improved in recent years. Overall, the capital
+        market in New Zealand remains relatively small and although it has grown in recent years, this growth is been driven
+        by managed funds30 which are assessed by the FMA as lower risk.
+      </p>
+      <h5>Bank secrecy</h5>
+      <p>
+        Internationally, banking secrecy has traditionally been one of the major vulnerabilities for money laundering and
+        terrorism financing. New Zealand does not have a reputation for banking secrecy. Bank and other financial accounts do
+        not retain greater privacy rights than personal information held by other entities. The New Zealand Privacy Act 1993
+        specifically allows sharing of information, including financial information, for law enforcement purposes while the
+        AML/CFT Act, the Criminal Proceeds (Recovery) Act 2009 (CPRA) and the Search and Surveillance Act 2012 include
+        provisions to enable agencies to access information for law enforcement purposes.
+      </p>
+      <h5>Modern payment technology</h5>
+      <p>
+        New Zealand’s major payment and settlement systems are electronic and the high value systems settle on a real-time
+        gross basis. These systems are also fully integrated into the major international payment channels. These modern
+        systems are symptomatic, and a driver, of the move away from the cash economy, which helps to reduce the macro-level
+        exposure to cash laundering. However, these systems also allow fast movement of funds and facilitate online activity
+        with less face-to-face interaction increasing opportunities for anonymity.
+      </p>
+      <p>
+        As with legitimate customers, money launderers and terrorism financiers may be attracted by the speed and convenience
+        of new payment technology enabled transactions. Such convenience allows fast layering. Additionally, criminals can
+        exploit the borderless nature of the internet whereby there are difficulties regulating financial services that
+        operate online.
+      </p>
+      <p>
+        Financial payment technology continues to develop rapidly. The emergence of new payment technologies increase the
+        opportunities for money laundering, in particular where they allow criminals to exploit developments that breakdown
+        the barriers posed by international borders, or facilitate new anonymous means of payments between individuals. By
+        contrast, new payments technologies offer opportunities to design in anti-money laundering and countering financing
+        of terrorism (AML/CFT) risk mitigation at the time they are launched. For example some new technologies that have
+        better recordkeeping and supporting systems may be better able to detect unusual or suspicious activity.
+      </p>
+      <p>
+        New payment technologies offered by third parties may exacerbate vulnerabilities in the financial sector by
+        circumventing or obstructing AML/CFT controls. New payment technology may be an attractive means of distancing a
+        money launderer’s activity from a reporting entity for example by presenting new opportunities for non-face-to-face
+        transactions. Alternatively, a third party may offer a new payment facility that places a layer between the money
+        launderer or terrorist financier and the reporting entity.
+      </p>
+      <p>
+        Outside of traditional payment technology, New Zealand has had a mixed uptake of the new payment services identified
+        as high risk internationally. Cash tokens and other bearer negotiable instruments are available and in particular
+        financial institutions may be exposed to open-loop products, such as travel cards, issued by other institutions.
+        Formal virtual asset service providers have only a small presence in New Zealand. Individuals who operate outside of
+        regulations as informal exchanges using bank accounts, expose institutions to risk and provide criminals
+        opportunities to obtain virtual assets for illicit purposes. Mobile phone-based money transfer services have been
+        identified as an emerging issue.
+      </p>
+      {% endif %}
+      <p></p>
+    </div>
   </body>
 </html>

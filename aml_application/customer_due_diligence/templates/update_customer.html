@@ -8,6 +8,7 @@
     <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="{% static 'login.css' %}" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   </head>
   <body>
     <section class="pb-2 home-body">
@@ -31,7 +32,7 @@
 
                     <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Update Customer Details</p>
 
-                    <form class="mx-1 mx-md-4 mt-3" method="post" action="{% url 'cdd:update_customer' customer.id %}">
+                    <form id="updateCustomerForm" class="mx-1 mx-md-4 mt-3" method="post" action="">
                       {% csrf_token %}
 
                       <div class="d-flex flex-row input-group align-items-center mb-4">
@@ -89,6 +90,91 @@
                           value="{{ form.email.value}}"
                         />
                       </div>
+                      <div class="d-flex flex-row mb-4">
+                        <label>Is the Customer a director of any companies?</label>
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input ms-2"
+                            type="radio"
+                            id="id_is_director_no"
+                            name="is_director"
+                            value="No"
+                          />
+                          <label class="form-check-label" for="id_is_director_no">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            id="id_is_director_yes"
+                            name="is_director"
+                            value="Yes"
+                          />
+                          <label class="form-check-label" for="id_is_director_yes">Yes</label>
+                        </div>
+                      </div>
+                      <div class="d-flex flex-row mb-4" id="companyDropdownDirector" style="display: none">
+                        <div class="input-group">
+                          <label class="form-control" for="id_company_director">Select Company:</label>
+                          <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            id="id_company_director"
+                            name="company"
+                          >
+                            <option selected>------</option>
+                            {% for company in companies %}
+                            <option value="{{ company.id }}">{{ company.name }}</option>
+                            {% endfor %}
+                          </select>
+                          <button class="btn btn-outline-secondary" type="button" onclick="openCompanyModal()">
+                            Add new company
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="d-flex flex-row mb-4">
+                        <label>Is the Customer a Shareholder of any companies?</label>
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input ms-2"
+                            type="radio"
+                            id="id_is_shareholder_no"
+                            name="is_shareholder"
+                            value="No"
+                          />
+                          <label class="form-check-label" for="id_is_shareholder_no">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            id="id_is_shareholder_yes"
+                            name="is_shareholder"
+                            value="Yes"
+                          />
+                          <label class="form-check-label" for="id_is_shareholder_yes">Yes</label>
+                        </div>
+                      </div>
+                      <div class="d-flex flex-row mb-4" id="companyDropdownShareholder" style="display: none">
+                        <div class="input-group">
+                          <label class="form-control" for="id_company_shareholder">Select Company:</label>
+                          <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            id="id_company_shareholder"
+                            name="company"
+                          >
+                            <option selected>------</option>
+                            {% for company in companies %}
+                            <option value="{{ company.id }}">{{ company.name }}</option>
+                            {% endfor %}
+                          </select>
+                          <button class="btn btn-outline-secondary" type="button" onclick="openCompanyModal()">
+                            Add new company
+                          </button>
+                        </div>
+                      </div>
 
                       <div class="d-flex flex-row align-items-center input-group mb-4">
                         <textarea
@@ -124,6 +210,116 @@
         </div>
       </div>
     </section>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- AJAX Script for Form Submission -->
+    <script>
+      $(document).ready(function () {
+        function openCompanyModal() {
+          $("#companyModal").modal("show");
+        }
+        console.log("Script loaded!");
+
+        $(document).ready(function () {
+          // Log form existence
+          console.log($("#companyCreateForm"));
+
+          // Add an event listener for the button click
+          $("#companyCreateForm").click(function () {
+            console.log("Button clicked!");
+            openCompanyModal();
+          });
+
+          $("#companyCreateForm").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+              type: form.attr("method"),
+              url: form.attr("action"),
+              data: form.serialize(),
+              success: function (data, textStatus, jqXHR) {
+                if (jqXHR.status === 200) {
+                  // Handle success response
+                  console.log("Success:", data);
+                  $("#companyModal").modal("hide");
+                } else {
+                  console.log("Unexpected status code:", jqXHR.status);
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                // Handle the error response
+                console.log("Error:", textStatus, errorThrown);
+              },
+            });
+          });
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          // Get references to elements
+          var dropdownDirector = document.getElementById("companyDropdownDirector");
+          var dropdownShareholder = document.getElementById("companyDropdownShareholder");
+          var isDirectorYes = document.getElementById("id_is_director_yes");
+          var isShareholderYes = document.getElementById("id_is_shareholder_yes");
+
+          // Function to update dropdown visibility
+          function updateDropdownVisibility() {
+            console.log("isDirectorYes checked:", isDirectorYes.checked);
+            console.log("isShareholderYes checked:", isShareholderYes.checked);
+
+            // Use Bootstrap utility classes to control visibility
+            dropdownDirector.classList.toggle("d-none", !isDirectorYes.checked);
+            dropdownShareholder.classList.toggle("d-none", !isShareholderYes.checked);
+          }
+
+          // Set initial state on page load
+          updateDropdownVisibility();
+
+          // Add event listeners
+          isDirectorYes.addEventListener("change", updateDropdownVisibility);
+          isShareholderYes.addEventListener("change", updateDropdownVisibility);
+        });
+      });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+        // Intercept form submission and handle it with AJAX
+        $(document).on("submit", "#updateCustomerForm", function (e) {
+          e.preventDefault();
+
+          // Serialize form data
+          var formData = $(this).serialize();
+
+          // Make AJAX request
+          $.ajax({
+            type: "POST",
+            url: window.location.href, // Use the current URL
+            data: formData,
+            success: function (data) {
+              // Handle success (data should contain a success property)
+              if (data.success) {
+                // Optionally, update the content on the page
+                console.log("Form submitted successfully");
+              } else {
+                console.error('Error submitting form:', data.errors);
+                // Handle form errors (display them to the user, for example)
+            }
+              }
+            },
+            error: function (xhr, status, error) {
+              // Handle errors (display form errors or other messages)
+              console.error('AJAX error:', error);
+              // Log the response to the console for more information
+              console.log("Response:", xhr.responseText);
+            },
+          });
+        });
+      });
+    </script>
     <script src="{% static 'bootstrap-5.3.2/js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
   </body>
 </html>
