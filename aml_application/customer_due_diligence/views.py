@@ -12,7 +12,6 @@ from base_app.models import Customer, Company, Shareholder, Director
 def customer_due_diligence_view(request):
     # set the companies to only those in the current entity
     companies = Company.objects.filter(entity=request.user.userprofile.entity)
-    stored_data = request.GET.get('stored_data', '{}')
 
     if request.method == 'POST':
         form = CustomerDueDiligenceForm(
@@ -58,11 +57,11 @@ def customer_due_diligence_view(request):
                 messages.success(request, 'Customer added successfully')
                 return redirect('cdd:register')
         else:
-            return render(request, 'cddform.html', {'form': form, 'companies': companies, 'stored_data': stored_data})
+            return render(request, 'cddform.html', {'form': form, 'companies': companies, })
     else:
         form = CustomerDueDiligenceForm()
 
-    return render(request, 'cddform.html', {'form': form, 'companies': companies, 'stored_data': stored_data})
+    return render(request, 'cddform.html', {'form': form, 'companies': companies, })
 
 
 @login_required
@@ -132,9 +131,12 @@ def update_customer_view(request, customer_id):
 
             updated_customer.save(update_verification_times=False)
             messages.success(request, 'Customer details updated successfully')
-            return redirect('cdd:customer_list')
+            # Return JSON response indicating successful update
+            return JsonResponse({'success': True})
         else:
-            return render(request, 'update_customer.html', {'form': form, 'customer': customer})
+            # Return JSON response with form errors
+            form_errors = form.errors.as_json()
+            return JsonResponse({'success': False, 'errors': form_errors}, status=400)
     else:
         # Create a form instance with the data from the existing customer
         form = CustomerDueDiligenceForm(instance=customer)
@@ -145,18 +147,22 @@ def update_customer_view(request, customer_id):
 @login_required
 def create_company(request):
     if request.method == 'POST':
-        print(request.POST)
         form = CompanyForm(request.POST)
         if form.is_valid():
             company = form.save(commit=False)
             company.entity = request.user.userprofile.entity
             company.save()
-            data = {'company_id': company.id,
-                    'company_name': company.name, }
+            data = {
+                'success': True,
+                'message': "Company created successfully",
+            }
             return JsonResponse(data)
         else:
-            print(form.errors)
-            return JsonResponse({'errors': form.errors}, status=400)
+            errors_html = {field: '\n'.join(errors)
+                           for field, errors in form.errors.items()}
+            data = {'success': False, 'errors_html': errors_html,
+                    'message': "Error submitting company"}
+            return JsonResponse(data, status=400)
     else:
         form = CompanyForm()
         return render(request, 'company_create_form.html', {'form': form})

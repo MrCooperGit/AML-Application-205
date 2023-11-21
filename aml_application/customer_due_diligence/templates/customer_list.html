@@ -8,6 +8,7 @@
     <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="{% static 'login.css' %}" rel="stylesheet" />
+    <script src="{% static 'cdd_scripts.js' %}"></script>
   </head>
   <body>
     <section class="pb-2 home-body">
@@ -35,7 +36,13 @@
                     <ul>
                       {% for customer in customers %}
                       <li>
-                        <a href="{% url 'cdd:update_customer' customer.id %}">{{ customer.full_name }}</a>
+                        <a
+                          href="#{{ customer.full_name|slugify }}"
+                          class="text-decoration-none"
+                          onclick="openTabAndSave('{{ customer.full_name }}', this, '{% url 'cdd:update_customer' customer.id %}')"
+                        >
+                          {{ customer.full_name }}
+                        </a>
                       </li>
                       {% endfor %}
                     </ul>

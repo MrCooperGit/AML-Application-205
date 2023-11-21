@@ -31,7 +31,7 @@
 
                     <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">New Customer</p>
 
-                    <form data-page="New Customer" class="mx-1 mx-md-4 mt-3" method="post" action="{% url 'cdd:register' %}">
+                    <form id="newCustomerForm" data-page="New Customer" class="mx-1 mx-md-4 mt-3" method="post" action="">
                       {% csrf_token %}
 
                       <div class="d-flex flex-row input-group align-items-center mb-4">
@@ -186,21 +186,14 @@
                         >
                       </div>
 
-                      {% if form.errors %}
+                      <!-- Errors displayed dynamically -->
                       <div class="d-flex flex-row align-items-center mb-4">
-                        <ul class="list-unstyled">
-                          {% if form.non_field_errors %}
-                          <li class="alert alert-danger fade show" role="alert">
-                            <strong>Error:</strong>{{ form.non_field_errors }}
-                          </li>
-                          {% endif %}
-                          <li class="alert alert-danger fade show" role="alert">
-                            {% for field in form %} {% if field.errors %}
-                            <strong>{{ field.label }}:</strong>{{ field.errors }} {% endif %}{% endfor %}
-                          </li>
-                        </ul>
+                        <ul class="list-unstyled error-list"></ul>
                       </div>
-                      {% endif %}
+                      <!-- Success displayed dynamically -->
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <ul class="list-unstyled success-list"></ul>
+                      </div>
 
                       <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                         <button type="submit" class="btn btn-lg" style="background-color: #0085ff">Submit</button>
@@ -225,7 +218,7 @@
           </div>
           <div class="modal-body">
             <!-- Add your form for creating a new company here -->
-            <form id="companyCreateForm" method="post" action="{% url 'cdd:create_company_view' %}">
+            <form id="companyCreateForm" method="post" action="">
               {% csrf_token %}
               <div class="d-flex flex-row input-group align-items-center mb-4">
                 <input
@@ -258,16 +251,22 @@
                   value="{% if form.address.value %}{{ form.address.value }}{% endif %}"
                 />
               </div>
-              {% if form.errors %}
               <div class="d-flex flex-row align-items-center mb-4">
-                <ul class="list-unstyled">
-                  <li class="alert alert-danger fade show" role="alert">
-                    {% for field in form %} {% if field.errors %}
-                    <strong>{{ field.label }}:</strong>{{ field.errors }} {% endif %}{% endfor %}
-                  </li>
-                </ul>
+                <div class="form-outline flex-fill mb-0 mt-2">
+                  {{ form.entity }}
+                  <label class="form-label">Select your Entity (debugging/marking only)</label>
+                </div>
+                <div id="id_entity-errors" class="text-danger"></div>
               </div>
-              {% endif %}
+
+              <!-- Errors displayed dynamically -->
+              <div class="d-flex flex-row align-items-center mb-4">
+                <ul class="list-unstyled error-list"></ul>
+              </div>
+              <!-- Success displayed dynamically -->
+              <div class="d-flex flex-row align-items-center mb-4">
+                <ul class="list-unstyled success-list"></ul>
+              </div>
 
               <button type="submit" class="btn btn-primary">Create Company</button>
             </form>
@@ -280,46 +279,135 @@
 
     <!-- AJAX Script for Form Submission -->
     <script>
-      if (typeof jQuery == "undefined") {
-        console.error("jQuery is not loaded!");
-      } else {
-        console.log("jQuery is loaded!");
-      }
+      // Add an event listener for the button click
+      $("#companyCreateForm").click(function () {
+        console.log("Button clicked!");
+        openCompanyModal();
+      });
 
       function openCompanyModal() {
         $("#companyModal").modal("show");
       }
-      console.log("Script loaded!");
+      console.log("Modal Script loaded!");
 
       $(document).ready(function () {
-        // Log form existence
-        console.log($("#companyCreateForm"));
-
-        // Add an event listener for the button click
-        $("#companyCreateForm").click(function () {
-          console.log("Button clicked!");
-          openCompanyModal();
-        });
-
-        $("#companyCreateForm").submit(function (e) {
+        $("#createCompanyForm").submit(function (e) {
+          // prevent from normal form behaviour
           e.preventDefault();
-          var form = $(this);
+          // serialize the form data
+          var serializedData = $(this).serialize();
           $.ajax({
-            type: form.attr("method"),
-            url: form.attr("action"),
-            data: form.serialize(),
-            success: function (data, textStatus, jqXHR) {
-              if (jqXHR.status === 200) {
-                // Handle success response
-                console.log("Success:", data);
+            type: "POST",
+            url: "cdd/create_company/",
+            data: serializedData,
+
+            success: function (response) {
+              $(".success-list").empty();
+
+              console.log(response.message);
+              // Append new success message to the list
+              $(".success-list").append(`<li class="alert alert-success fade show" role="alert">${response.message}</li>`);
+
+              setTimeout(function () {
+                // Hide and empty the success message after 5 seconds
+                $(".success-list").fadeOut().empty();
+              }, 3000);
+
+              // reset the form after successful submit
+              setTimeout(function () {
+                // Reset the form after 3 seconds
                 $("#companyModal").modal("hide");
-              } else {
-                console.log("Unexpected status code:", jqXHR.status);
-              }
+              }, 3000);
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-              // Handle the error response
-              console.log("Error:", textStatus, errorThrown);
+            error: function (response) {
+              //console.log(response.responseJSON.errors_html);
+              //console.log(response.responseJSON.message);
+              //console.log(response.responseText);
+              //console.log(response);
+
+              // Clear existing error messages
+              $(".error-list").empty();
+
+              // Display error messages for each field
+              for (var field in response.responseJSON.errors_html) {
+                var errorMessage = response.responseJSON.errors_html[field];
+
+                // Create a new list item with the error message
+                var listItem = $("<li>", {
+                  class: "alert alert-danger fade show",
+                  role: "alert",
+                  text: errorMessage,
+                });
+
+                // Append the list item to the error list
+                $(".error-list").append(listItem);
+              }
+              setTimeout(function () {
+                // Hide and empty the success message after 5 seconds
+                $(".error-list").fadeOut().empty();
+              }, 5000);
+            },
+          });
+        });
+      });
+    </script>
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("#newCustomerForm").submit(function (e) {
+          // prevent from normal form behaviour
+          e.preventDefault();
+          // serialize the form data
+          var serializedData = $(this).serialize();
+          $.ajax({
+            type: "POST",
+            url: "/cdd/register/",
+            data: serializedData,
+            success: function (response) {
+              $(".success-list").empty();
+
+              console.log(response.message);
+              // Append new success message to the list
+              $(".success-list").append(`<li class="alert alert-success fade show" role="alert">${response.message}</li>`);
+
+              setTimeout(function () {
+                // Hide and empty the success message after 5 seconds
+                $(".success-list").fadeOut().empty();
+              }, 3000);
+
+              // reset the form after successful submit
+              setTimeout(function () {
+                // Reset the form after 3 seconds
+                $("#createCompanyForm")[0].reset();
+              }, 3000);
+            },
+            error: function (response) {
+              //console.log(response.responseJSON.errors_html);
+              //console.log(response.responseJSON.message);
+              //console.log(response.responseText);
+              //console.log(response);
+
+              // Clear existing error messages
+              $(".error-list").empty();
+
+              // Display error messages for each field
+              for (var field in response.responseJSON.errors_html) {
+                var errorMessage = response.responseJSON.errors_html[field];
+
+                // Create a new list item with the error message
+                var listItem = $("<li>", {
+                  class: "alert alert-danger fade show",
+                  role: "alert",
+                  text: errorMessage,
+                });
+
+                // Append the list item to the error list
+                $(".error-list").append(listItem);
+              }
+              setTimeout(function () {
+                // Hide and empty the success message after 5 seconds
+                $(".error-list").fadeOut().empty();
+              }, 5000);
             },
           });
         });
@@ -327,7 +415,8 @@
     </script>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
+      $(document).ready(function () {
+        //console.log("DOMContentLoaded");
         // Get references to elements
         var dropdownDirector = document.getElementById("companyDropdownDirector");
         var dropdownShareholder = document.getElementById("companyDropdownShareholder");

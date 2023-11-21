@@ -1,5 +1,171 @@
-<h2>Create New Company</h2>
-<form method="post" action="{% url 'cdd:create_company_view' %}">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit">Create Company</button>
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create Company</title>
+    <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="{% static 'login.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <section class="pb-2 home-body">
+      <div class="container mb-5">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-10 pt-5">
+            <div class="card text-black bg-light" style="border-radius: 25px">
+              <div class="card-body">
+                <div class="row justify-content-center">
+                  <div class="col-md-12 col-lg-10 col-xl-8 order-2 order-lg-1">
+                    {% if messages %}
+                    <ul class="messages list-unstyled">
+                      {% for message in messages %}
+                      <li class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Create Company</p>
+
+                    <form id="createCompanyForm" class="mx-1 mx-md-4 mt-3" method="post" action="">
+                      {% csrf_token %}
+
+                      <div class="d-flex flex-row input-group align-items-center mb-4">
+                        <input
+                          name="name"
+                          id="id_name"
+                          type="text"
+                          class="form-control"
+                          placeholder="Company name"
+                          required
+                          value="{% if form.name.value %}{{ form.name.value }}{% endif %}"
+                        />
+                        <div id="id_name-errors" class="text-danger"></div>
+                      </div>
+                      <div class="d-flex flex-row input-group align-items-center mb-4">
+                        <input
+                          name="company_registration_num"
+                          id="id_company_registration_num"
+                          type="number"
+                          class="form-control"
+                          placeholder="Company registration number"
+                          required
+                          value="{% if form.company_registration_num.value %}{{ form.company_registration_num.value }}{% endif %}"
+                        />
+                        <div id="id_company_registration_num-errors" class="text-danger"></div>
+                      </div>
+                      <div class="d-flex flex-row input-group align-items-center mb-4">
+                        <input
+                          name="address"
+                          id="id_address"
+                          type="text"
+                          class="form-control"
+                          placeholder="Company address"
+                          required
+                          value="{% if form.address.value %}{{ form.address.value }}{% endif %}"
+                        />
+                        <div id="id_address-errors" class="text-danger"></div>
+                      </div>
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <div class="form-outline flex-fill mb-0 mt-2">
+                          {{ form.entity }}
+                          <label class="form-label">Select your Entity (debugging/marking only)</label>
+                        </div>
+                        <div id="id_entity-errors" class="text-danger"></div>
+                      </div>
+
+                      <!-- Errors displayed dynamically -->
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <ul class="list-unstyled error-list"></ul>
+                      </div>
+                      <!-- Success displayed dynamically -->
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <ul class="list-unstyled success-list"></ul>
+                      </div>
+
+                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                        <button type="submit" class="btn btn-lg" style="background-color: #0085ff">Submit</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+      console.log("Scripts loaded");
+    </script>
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("#createCompanyForm").submit(function (e) {
+          // prevent from normal form behaviour
+          e.preventDefault();
+          // serialize the form data
+          var serializedData = $(this).serialize();
+          $.ajax({
+            type: "POST",
+            url: "create_company/",
+            data: serializedData,
+            success: function (response) {
+              $(".success-list").empty();
+
+              console.log(response.message);
+              // Append new success message to the list
+              $(".success-list").append(`<li class="alert alert-success fade show" role="alert">${response.message}</li>`);
+
+              setTimeout(function () {
+                // Hide and empty the success message after 5 seconds
+                $(".success-list").fadeOut().empty();
+              }, 3000);
+
+              // reset the form after successful submit
+              setTimeout(function () {
+                // Reset the form after 3 seconds
+                $("#createCompanyForm")[0].reset();
+              }, 3000);
+            },
+            error: function (response) {
+              //console.log(response.responseJSON.errors_html);
+              //console.log(response.responseJSON.message);
+              //console.log(response.responseText);
+              //console.log(response);
+
+              // Clear existing error messages
+              $(".error-list").empty();
+
+              // Display error messages for each field
+              for (var field in response.responseJSON.errors_html) {
+                var errorMessage = response.responseJSON.errors_html[field];
+
+                // Create a new list item with the error message
+                var listItem = $("<li>", {
+                  class: "alert alert-danger fade show",
+                  role: "alert",
+                  text: errorMessage,
+                });
+
+                // Append the list item to the error list
+                $(".error-list").append(listItem);
+              }
+              setTimeout(function () {
+                // Hide and empty the success message after 5 seconds
+                $(".error-list").fadeOut().empty();
+              }, 5000);
+            },
+          });
+        });
+      });
+    </script>
+    <script src="{% static 'bootstrap-5.3.2/js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
+  </body>
+</html>
