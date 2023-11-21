@@ -1,95 +1,120 @@
+{% extends 'cdd/base.html'%}
+<!---->
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AML APP</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/main.css' %}">
-</head>
-<!-- This page is the main page for the application, it consists of a sidebar with all the different forms on it, then when clicking on one of them, will create a new tab to the right of it. 
-This tab system shows all the active forms that are currently being filled out.  -->
-<body>
-    <div class="app-container d-flex flex-nowrap">
-        <nav class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark col-md-2">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <a class="logo">
-                    <h4 class="px-3b">AML <span> Solutions</span></h4>
-                  </a>
-            </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="{% url "cdd:register"  %}" class="nav-link text-white">
-                        Customer Due Diligence: Register
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://ui-avatars.com/api/?name={{ user.username|default:user.email}}&background=random&size=128" alt="" width="32" height="32" class="rounded-circle me-2">
-                    <strong>{{ user.username|default:user.email }}</strong>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    {% if user.is_superuser %}
-                    <li><a class="dropdown-item" rel="noreferrer noopener" target="_blank" href="{% url 'admin:index' %}">Admin Panel</a></li>
-                    {% endif %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
-                </ul>
-            </div>
-        </nav>
-        {% comment %} <main role="main" class="main-container col-md-10 ml-sm-auto">
-            <div class="">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                    <div class="tabs-container">
-                        <ul class="tabs nav">
-                            
-                            {% for tab in tabs %}
-                            <li class="nav-item {% if tab.is_active %}active{% endif %}">
-                                <a class="nav-link p-2 px-3" href="/landing/{{ tab.app_id.name }}">
-                                    <span class="tab-inner-text ms-1">
-                                        {{ tab.app_id.display_name }}
-                                        <span class="close-tab"><i data-delete-tab="/landing/tab/delete/{{tab.app_id.name}}" class="fa fa-times" aria-hidden="true"></i></span>
-                                    </span>
-                                </a>
-                            </li>
-                            {% endfor %}
-                            
-                        </ul>
-                    </div>
-                </div>
-                <section class="content p-4" style="background-color:white;">
-                    <div class="app-container">
-                        {% include app_template_name %}
-                    </div>
-                </section>
-            </div>
-        </main> {% endcomment %}
-    </div>
-    <script>
-    $(document).ready(function() {
-        $('.close-tab i').click(function(e) {
-            e.preventDefault();
-            var url = $(this).data('delete-tab');
-                $.ajax({
-                    url: url,
-                    success: function(data) {
-                        location.reload();
-                    }
-                })
-            })
-        })
-    </script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
-    ></script>
+    />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <title>AML Application</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href={% static "vendor/bootstrap/css/bootstrap.min.css"%} rel="stylesheet" />
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}" />
+    <link rel="stylesheet" href="{% static 'home.css' %}" />
+  </head>
+  <body>
+    {% block content %}
+    <div class="container">
+      <div class="row my-5 py-5">
+        <div class="col-lg-6 wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.25s">
+          <div class="section-heading">
+            <h2>AML/CFT <em>News </em> and <span> Updates</span></h2>
+          </div>
+        </div>
+        <div class="col-lg-6 wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.25s">
+          <div class="top-dec"></div>
+        </div>
+      </div>
+      <div class="row my-5">
+        <div class="col-lg-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.25s">
+          <div class="left-image">
+            <a href="#"> </a>
+            <div class="info">
+              <div class="inner-content">
+                <ul>
+                  <li><i class="fa fa-calendar"></i> 25 Oct 2023</li>
+                </ul>
+                <a href="#"><h4>Updates on changes to &amp; AML/CFT Act regulations</h4></a>
+
+                <p>https://www.dia.govt.nz/AML-CFT-Update-on-changes-to-AML-CFT-Act-regulations</p>
+                <div class="main-blue-button">
+                  <a href="#">Discover More</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.25s">
+          <div class="right-list">
+            <ul>
+              <li>
+                <div class="left-content align-self-center">
+                  <span><i class="fa fa-calendar"></i> 30 Sep 2023</span>
+                  <a href="#"><h4>List of Jurisdictions under &amp; Increased Monitoring</h4></a>
+                  <p>https://www.dia.govt.nz/AML-CFT-List-of-Jurisdictions-under-Increased-Monitoring</p>
+                </div>
+                <div class="right-image">
+                  <a href="#"></a>
+                </div>
+              </li>
+              <li>
+                <div class="left-content align-self-center">
+                  <span><i class="fa fa-calendar"></i> 27 Aug 2023</span>
+                  <a href="#"
+                    ><h4>
+                      Regulatory changes – Anti-Money Laundering & &amp; Countering Financing of Terrorism Act 2009
+                    </h4></a
+                  >
+                  <p>
+                    https://www.dia.govt.nz/AML-CFT-Regulatory-and-Legislative-Changes-Anti-Money-Laundering-and-Counter-Financing-of-Terrorism
+                  </p>
+                </div>
+                <div class="right-image">
+                  <a href="#"></a>
+                </div>
+              </li>
+              <li>
+                <div class="left-content align-self-center">
+                  <span><i class="fa fa-calendar"></i> 06 July 2023</span>
+                  <a href="#"><h4>Common areas of &amp; non-compliance</h4></a>
+                  <p>https://www.dia.govt.nz/AML-CFT-Common-areas-of-non-compliance</p>
+                </div>
+                <div class="right-image">
+                  <a href="#"></a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/owl-carousel.js"></script>
+    <script src="assets/js/animation.js"></script>
+    <script src="assets/js/imagesloaded.js"></script>
+    <script src="assets/js/templatemo-custom.js"></script>
   </body>
 </html>

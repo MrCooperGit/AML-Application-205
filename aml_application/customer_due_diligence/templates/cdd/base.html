@@ -7,36 +7,186 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}My Website{% endblock %}</title>
     <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="{% static 'bootstrap-5.3.2/js/bootstrap.min.js' %}"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="{% static 'bootstrap-5.3.2/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'cdd_scripts.js' %}"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="{% static 'login.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/main.css' %}" />
+    <style>
+      #sidebar {
+        min-height: 99vh;
+      }
+    </style>
   </head>
   <body>
     <div class="row">
-      <div class="col-2">
+      <div class="col-2 text-bg-dark full-height-container sidebar">
         <!-- Sidebar -->
-        <div class="nav flex-column nav-pills me-3" id="sidebar" aria-orientation="vertical">
+        <nav class="d-flex flex-column flex-shrink-0 p-3 col-md-2" id="sidebar">
           <!-- Sidebar content goes here -->
-          <ul role="tablist">
-            <li>
-              <a class="sidebar-link" href="#page1" onclick="openTabAndSave('Verify Customer', this, '{% url 'cdd:page1'%}')"
-                >Verify Customer</a
+          <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <a href="{% url 'landing_app:landing'%}" class="logo">
+              <h4 class="px-3b">AML <span> Solutions</span></h4>
+            </a>
+          </a>
+          <hr />
+
+          <ul class="nav nav-pills flex-column mb-auto" role="tablist">
+            <!-- Users Menu-->
+            <li class="dropdown mb-1">
+              <button
+                class="btn dropdown-toggle d-inline-flex align-items-center text-white rounded border-0"
+                data-bs-toggle="collapse"
+                data-bs-target="#users-collapse"
+                aria-expanded="false"
+                aria-controls="menu"
               >
+                Users
+              </button>
+              <div class="collapse" id="users-collapse" style="">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-4 small">
+                  <li class="nav-item">
+                    <a
+                      href="#new-user"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded nav-link text-white sidebar-link"
+                      onclick="openTabAndSave('New User', this, '{% url 'base_app:register-user'%}')"
+                      >New User</a
+                    >
+                  </li>
+                </ul>
+              </div>
             </li>
-            <li>
-              <a class="sidebar-link" href="#page2" onclick="openTabAndSave('Check Customer', this, '{% url 'cdd:page2'%}')"
-                >Check Customer</a
+            <!-- Users Menu end-->
+
+            <!-- Customer Menu-->
+            <li class="dropdown mb-1">
+              <button
+                class="btn dropdown-toggle d-inline-flex align-items-center text-white rounded border-0"
+                data-bs-toggle="collapse"
+                data-bs-target="#customers-collapse"
+                aria-expanded="false"
+                aria-controls="menu"
               >
+                Customers
+              </button>
+              <div class="collapse" id="customers-collapse" style="">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-4 small">
+                  <li class="nav-item">
+                    <a
+                      href="#customers"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded nav-link text-white sidebar-link"
+                      onclick="openTabAndSave('Customers', this, '{% url 'cdd:customer_list'%}')"
+                      >Customers</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      href="#new-customer"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded nav-link text-white sidebar-link"
+                      onclick="openTabAndSave('New Customer', this, '{% url 'cdd:register'%}')"
+                      >New Customer</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      href="#verify-customer"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded nav-link text-white sidebar-link"
+                      onclick="openTabAndSave('Verify Customer', this, '{% url 'cdd:verify'%}')"
+                      >Verify Customer</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      href="#create-company"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded nav-link text-white sidebar-link"
+                      onclick="openTabAndSave('Create Company', this, '{% url 'cdd:create_company_view'%}')"
+                      >Create Company</a
+                    >
+                  </li>
+                </ul>
+              </div>
             </li>
-            <li>
-              <a class="sidebar-link" href="#page3" onclick="openTabAndSave('New Customer', this, '{% url 'cdd:register'%}')"
-                >New Customer</a
+            <!-- Customer Menu end-->
+            <!-- Risk Assessment Menu-->
+            <li class="dropdown mb-1">
+              <button
+                class="btn dropdown-toggle d-inline-flex align-items-center text-white rounded border-0"
+                data-bs-toggle="collapse"
+                data-bs-target="#risk-assessment-collapse"
+                aria-expanded="false"
+                aria-controls="menu"
               >
-              <!-- Add more links as needed -->
+                Risk Assessment
+              </button>
+              <div class="collapse" id="risk-assessment-collapse" style="">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-4 small">
+                  <li class="nav-item">
+                    <a
+                      href="#home"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded nav-link text-white sidebar-link"
+                      onclick="openTabAndSave('Home', this, '{% url 'risk_assessment:home'%}')"
+                      >Home</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      href="#your-assessment"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded nav-link text-white sidebar-link"
+                      onclick="openTabAndSave('Your Assessment', this, '{% url 'risk_assessment:view'%}')"
+                      >Your Assessment</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      href="#new-assessment"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded nav-link text-white sidebar-link"
+                      onclick="openTabAndSave('New Assessment', this, '{% url 'risk_assessment:risk-assessment-view'%}')"
+                      >New Assessment</a
+                    >
+                  </li>
+                </ul>
+              </div>
             </li>
+
+            <!-- Risk Assessment Menu end-->
           </ul>
-        </div>
+          <hr />
+          <div class="dropdown">
+            <a
+              href="#"
+              class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img
+                src="https://ui-avatars.com/api/?name={{ user.username|default:user.email}}&background=random&size=128"
+                alt=""
+                width="32"
+                height="32"
+                class="rounded-circle me-2"
+              />
+              <strong>{{ user.username|default:user.email }}</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+              <li><a class="dropdown-item" href="#">Settings</a></li>
+              {% if user.is_superuser %}
+              <li>
+                <a class="dropdown-item" rel="noreferrer noopener" target="_blank" href="{% url 'admin:index' %}"
+                  >Admin Panel</a
+                >
+              </li>
+              {% endif %}
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+            </ul>
+          </div>
+        </nav>
       </div>
 
       <!-- Tabs -->
@@ -46,197 +196,8 @@
           <ul id="tabsList" class="nav nav-tabs" role="tablist"></ul>
         </div>
         <div class="row" id="contentContainer">{% block content %}{% endblock %}</div>
+        <div class="content"></div>
       </div>
     </div>
-
-    <script>
-      function openTab(pageName, url) {
-        console.log(`Opening tab: ${pageName}, URL: ${url}`);
-
-        // Check if the tab is already open
-        var existingTab = document.getElementById(`${pageName}-tab`);
-
-        // Replace spaces and parentheses with underscores
-        var validPageName = pageName.replace(/[ ()]/g, "_");
-
-        if (!existingTab) {
-          // Create a new tab
-          var tabLink = document.createElement("li");
-          tabLink.innerHTML = `
-            <a class="nav-link text-decoration-none" id="${validPageName}-tab" data-bs-toggle="pill" href="#${pageName}" onclick="loadContent('${pageName}', '${url}')">
-              ${pageName}
-              <button type="button" class="btn-close" aria-label="Close" onclick="closeTab('${pageName}')"></button>
-            </a>
-          `;
-          tabLink.classList.add("nav-item");
-          tabLink.id = `${pageName}-tab`;
-          document.getElementById("tabsList").appendChild(tabLink);
-
-          // Load content for the tab
-          loadContent(pageName, url);
-        } else {
-          // If the tab already exists, find a suitable name
-          var i = 2;
-          var modifiedPageName = `${pageName}-${i}`;
-          while (document.getElementById(`${modifiedPageName}-tab`)) {
-            i++;
-            modifiedPageName = `${pageName}-${i}`;
-          }
-          // Log the ID of the created tab
-          console.log(`Created tab with ID: ${modifiedPageName}-tab`);
-
-          // Create a new tab with the modified name
-          openTab(modifiedPageName, url);
-        }
-      }
-
-      function openTabAndSave(pageName, element, url) {
-        // Save form data for the current page
-        var currentPage = $(".sidebar-link.active").text().trim();
-        // Remove existinf data for current page
-        localStorage.removeItem(currentPage);
-        console.log("Current Page for save (sidebar):", currentPage);
-        saveFormData(currentPage);
-
-        // Remove 'active' class from all sidebar links
-        $(".sidebar-link").removeClass("active");
-
-        // Add 'active' class to the clicked link
-        $(element).addClass("active");
-        var classes = element.classList;
-
-        if (classes.contains("active")) {
-          console.log(element, "Element has the 'active' class");
-        } else {
-          console.log("Element does not have the 'active' class");
-        }
-
-        openTab(pageName, url);
-      }
-
-      // Function to save form data to localStorage
-      function saveFormData(pageName) {
-        var formData = {};
-
-        // Iterate through all form elements within the identified form
-        $(`form[data-page="${pageName}"] :input`).each(function () {
-          var element = $(this);
-          var fieldName = element.attr("name");
-
-          // Check if the field is a date field
-          if (element.attr("type") === "date") {
-            // Format the date field value to "yyyy-MM-dd"
-            var dateValue = element.val();
-            if (dateValue) {
-              formData[fieldName] = dateValue;
-            } else {
-              formData[fieldName] = null;
-            }
-          }
-        });
-
-        // Store the form data in localStorage
-        localStorage.setItem(pageName, JSON.stringify(formData));
-
-        // Log the saved data
-        console.log(`Saved data for ${pageName}:`, formData);
-
-        // Check if the data is actually stored in localStorage
-        var storedData = localStorage.getItem(pageName);
-        console.log(`Data stored in localStorage for ${pageName}:`, storedData);
-      }
-
-      // Function to load form data from localStorage
-      function loadFormData(pageName) {
-        // Retrieve the form data from localStorage
-        var storedData = localStorage.getItem(pageName);
-        console.log(`Attempting to load data for ${pageName}. Stored data:`, storedData);
-
-        if (storedData) {
-          // Parse the stored data and populate the form
-          var formData = JSON.parse(storedData);
-
-          // Log the loaded data
-          console.log(`Loaded data for ${pageName}:`, formData);
-
-          // Identify the form based on the data-page attribute
-          var formSelector = `form[data-page="${pageName}"]`;
-
-          // Iterate through all form elements
-          $(formSelector + " :input").each(function () {
-            var element = $(this);
-            var fieldName = element.attr("name");
-
-            // Update fieldName to match Django's naming convention
-            fieldName = "id_" + fieldName;
-
-            console.log("Element:", element);
-            console.log("Field Name:", fieldName);
-            console.log("Stored Value:", formData[fieldName]);
-            console.log("Element Value:", element.val());
-
-            if (fieldName && formData.hasOwnProperty(fieldName)) {
-              // Populate the field with the stored value
-              element.val(formData[fieldName]);
-            }
-          });
-        }
-      }
-
-      // Call saveFormData when leaving the tab
-      $(document).on("hide.bs.tab", ".nav-link", function () {
-        $(".sidebar-link").removeClass("active");
-        var currentPage = $(".active").text().trim();
-        console.log("Current Page for save:", currentPage);
-        saveFormData(currentPage);
-      });
-
-      // Call loadFormData when switching to a tab
-      $(document).on("shown.bs.tab", ".nav-link", function () {
-        var targetPage = $(this).text().trim();
-        loadFormData(targetPage);
-      });
-
-      function loadContent(pageName, url) {
-        // Fetch content using AJAX
-        $.get(url, function (data) {
-          // Insert the fetched content into the tab
-          var contentContainer = document.getElementById("contentContainer");
-          contentContainer.innerHTML = `<div id="${pageName}">${data}</div>`;
-        });
-      }
-
-      function closeTab(pageName) {
-        // Check if the tab and its content exist
-        var tabElement = document.getElementById(`${pageName}-tab`);
-        var contentElement = document.getElementById(`${pageName}`);
-
-        if (tabElement) {
-          // Remove the tab and its content
-          console.log(`Closing tab: ${pageName}`);
-          tabElement.remove();
-        } else {
-          console.log(`Tab not found for: ${pageName}`);
-        }
-
-        if (contentElement) {
-          // Remove the tab and its content
-          console.log(`Closing tab content: ${pageName}`);
-          contentElement.remove();
-        } else {
-          console.log(`Content not found for: ${pageName}`);
-        }
-
-        // Check if there are no more tabs
-        var remainingTabs = $("#tabsList li").length;
-        if (remainingTabs === 0) {
-          console.log("No more tabs. Redirecting to /cdd/");
-          // Set the URL back to /cdd/
-          window.location.href = "/cdd/";
-        } else {
-          console.log(`Tabs still open. Remaining tabs: ${remainingTabs}`);
-        }
-      }
-    </script>
   </body>
 </html>

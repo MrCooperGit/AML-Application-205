@@ -47,7 +47,7 @@ def custom_login_view(request):
                 if next_url:
                     return redirect(next_url)
                 else:
-                    return redirect('base_app:index')
+                    return redirect('landing_app:landing')
             else:
                 messages.error(
                     request, 'The username or password is incorrect')
