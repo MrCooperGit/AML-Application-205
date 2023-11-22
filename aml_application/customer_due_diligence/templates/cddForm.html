@@ -8,6 +8,7 @@
     <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="{% static 'login.css' %}" rel="stylesheet" />
+    <script src="{% static 'cdd_scripts.js' %}"></script>
   </head>
   <body>
     <section class="pb-2 home-body">
@@ -275,23 +276,44 @@
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" type="text/javascript"></script>
 
     <!-- AJAX Script for Form Submission -->
-    <script>
-      // Add an event listener for the button click
-      $("#companyCreateForm").click(function () {
-        console.log("Button clicked!");
-        openCompanyModal();
-      });
-
+    <script type="text/javascript">
       function openCompanyModal() {
         $("#companyModal").modal("show");
+        console.log("Modal Script loaded!");
       }
-      console.log("Modal Script loaded!");
+    </script>
 
+    <script type="text/javascript">
       $(document).ready(function () {
+        console.log("Dropdown Director/Shareholder script");
+        // Get references to elements
+        var dropdownDirector = document.getElementById("companyDropdownDirector");
+        var dropdownShareholder = document.getElementById("companyDropdownShareholder");
+        var isDirectorYes = document.getElementById("id_is_director_yes");
+        var isShareholderYes = document.getElementById("id_is_shareholder_yes");
+
+        // Function to update dropdown visibility
+        function updateDropdownVisibility() {
+          console.log("isDirectorYes checked:", isDirectorYes.checked);
+          console.log("isShareholderYes checked:", isShareholderYes.checked);
+
+          // Use Bootstrap utility classes to control visibility
+          dropdownDirector.classList.toggle("d-none", !isDirectorYes.checked);
+          dropdownShareholder.classList.toggle("d-none", !isShareholderYes.checked);
+        }
+
+        // Set initial state on page load
+        updateDropdownVisibility();
+
+        // Add event listeners
+        isDirectorYes.addEventListener("change", updateDropdownVisibility);
+        isShareholderYes.addEventListener("change", updateDropdownVisibility);
+
         $("#createCompanyForm").submit(function (e) {
+          console.log("Script for create company form");
           // prevent from normal form behaviour
           e.preventDefault();
           // serialize the form data
@@ -329,116 +351,75 @@
               $(".error-list").empty();
 
               // Display error messages for each field
+              // Iterate over error messages and create list items
               for (var field in response.responseJSON.errors_html) {
                 var errorMessage = response.responseJSON.errors_html[field];
-
-                // Create a new list item with the error message
-                var listItem = $("<li>", {
-                  class: "alert alert-danger fade show",
-                  role: "alert",
-                  text: errorMessage,
-                });
+                var listItem = createErrorListItem(errorMessage);
 
                 // Append the list item to the error list
                 $(".error-list").append(listItem);
               }
-              setTimeout(function () {
-                // Hide and empty the success message after 5 seconds
-                $(".error-list").fadeOut().empty();
-              }, 5000);
             },
           });
         });
       });
-    </script>
 
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $("#newCustomerForm").submit(function (e) {
-          // prevent from normal form behaviour
-          e.preventDefault();
-          // serialize the form data
-          var serializedData = $(this).serialize();
-          $.ajax({
-            type: "POST",
-            url: "/cdd/register/",
-            data: serializedData,
-            success: function (response) {
-              $(".success-list").empty();
+      $("#newCustomerForm").submit(function (e) {
+        console.log("Script for new customer form");
+        // prevent from normal form behaviour
+        e.preventDefault();
+        // serialize the form data
+        var serializedData = $(this).serialize();
+        // Check if is_director and is_shareholder are both 'No'
+        var isDirector = $("#id_is_director_no").val();
+        var isShareholder = $("#id_is_shareholder_no").val();
 
-              console.log(response.message);
-              // Append new success message to the list
-              $(".success-list").append(`<li class="alert alert-success fade show" role="alert">${response.message}</li>`);
-
-              setTimeout(function () {
-                // Hide and empty the success message after 5 seconds
-                $(".success-list").fadeOut().empty();
-              }, 3000);
-
-              // reset the form after successful submit
-              setTimeout(function () {
-                // Reset the form after 3 seconds
-                $("#createCompanyForm")[0].reset();
-              }, 3000);
-            },
-            error: function (response) {
-              //console.log(response.responseJSON.errors_html);
-              //console.log(response.responseJSON.message);
-              //console.log(response.responseText);
-              //console.log(response);
-
-              // Clear existing error messages
-              $(".error-list").empty();
-
-              // Display error messages for each field
-              for (var field in response.responseJSON.errors_html) {
-                var errorMessage = response.responseJSON.errors_html[field];
-
-                // Create a new list item with the error message
-                var listItem = $("<li>", {
-                  class: "alert alert-danger fade show",
-                  role: "alert",
-                  text: errorMessage,
-                });
-
-                // Append the list item to the error list
-                $(".error-list").append(listItem);
-              }
-              setTimeout(function () {
-                // Hide and empty the success message after 5 seconds
-                $(".error-list").fadeOut().empty();
-              }, 5000);
-            },
-          });
-        });
-      });
-    </script>
-
-    <script>
-      $(document).ready(function () {
-        //console.log("DOMContentLoaded");
-        // Get references to elements
-        var dropdownDirector = document.getElementById("companyDropdownDirector");
-        var dropdownShareholder = document.getElementById("companyDropdownShareholder");
-        var isDirectorYes = document.getElementById("id_is_director_yes");
-        var isShareholderYes = document.getElementById("id_is_shareholder_yes");
-
-        // Function to update dropdown visibility
-        function updateDropdownVisibility() {
-          console.log("isDirectorYes checked:", isDirectorYes.checked);
-          console.log("isShareholderYes checked:", isShareholderYes.checked);
-
-          // Use Bootstrap utility classes to control visibility
-          dropdownDirector.classList.toggle("d-none", !isDirectorYes.checked);
-          dropdownShareholder.classList.toggle("d-none", !isShareholderYes.checked);
+        if (isDirector === "No" && isShareholder === "No") {
+          // Exclude the 'company' field from serialized data
+          serializedData = $(this).find(':input[name][name!="company"]').serialize();
         }
+        $.ajax({
+          type: "POST",
+          url: "/cdd/register/",
+          data: serializedData,
+          success: function (response) {
+            $(".success-list").empty();
 
-        // Set initial state on page load
-        updateDropdownVisibility();
+            console.log(response.message);
+            // Append new success message to the list
+            $(".success-list").append(`<li class="alert alert-success fade show" role="alert">${response.message}</li>`);
 
-        // Add event listeners
-        isDirectorYes.addEventListener("change", updateDropdownVisibility);
-        isShareholderYes.addEventListener("change", updateDropdownVisibility);
+            setTimeout(function () {
+              // Hide and empty the success message after 5 seconds
+              $(".success-list").fadeOut().empty();
+            }, 3000);
+
+            // reset the form after successful submit
+            setTimeout(function () {
+              // Reset the form after 3 seconds
+              $("#createCompanyForm")[0].reset();
+            }, 3000);
+          },
+          error: function (response) {
+            //console.log(response.responseJSON.errors_html);
+            //console.log(response.responseJSON.message);
+            //console.log(response.responseText);
+            console.log(response);
+
+            // Clear existing error messages
+            $(".error-list").empty();
+
+            // Display error messages for each field
+            // Iterate over error messages and create list items
+            for (var field in response.responseJSON.errors_html) {
+              var errorMessage = response.responseJSON.errors_html[field];
+              var listItem = createErrorListItem(errorMessage);
+
+              // Append the list item to the error list
+              $(".error-list").append(listItem);
+            }
+          },
+        });
       });
     </script>
 

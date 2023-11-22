@@ -44,7 +44,7 @@ class CustomerDueDiligenceForm(forms.ModelForm):
         company = cleaned_data.get('company')
 
         # Check that if the customer is a director or shareholder, a company is selected
-        if (is_director or is_shareholder) and not company:
+        if (is_director == 'Yes' or is_shareholder == 'Yes') and not company:
             raise forms.ValidationError(
                 'Please select a company for the director or shareholder.')
 

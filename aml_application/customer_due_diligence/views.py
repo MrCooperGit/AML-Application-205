@@ -16,30 +16,40 @@ def customer_due_diligence_view(request):
     if request.method == 'POST':
         form = CustomerDueDiligenceForm(
             request.POST, company_choices=companies)
-        # print(form)
+        print(form)
         if form.is_valid():
             customer = form.save(commit=False)
             customer.entity = request.user.userprofile.entity
-            customer.company = form.cleaned_data['company']
+            if form.cleaned_data['is_director'] == 'Yes' or form.cleaned_data['is_shareholder'] == 'Yes':
+                # Set customer.company if condition is met
+                customer.company = form.cleaned_data['company']
+            else:
+                # Clear customer.company if condition is not met
+                customer.company = None
 
             full_name = form.cleaned_data['full_name']
             date_of_birth = form.cleaned_data['date_of_birth']
             email = form.cleaned_data['email']
 
             if Customer.objects.filter(full_name=full_name, date_of_birth=date_of_birth).exists():
-                messages.error(
-                    request, 'A customer with that full name and date of birth already exists')
+                data = {'success': False,
+                        'message': "A customer with matching name and date of birth already exists."}
+                return JsonResponse(data, status=400)
             elif Customer.objects.filter(email=email,).exists():
-                messages.error(
-                    request, 'A customer with that email already exists')
+                data = {'success': False,
+                        'message': "A customer with that email already exists."}
+                return JsonResponse(data, status=400)
             else:
                 customer.save(update_verification_times=True)
-
+                data = {
+                    'success': True,
+                    'message': "Customer created successfully",
+                }
                 # Check if the customer is a director or shareholder
-                if form.cleaned_data['is_director'] or form.cleaned_data['is_shareholder']:
+                if form.cleaned_data['is_director'] == 'Yes' or form.cleaned_data['is_shareholder'] == 'Yes':
                     company = customer.company
 
-                    if form.cleaned_data['is_director']:
+                    if form.cleaned_data['is_director'] == 'Yes':
                         director = Director(
                             entity=request.user.userprofile.entity,
                             customer=customer,
@@ -47,21 +57,27 @@ def customer_due_diligence_view(request):
                         )
                         director.save()
 
-                    if form.cleaned_data['is_shareholder']:
+                    if form.cleaned_data['is_shareholder'] == 'Yes':
                         shareholder = Shareholder(
                             entity=request.user.userprofile.entity,
                             customer=customer,
                             company=company
                         )
                         shareholder.save()
-                messages.success(request, 'Customer added successfully')
-                return redirect('cdd:register')
+                data = {
+                    'success': True,
+                    'message': "Company created successfully",
+                }
+                return JsonResponse(data)
         else:
-            return render(request, 'cddform.html', {'form': form, 'companies': companies, })
+            errors_html = {field: '\n'.join(errors)
+                           for field, errors in form.errors.items()}
+            data = {'success': False, 'errors_html': errors_html,
+                    }
+            return JsonResponse(data, status=400)
     else:
         form = CustomerDueDiligenceForm()
-
-    return render(request, 'cddform.html', {'form': form, 'companies': companies, })
+        return render(request, 'cddform.html', {'form': form, 'companies': companies, })
 
 
 @login_required
