@@ -8,7 +8,7 @@
     <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="{% static 'login.css' %}" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{% static 'cdd_scripts.js' %}"></script>
   </head>
   <body>
     <section class="pb-2 home-body">
@@ -90,16 +90,11 @@
                           value="{{ form.email.value}}"
                         />
                       </div>
+
                       <div class="d-flex flex-row mb-4">
                         <label>Is the Customer a director of any companies?</label>
                         <div class="form-check form-check-inline">
-                          <input
-                            class="form-check-input ms-2"
-                            type="radio"
-                            id="id_is_director_no"
-                            name="is_director"
-                            value="No"
-                          />
+                          <input class="form-check-input ms-2" type="radio" id="id_is_director_no" name="" value="No" />
                           <label class="form-check-label" for="id_is_director_no">No</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -107,7 +102,7 @@
                             class="form-check-input"
                             type="radio"
                             id="id_is_director_yes"
-                            name="is_director"
+                            name="is_director_yes"
                             value="Yes"
                           />
                           <label class="form-check-label" for="id_is_director_yes">Yes</label>
@@ -120,7 +115,7 @@
                             class="form-select"
                             aria-label="Default select example"
                             id="id_company_director"
-                            name="company"
+                            name="company_director"
                           >
                             <option selected>------</option>
                             {% for company in companies %}
@@ -134,15 +129,9 @@
                       </div>
 
                       <div class="d-flex flex-row mb-4">
-                        <label>Is the Customer a Shareholder of any companies?</label>
+                        <label>Is the Customer a shareholder of any companies?</label>
                         <div class="form-check form-check-inline">
-                          <input
-                            class="form-check-input ms-2"
-                            type="radio"
-                            id="id_is_shareholder_no"
-                            name="is_shareholder"
-                            value="No"
-                          />
+                          <input class="form-check-input ms-2" type="radio" id="id_is_shareholder_no" name="" value="No" />
                           <label class="form-check-label" for="id_is_shareholder_no">No</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -150,7 +139,7 @@
                             class="form-check-input"
                             type="radio"
                             id="id_is_shareholder_yes"
-                            name="is_shareholder"
+                            name="is_shareholder_yes"
                             value="Yes"
                           />
                           <label class="form-check-label" for="id_is_shareholder_yes">Yes</label>
@@ -163,7 +152,7 @@
                             class="form-select"
                             aria-label="Default select example"
                             id="id_company_shareholder"
-                            name="company"
+                            name="company_shareholder"
                           >
                             <option selected>------</option>
                             {% for company in companies %}
@@ -187,16 +176,14 @@
                         >
                       </div>
 
-                      {% if form.errors %}
+                      <!-- Errors displayed dynamically -->
                       <div class="d-flex flex-row align-items-center mb-4">
-                        <ul class="list-unstyled">
-                          <li class="alert alert-danger fade show" role="alert">
-                            {% for field in form %} {% if field.errors %}
-                            <strong>{{ field.label }}:</strong>{{ field.errors }} {% endif %}{% endfor %}
-                          </li>
-                        </ul>
+                        <ul class="list-unstyled error-list"></ul>
                       </div>
-                      {% endif %}
+                      <!-- Success displayed dynamically -->
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <ul class="list-unstyled success-list"></ul>
+                      </div>
 
                       <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                         <button type="submit" class="btn btn-lg" style="background-color: #0085ff">Submit</button>
@@ -209,117 +196,152 @@
           </div>
         </div>
       </div>
+      <!-- Pass customer data to be referenced in javascripts -->
+      <div id="customer-data" data-customer-id="{{ customer.id }}"></div>
     </section>
+    {% include 'modal_company.html'%}
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <!-- AJAX Script for Form Submission -->
-    <script>
+    <script type="text/javascript">
+      function openCompanyModal() {
+        $("#companyModal").modal("show");
+        console.log("Modal Script loaded!");
+      }
+    </script>
+
+    <script type="text/javascript">
       $(document).ready(function () {
-        function openCompanyModal() {
-          $("#companyModal").modal("show");
+        console.log("Dropdown Director/Shareholder script");
+        // Get references to elements
+        var dropdownDirector = document.getElementById("companyDropdownDirector");
+        var dropdownShareholder = document.getElementById("companyDropdownShareholder");
+        var isDirectorYes = document.getElementById("id_is_director_yes");
+        var isShareholderYes = document.getElementById("id_is_shareholder_yes");
+
+        // Function to update dropdown visibility
+        function updateDropdownVisibility() {
+          console.log("isDirectorYes checked:", isDirectorYes.checked);
+          console.log("isShareholderYes checked:", isShareholderYes.checked);
+
+          // Use Bootstrap utility classes to control visibility
+          dropdownDirector.classList.toggle("d-none", !isDirectorYes.checked);
+          dropdownShareholder.classList.toggle("d-none", !isShareholderYes.checked);
         }
-        console.log("Script loaded!");
 
-        $(document).ready(function () {
-          // Log form existence
-          console.log($("#companyCreateForm"));
+        // Set initial state on page load
+        updateDropdownVisibility();
 
-          // Add an event listener for the button click
-          $("#companyCreateForm").click(function () {
-            console.log("Button clicked!");
-            openCompanyModal();
-          });
+        // Add event listeners
+        isDirectorYes.addEventListener("change", updateDropdownVisibility);
+        isShareholderYes.addEventListener("change", updateDropdownVisibility);
 
-          $("#companyCreateForm").submit(function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-              type: form.attr("method"),
-              url: form.attr("action"),
-              data: form.serialize(),
-              success: function (data, textStatus, jqXHR) {
-                if (jqXHR.status === 200) {
-                  // Handle success response
-                  console.log("Success:", data);
-                  $("#companyModal").modal("hide");
-                } else {
-                  console.log("Unexpected status code:", jqXHR.status);
-                }
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                // Handle the error response
-                console.log("Error:", textStatus, errorThrown);
-              },
-            });
-          });
-        });
-      });
-    </script>
-
-    <script>
-      $(document).ready(function () {
-        document.addEventListener("DOMContentLoaded", function () {
-          // Get references to elements
-          var dropdownDirector = document.getElementById("companyDropdownDirector");
-          var dropdownShareholder = document.getElementById("companyDropdownShareholder");
-          var isDirectorYes = document.getElementById("id_is_director_yes");
-          var isShareholderYes = document.getElementById("id_is_shareholder_yes");
-
-          // Function to update dropdown visibility
-          function updateDropdownVisibility() {
-            console.log("isDirectorYes checked:", isDirectorYes.checked);
-            console.log("isShareholderYes checked:", isShareholderYes.checked);
-
-            // Use Bootstrap utility classes to control visibility
-            dropdownDirector.classList.toggle("d-none", !isDirectorYes.checked);
-            dropdownShareholder.classList.toggle("d-none", !isShareholderYes.checked);
-          }
-
-          // Set initial state on page load
-          updateDropdownVisibility();
-
-          // Add event listeners
-          isDirectorYes.addEventListener("change", updateDropdownVisibility);
-          isShareholderYes.addEventListener("change", updateDropdownVisibility);
-        });
-      });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-        // Intercept form submission and handle it with AJAX
-        $(document).on("submit", "#updateCustomerForm", function (e) {
+        $("#updateCustomerForm").submit(function (e) {
+          console.log("Script for update customer form");
+          // prevent from normal form behaviour
           e.preventDefault();
+          // serialize the form data
+          var serializedData = $(this).serialize();
+          var customerId = document.getElementById("customer-data").getAttribute("data-customer-id");
+          console.log("Customer ID: " + customerId);
 
-          // Serialize form data
-          var formData = $(this).serialize();
-
-          // Make AJAX request
           $.ajax({
             type: "POST",
-            url: window.location.href, // Use the current URL
-            data: formData,
-            success: function (data) {
-              // Handle success (data should contain a success property)
-              if (data.success) {
-                // Optionally, update the content on the page
-                console.log("Form submitted successfully");
-              } else {
-                console.error('Error submitting form:', data.errors);
-                // Handle form errors (display them to the user, for example)
-            }
-              }
+            url: "/cdd/update/" + customerId + "/",
+            data: serializedData,
+
+            success: function (response) {
+              $(".success-list").empty();
+
+              console.log(response.message);
+              // Append new success message to the list
+              $(".success-list").append(`<li class="alert alert-success fade show" role="alert">${response.message}</li>`);
+
+              setTimeout(function () {
+                // Hide and empty the success message after 5 seconds
+                $(".success-list").fadeOut().empty();
+              }, 3000);
+
+              // reset the form after successful submit
+              setTimeout(function () {
+                // Reset the form after 3 seconds
+                $("#companyModal").modal("hide");
+              }, 3000);
             },
-            error: function (xhr, status, error) {
-              // Handle errors (display form errors or other messages)
-              console.error('AJAX error:', error);
-              // Log the response to the console for more information
-              console.log("Response:", xhr.responseText);
+            error: function (response) {
+              //console.log(response.responseJSON.errors_html);
+              //console.log(response.responseJSON.message);
+              //console.log(response.responseText);
+              console.log(response);
+
+              // Clear existing error messages
+              $(".error-list").empty();
+
+              // Display error messages for each field
+              // Iterate over error messages and create list items
+              for (var field in response.responseJSON.errors_html) {
+                var errorMessage = response.responseJSON.errors_html[field];
+                var listItem = createErrorListItem(errorMessage);
+
+                // Append the list item to the error list
+                $(".error-list").append(listItem);
+              }
             },
           });
         });
       });
+
+      $("#createCompanyForm").submit(function (e) {
+        // prevent from normal form behaviour
+        e.preventDefault();
+        // serialize the form data
+        var serializedData = $(this).serialize();
+        $.ajax({
+          type: "POST",
+          url: "create_company/",
+          data: serializedData,
+          success: function (response) {
+            $(".success-list").empty();
+
+            console.log(response.message);
+            // Append new success message to the list
+            $(".success-list").append(`<li class="alert alert-success fade show" role="alert">${response.message}</li>`);
+
+            setTimeout(function () {
+              // Hide and empty the success message after 5 seconds
+              $(".success-list").fadeOut().empty();
+            }, 3000);
+
+            // reset the form after successful submit
+            setTimeout(function () {
+              // Reset the form after 3 seconds
+              $("#createCompanyForm")[0].reset();
+            }, 3000);
+          },
+          error: function (response) {
+            //console.log(response.responseJSON.errors_html);
+            //console.log(response.responseJSON.message);
+            //console.log(response.responseText);
+            //console.log(response);
+
+            // Clear existing error messages
+            $(".error-list").empty();
+
+            // Display error messages for each field
+            // Iterate over error messages and create list items
+            for (var field in response.responseJSON.errors_html) {
+              var errorMessage = response.responseJSON.errors_html[field];
+              var listItem = createErrorListItem(errorMessage);
+
+              // Append the list item to the error list
+              $(".error-list").append(listItem);
+            }
+          },
+        });
+      });
     </script>
+
     <script src="{% static 'bootstrap-5.3.2/js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
   </body>
 </html>

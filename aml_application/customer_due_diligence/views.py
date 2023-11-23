@@ -133,31 +133,64 @@ def customer_list_view(request):
 def update_customer_view(request, customer_id):
     # Retrieve the customer object using the customer_id
     customer = get_object_or_404(Customer, id=customer_id)
+    # set the companies to only those in the current entity
+    companies = Company.objects.filter(entity=request.user.userprofile.entity)
 
     if request.method == 'POST':
         # Create a form instance with the POST data and the instance of the customer to be updated
         form = CustomerDueDiligenceForm(request.POST, instance=customer)
+        # print(form)
 
         if form.is_valid():
             updated_customer = form.save(commit=False)
             # Ensure that the entity remains the same
             updated_customer.entity = request.user.userprofile.entity
-
-            # Perform any additional checks or validations if needed
+            if form.cleaned_data['is_director'] == 'Yes' or form.cleaned_data['is_shareholder'] == 'Yes':
+                # Set customer.company if condition is met
+                updated_customer.company = form.cleaned_data['company']
+            else:
+                # Clear customer.company if condition is not met
+                updated_customer.company = None
 
             updated_customer.save(update_verification_times=False)
-            messages.success(request, 'Customer details updated successfully')
+
+            # Check if the customer is a director or shareholder
+            if form.cleaned_data['is_director'] == 'Yes' or form.cleaned_data['is_shareholder'] == 'Yes':
+                company = customer.company
+
+                if form.cleaned_data['is_director'] == 'Yes':
+                    director = Director(
+                        entity=request.user.userprofile.entity,
+                        customer=customer,
+                        company=company
+                    )
+                    director.save()
+
+                if form.cleaned_data['is_shareholder'] == 'Yes':
+                    shareholder = Shareholder(
+                        entity=request.user.userprofile.entity,
+                        customer=customer,
+                        company=company
+                    )
+                    shareholder.save()
+
             # Return JSON response indicating successful update
-            return JsonResponse({'success': True})
+            data = {
+                'success': True,
+                'message': "Customer updated",
+            }
+            return JsonResponse(data)
         else:
             # Return JSON response with form errors
-            form_errors = form.errors.as_json()
-            return JsonResponse({'success': False, 'errors': form_errors}, status=400)
+            errors_html = {field: '\n'.join(errors)
+                           for field, errors in form.errors.items()}
+            data = {'success': False, 'errors_html': errors_html,
+                    }
+            return JsonResponse(data, status=400)
     else:
         # Create a form instance with the data from the existing customer
         form = CustomerDueDiligenceForm(instance=customer)
-
-    return render(request, 'update_customer.html', {'form': form, 'customer': customer})
+        return render(request, 'update_customer.html', {'form': form, 'customer': customer, 'companies': companies})
 
 
 @login_required
@@ -182,15 +215,3 @@ def create_company(request):
     else:
         form = CompanyForm()
         return render(request, 'company_create_form.html', {'form': form})
-
-
-def home_page_view(request):
-    return render(request, 'cdd/base.html')
-
-
-def page1_view(request):
-    return render(request, 'cdd/page1.html')
-
-
-def page2_view(request):
-    return render(request, 'cdd/page2.html')

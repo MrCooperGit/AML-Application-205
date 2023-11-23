@@ -177,23 +177,32 @@ function openTab(pageName, url) {
                         return existing.text === script.innerHTML;
                     });
 
-                    if (!existingScript) {
-                        console.log("Appending Script:", script);
-                        var scriptClone = document.createElement("script");
-                        scriptClone.type = script.type || "text/javascript";
-                        scriptClone.text = script.innerHTML;
-                        contentContainer.appendChild(scriptClone);
+                    // Colelct scripts without if statement below
+                    console.log("Appending Script:", script);
+                    var scriptClone = document.createElement("script");
+                    scriptClone.type = script.type || "text/javascript";
+                    scriptClone.text = script.innerHTML;
+                    contentContainer.appendChild(scriptClone);
+                    // Collect scripts for later execution
+                    scriptsToExecute.push(scriptClone);
 
-                        // Collect scripts for later execution
-                        scriptsToExecute.push(scriptClone);
-                    } else {
-                        console.log("Script already exists, skipping:", script);
-                    }
-                });
+                //     if (!existingScript) {
+                //         console.log("Appending Script:", script);
+                //         var scriptClone = document.createElement("script");
+                //         scriptClone.type = script.type || "text/javascript";
+                //         scriptClone.text = script.innerHTML;
+                //         contentContainer.appendChild(scriptClone);
+
+                //         // Collect scripts for later execution
+                //         scriptsToExecute.push(scriptClone);
+                //     } else {
+                //         console.log("Script already exists, skipping:", script);
+                //     }
+                 });
 
                 // Manually execute all the collected scripts
-                scriptsToExecute.forEach(function (script) {
-                    eval(script.text);
+                  scriptsToExecute.forEach(function (script) {
+                      eval(script.text);
                 });
             }
         } else {

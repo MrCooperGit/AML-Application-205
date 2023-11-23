@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from dal import autocomplete
@@ -23,10 +24,6 @@ def aboutus(request):
 
 def contactus(request):
     return render(request, 'contactus.html')
-
-
-def index(request):
-    return render(request, 'index.html')
 
 
 def custom_login_view(request):
@@ -88,9 +85,17 @@ def register_user(request):
             user = form.save(commit=False)
             user.entity = request.user.userprofile.entity
             user = form.save()
-            messages.success(
-                request, f"{user.first_name.capitalize()} {user.last_name.capitalize()}'s account created successfully")
+            data = {
+                'success': True,
+                'message': "User created successfully",
+            }
+            return JsonResponse(data)
+        else:
+            errors_html = {field: '\n'.join(errors)
+                           for field, errors in form.errors.items()}
+            data = {'success': False, 'errors_html': errors_html,
+                    'message': "Error creating user"}
+            return JsonResponse(data, status=400)
     else:
         form = CustomUserCreationForm()
-
-    return render(request, 'register_user.html', {'form': form})
+        return render(request, 'register_user.html', {'form': form})

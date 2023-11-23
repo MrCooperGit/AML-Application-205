@@ -32,21 +32,26 @@ class CustomerDueDiligenceForm(forms.ModelForm):
         empty_label=None,
         required=False
     )
-    is_director = forms.ChoiceField(choices=YES_NO_CHOICES,)
-    is_shareholder = forms.ChoiceField(choices=YES_NO_CHOICES,)
-    company = forms.ModelChoiceField(
-        queryset=Company.objects.none(), required=False)
+    is_director = forms.ChoiceField(choices=YES_NO_CHOICES, required=False)
+    is_shareholder = forms.ChoiceField(choices=YES_NO_CHOICES, required=False)
+    company_director = forms.ModelChoiceField(
+        queryset=Company.objects.all(), required=False)
+    company_shareholder = forms.ModelChoiceField(
+        queryset=Company.objects.all(), required=False)
 
     def clean(self):
         cleaned_data = super().clean()
-        is_director = cleaned_data.get('is_director')
-        is_shareholder = cleaned_data.get('is_shareholder')
-        company = cleaned_data.get('company')
+        is_director = cleaned_data.get('is_director_yes')
+        is_shareholder = cleaned_data.get('is_shareholder_yes')
+        company_director = cleaned_data.get('company_director')
+        company_shareholder = cleaned_data.get('company_shareholder')
 
         # Check that if the customer is a director or shareholder, a company is selected
-        if (is_director == 'Yes' or is_shareholder == 'Yes') and not company:
+        if (is_director == 'Yes' or is_shareholder == 'Yes') and not company_director and not company_shareholder:
             raise forms.ValidationError(
                 'Please select a company for the director or shareholder.')
+        print("Is director:", is_director, " Is shareholder:",
+              is_shareholder, " Company_director:", company_director, " Company_shareholder:", company_shareholder)
 
         return cleaned_data
 

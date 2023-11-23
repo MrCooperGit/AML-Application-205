@@ -148,13 +148,72 @@ function openTab(pageName, url) {
   function loadContent(pageName, url) {
     // Fetch content using AJAX
     $.get(url, function (data) {
-      // Insert the fetched content into the tab
-      var contentContainer = document.getElementById("contentContainer");
-      contentContainer.innerHTML = `<div id="${pageName}">${data}</div>`;
+      //console.log("Fetched Data:", data);
+  
+      // Extract content within the body tags
+      var bodyContent = data.match(/<body[^>]*>[\s\S]*<\/body>/gi);
+      var bodyElement = document.createElement("div");
+      bodyElement.innerHTML = bodyContent ? bodyContent[0] : data;
+  
+      //console.log("Body Element:", bodyElement);
+  
+      // Check if there are scripts in the body
+        var scriptsToExecute = [];
+        if (bodyElement) {
+            // Insert the fetched content into the tab
+            var contentContainer = document.getElementById("contentContainer");
+            contentContainer.innerHTML = `<div id="${pageName}">${bodyElement.innerHTML}</div>`;
+
+            // Append scripts to the contentContainer
+            var bodyScripts = bodyElement.querySelectorAll("script");
+            console.log("Page Name:", pageName);
+            console.log("URL:", url);
+            console.log("Body Scripts:", bodyScripts);
+
+            if (bodyScripts.length > 0) {
+                bodyScripts.forEach(function (script) {
+                    // Check if a script with the same content already exists
+                    var existingScript = Array.from(document.querySelectorAll("script")).find(function (existing) {
+                        return existing.text === script.innerHTML;
+                    });
+
+                    // Colelct scripts without if statement below
+                    console.log("Appending Script:", script);
+                    var scriptClone = document.createElement("script");
+                    scriptClone.type = script.type || "text/javascript";
+                    scriptClone.text = script.innerHTML;
+                    contentContainer.appendChild(scriptClone);
+                    // Collect scripts for later execution
+                    scriptsToExecute.push(scriptClone);
+
+                //     if (!existingScript) {
+                //         console.log("Appending Script:", script);
+                //         var scriptClone = document.createElement("script");
+                //         scriptClone.type = script.type || "text/javascript";
+                //         scriptClone.text = script.innerHTML;
+                //         contentContainer.appendChild(scriptClone);
+
+                //         // Collect scripts for later execution
+                //         scriptsToExecute.push(scriptClone);
+                //     } else {
+                //         console.log("Script already exists, skipping:", script);
+                //     }
+                 });
+
+                // Manually execute all the collected scripts
+                  scriptsToExecute.forEach(function (script) {
+                      eval(script.text);
+                });
+            }
+        } else {
+            console.error("No body element found in the fetched content.");
+        }
+
     });
   }
-  
-  function closeTab(pageName) {
+          
+
+    function closeTab(pageName) {
     // Check if the tab and its content exist
     var tabElement = document.getElementById(`${pageName}-tab`);
     var contentElement = document.getElementById(`${pageName}`);
@@ -178,9 +237,9 @@ function openTab(pageName, url) {
     // Check if there are no more tabs
     var remainingTabs = $("#tabsList li").length;
     if (remainingTabs === 0) {
-      console.log("No more tabs. Redirecting to /cdd/");
+      console.log("No more tabs. Redirecting to /landing");
       // Set the URL back to /cdd/
-      window.location.href = "/cdd/";
+      window.location.href = "/landing";
     } else {
       console.log(`Tabs still open. Remaining tabs: ${remainingTabs}`);
     }
@@ -192,4 +251,24 @@ function openInNewTabButton() {
     console.log("click activated");
     window.open(pdfUrl, "_blank");
 };
+
+// Function to create an error list item with a close button
+function createErrorListItem(errorMessage) {
+    console.log("createErrorListItem");
+    // Create the close button
+    var closeButton = $("<button>", {
+      type: "button",
+      class: "btn-close",
+      "data-bs-dismiss": "alert",
+      "aria-label": "Close",
+    });
   
+    // Create the list item with the error message and close button
+    var listItem = $("<li>", {
+      class: "alert alert-danger fade show",
+      role: "alert",
+      text: errorMessage,
+    }).append(closeButton);
+  
+    return listItem;
+  }
