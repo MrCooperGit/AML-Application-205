@@ -23,10 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-_pk@g@7txt=u&1zlt&#o^4!(ar^q7spe_r+cd-9+e9!c#ghp&#'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+if 'PYTHONPATH' in os.environ:
+    # Production settings
+    DEBUG = False
+    
+    ALLOWED_HOSTS = ['.ap-southeast-2.elasticbeanstalk.com']
+    
+else:
+    # Development settings    
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = True
+    ALLOWED_HOSTS = []
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 # Message bootstrap
@@ -41,8 +48,6 @@ MESSAGE_TEMPLATE = os.path.join(
     BASE_DIR, 'aml_application\\templates\custom_messages.html')
 # print(MESSAGE_TEMPLATE)
 
-CSRF_COOKIE_SECURE = True
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,10 +57,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',  # AWS S3
     'base_app',
     'customer_due_diligence',
     'risk_assessment',
     'landing_app',
+    'aml_application',
 
 ]
 
@@ -77,12 +84,7 @@ LOGIN_URL = 'base_app:login'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'base_app', 'templates'),
-            os.path.join(BASE_DIR, 'landing_app', 'templates'),
-            os.path.join(BASE_DIR, 'customer_due_diligence', 'templates'),
-            os.path.join(BASE_DIR, 'risk_assessment', 'templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'base_app/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,20 +103,34 @@ WSGI_APPLICATION = 'aml_application.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'aml_application',
-        'USER': 'postgres',
-        'PASSWORD': 'Adminadmin123',
-        'HOST': 'localhost',
-        'PORT': '5432',
-        # 'OPTIONS': {
-        #     'service': 'postgresql',
-        #     'passfile': '.my_pgpass',
-        # }
+if 'RDS_DB_NAME' in os.environ:
+    # Production settings
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
+else:
+    # Development settings
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'aml_application',
+            'USER': 'postgres',
+            'PASSWORD': 'Adminadmin123',
+            'HOST': 'localhost',
+            'PORT': '5432',
+            # 'OPTIONS': {
+            #     'service': 'postgresql',
+            #     'passfile': '.my_pgpass',
+            # }
+        }
+    }
 
 
 # Password validation
@@ -147,11 +163,28 @@ USE_I18N = True
 
 USE_TZ = True
 
+if 'S3_BUCKET' in os.environ:
+    # AWS Settings
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+    AWS_STORAGE_BUCKET_NAME = os.environ['S3_BUCKET']
+    AWS_S3_REGION_NAME = 'ap-southeast-2'
+    AWS_DEFAULT_ACL = None
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    
+    AWS_LOCATION = 'static'
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    STATIC_URL = '/static/'
+    
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = 'static/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'media/'
 
