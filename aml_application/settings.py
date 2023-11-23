@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_pk@g@7txt=u&1zlt&#o^4!(ar^q7spe_r+cd-9+e9!c#ghp&#
 
 if 'PYTHONPATH' in os.environ:
     # Production settings
-    DEBUG = True
+    DEBUG = False
     
     ALLOWED_HOSTS = ['.ap-southeast-2.elasticbeanstalk.com', '172.31.7.12']
     
