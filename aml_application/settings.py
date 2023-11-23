@@ -27,7 +27,7 @@ if 'PYTHONPATH' in os.environ:
     # Production settings
     DEBUG = False
     
-    ALLOWED_HOSTS = ['.ap-southeast-2.elasticbeanstalk.com', '172.31.7.12']
+    ALLOWED_HOSTS = ['.ap-southeast-2.elasticbeanstalk.com', '172.31.7.12', 'd57166yujx8fp.cloudfront.net']
     
 else:
     # Development settings    
