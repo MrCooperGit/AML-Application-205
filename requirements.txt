@@ -6,6 +6,6 @@ django-storages==1.13.2
 psycopg2-binary==2.9.5
 sqlparse==0.4.2
 tzdata==2022.1
-reportlab==4.0.5
 django-autocomplete-light==3.9.7
-xhtml2pdf==0.2.13
+xhtml2pdf==0.2.11
+Pillow==9.5.0
