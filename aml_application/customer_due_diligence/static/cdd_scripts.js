@@ -148,7 +148,7 @@ function openTab(pageName, url) {
   function loadContent(pageName, url) {
     // Fetch content using AJAX
     $.get(url, function (data) {
-      console.log("Fetched Data:", data);
+      //console.log("Fetched Data:", data);
   
       // Extract content within the body tags
       var bodyContent = data.match(/<body[^>]*>[\s\S]*<\/body>/gi);
@@ -158,37 +158,57 @@ function openTab(pageName, url) {
       //console.log("Body Element:", bodyElement);
   
       // Check if there are scripts in the body
-      if (bodyElement) {
-        // Insert the fetched content into the tab
-        var contentContainer = document.getElementById("contentContainer");
-        contentContainer.innerHTML = `<div id="${pageName}">${bodyElement.innerHTML}</div>`;
-  
-        // Append scripts to the contentContainer
-        var bodyScripts = bodyElement.querySelectorAll("script");
-        console.log("Page Name:", pageName);
-        console.log("URL:", url);
-        console.log("Body Scripts:", bodyScripts);
-  
         var scriptsToExecute = [];
-        if (bodyScripts.length > 0) {
-          bodyScripts.forEach(function (script) {
-            console.log("Appending Script:", script);
-            var scriptClone = document.createElement("script");
-            scriptClone.type = script.type || "text/javascript";
-            scriptClone.text = script.innerHTML;
-            contentContainer.appendChild(scriptClone);
-  
-          // Collect scripts for later execution
-          scriptsToExecute.push(scriptClone);
-          });
-        // Manually execute all the collected scripts
-        scriptsToExecute.forEach(function (script) {
-            eval(script.text);
-        });
+        if (bodyElement) {
+            // Insert the fetched content into the tab
+            var contentContainer = document.getElementById("contentContainer");
+            contentContainer.innerHTML = `<div id="${pageName}">${bodyElement.innerHTML}</div>`;
+
+            // Append scripts to the contentContainer
+            var bodyScripts = bodyElement.querySelectorAll("script");
+            console.log("Page Name:", pageName);
+            console.log("URL:", url);
+            console.log("Body Scripts:", bodyScripts);
+
+            if (bodyScripts.length > 0) {
+                bodyScripts.forEach(function (script) {
+                    // Check if a script with the same content already exists
+                    var existingScript = Array.from(document.querySelectorAll("script")).find(function (existing) {
+                        return existing.text === script.innerHTML;
+                    });
+
+                    // Colelct scripts without if statement below
+                    console.log("Appending Script:", script);
+                    var scriptClone = document.createElement("script");
+                    scriptClone.type = script.type || "text/javascript";
+                    scriptClone.text = script.innerHTML;
+                    contentContainer.appendChild(scriptClone);
+                    // Collect scripts for later execution
+                    scriptsToExecute.push(scriptClone);
+
+                //     if (!existingScript) {
+                //         console.log("Appending Script:", script);
+                //         var scriptClone = document.createElement("script");
+                //         scriptClone.type = script.type || "text/javascript";
+                //         scriptClone.text = script.innerHTML;
+                //         contentContainer.appendChild(scriptClone);
+
+                //         // Collect scripts for later execution
+                //         scriptsToExecute.push(scriptClone);
+                //     } else {
+                //         console.log("Script already exists, skipping:", script);
+                //     }
+                 });
+
+                // Manually execute all the collected scripts
+                  scriptsToExecute.forEach(function (script) {
+                      eval(script.text);
+                });
+            }
+        } else {
+            console.error("No body element found in the fetched content.");
         }
-      } else {
-        console.error("No body element found in the fetched content.");
-      }
+
     });
   }
           
@@ -231,3 +251,24 @@ function openInNewTabButton() {
     console.log("click activated");
     window.open(pdfUrl, "_blank");
 };
+
+// Function to create an error list item with a close button
+function createErrorListItem(errorMessage) {
+    console.log("createErrorListItem");
+    // Create the close button
+    var closeButton = $("<button>", {
+      type: "button",
+      class: "btn-close",
+      "data-bs-dismiss": "alert",
+      "aria-label": "Close",
+    });
+  
+    // Create the list item with the error message and close button
+    var listItem = $("<li>", {
+      class: "alert alert-danger fade show",
+      role: "alert",
+      text: errorMessage,
+    }).append(closeButton);
+  
+    return listItem;
+  }

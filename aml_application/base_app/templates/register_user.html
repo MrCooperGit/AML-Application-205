@@ -8,6 +8,7 @@
     <link href="{% static 'bootstrap-5.3.2/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="{% static 'login.css' %}" rel="stylesheet" />
+    <script src="{% static 'cdd_scripts.js' %}"></script>
   </head>
 
   <body>
@@ -19,24 +20,9 @@
               <div class="card-body">
                 <div class="row justify-content-center">
                   <div class="col-md-12 col-lg-10 col-xl-8 order-2 order-lg-1">
-                    {% if messages %}
-                    <ul class="messages list-unstyled">
-                      {% for message in messages %}
-                      <li class="alert {{message.tags}} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </li>
-                      {% endfor %}
-                    </ul>
-                    {% endif %}
-
                     <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">New User</p>
 
-                    <form
-                      class="mx-1 mx-md-4 needs-validation mt-3"
-                      method="post"
-                      action="{% url 'base_app:register-user' %}"
-                    >
+                    <form class="mx-1 mx-md-4 needs-validation mt-3" id="user-form" method="post" action="">
                       {% csrf_token %}
 
                       <div class="d-flex flex-row align-items-center mb-4">
@@ -87,16 +73,14 @@
                         </div>
                       </div>
 
-                      {% if form.errors %}
+                      <!-- Errors displayed dynamically -->
                       <div class="d-flex flex-row align-items-center mb-4">
-                        <ul class="list-unstyled">
-                          <li class="alert alert-danger fade show" role="alert">
-                            {% for field in form %} {% if field.errors %}
-                            <strong>{{ field.label }}:</strong>{{ field.errors }} {% endif %}{% endfor %}
-                          </li>
-                        </ul>
+                        <ul class="list-unstyled error-list"></ul>
                       </div>
-                      {% endif %}
+                      <!-- Success displayed dynamically -->
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <ul class="list-unstyled success-list"></ul>
+                      </div>
 
                       <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                         <button type="submit" class="btn btn-lg" style="background-color: #0085ff">Submit</button>
@@ -110,7 +94,64 @@
         </div>
       </div>
     </section>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+    <script>
+      console.log("Scripts loaded");
+    </script>
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("#user-form").submit(function (e) {
+          // prevent from normal form behaviour
+          e.preventDefault();
+          // serialize the form data
+          var serializedData = $(this).serialize();
+          $.ajax({
+            type: "POST",
+            url: "/base/register-user/",
+            data: serializedData,
+            success: function (response) {
+              $(".success-list").empty();
+
+              console.log(response.message);
+              // Append new success message to the list
+              $(".success-list").append(`<li class="alert alert-success fade show" role="alert">${response.message}</li>`);
+
+              setTimeout(function () {
+                // Hide and empty the success message after 5 seconds
+                $(".success-list").fadeOut().empty();
+              }, 3000);
+
+              // reset the form after successful submit
+              setTimeout(function () {
+                // Reset the form after 3 seconds
+                $("#createCompanyForm")[0].reset();
+              }, 3000);
+            },
+            error: function (response) {
+              //console.log(response.responseJSON.errors_html);
+              //console.log(response.responseJSON.message);
+              //console.log(response.responseText);
+              //console.log(response);
+
+              // Clear existing error messages
+              $(".error-list").empty();
+
+              // Display error messages for each field
+              // Iterate over error messages and create list items
+              for (var field in response.responseJSON.errors_html) {
+                var errorMessage = response.responseJSON.errors_html[field];
+                var listItem = createErrorListItem(errorMessage);
+
+                // Append the list item to the error list
+                $(".error-list").append(listItem);
+              }
+            },
+          });
+        });
+      });
+    </script>
     <script src="{% static 'bootstrap-5.3.2/js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
   </body>
 </html>

@@ -62,27 +62,10 @@ class ShareholderInline(admin.TabularInline):
     extra = 0
 
 
-class ActiveSessionInline(admin.TabularInline):
-    model = Active_Session
-    extra = 0
-
-
 @admin.register(Entity)
 class EntityAdmin(admin.ModelAdmin):
     list_display = ('name',)
     exclude = ('users',)
     list_per_page = 20
     inlines = [RiskAssessmentInline, CompanyInline, DirectorInline,
-               ShareholderInline, ActiveSessionInline, CustomUserInline, UserProfileInline, CustomerInline]
-
-
-@admin.register(AvailableApps)
-class AvailableAppsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'display_name')
-    list_per_page = 20
-
-
-@admin.register(UserTab)
-class UserTabAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'app_id', 'is_active')
-    list_per_page = 20
+               ShareholderInline, CustomUserInline, UserProfileInline, CustomerInline]

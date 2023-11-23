@@ -13,14 +13,32 @@
     />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'home.css' %}" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="{% static 'login.css' %}" />
   </head>
 
   <body>
-    <section class="pb-2 home-body">
-      <div class="container mb-5">
+    <section class="row p-5">{% include "header.html"%}</section>
+    <section class="row p-5 home-body" style="background-color: black">
+      <div class="container">
         <div class="row d-flex justify-content-center align-items-center">
-          <div class="col-10 pt-5">
+          <div class="col-10">
             <div class="card text-black bg-light" style="border-radius: 25px">
               <div class="card-body">
                 <div class="row justify-content-center">
@@ -118,7 +136,7 @@
         </div>
       </div>
     </section>
-
+    <div class="row">{% include "footer.html"%}</div>
     <script>
       // JavaScript for disabling form submissions if there are invalid fields
       (() => {
