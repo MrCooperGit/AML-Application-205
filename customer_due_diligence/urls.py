@@ -16,7 +16,4 @@ urlpatterns = [
     path('create_company/', views.create_company,
          name='create_company_view'),
     # test paths for tabs
-    path('', views.home_page_view, name='home'),
-    path('page1', views.page1_view, name='page1'),
-    path('page2', views.page2_view, name='page2'),
 ]

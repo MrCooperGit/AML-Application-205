@@ -1,0 +1,35 @@
+<header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <nav class="main-nav">
+          <!-- ***** Logo Start ***** -->
+          <a class="logo">
+            <h4>AML <span> Solutions</span></h4>
+          </a>
+          <!-- ***** Logo End ***** -->
+          <!-- ***** Menu Start ***** -->
+          <ul class="nav">
+            <li class="scroll-to-section"><a href="{% url 'home' %}">Home</a></li>
+            <li class="scroll-to-section"><a href="{% url 'aboutus' %}">About Us</a></li>
+            <!-- <li class="scroll-to-section"><a href="#services">Services</a></li> -->
+            <!-- <li class="scroll-to-section"><a href="#portfolio">Portfolio</a></li> -->
+            <!-- <li class="scroll-to-section"><a href="#blog">Resources</a></li>  -->
+            <li class="scroll-to-section"><a href="{% url 'contactus' %}">Contact Us</a></li>
+            {% if user.is_authenticated %}
+            <li class="scroll-to-section"><a href="{% url 'landing_app:landing' %}">Dashboard</a></li>
+            <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li class="scroll-to-section"><a href="{% url 'base_app:login' %}">Login</a></li>
+            <li class="scroll-to-section"><a href="{% url 'base_app:register' %}">Sign Up</a></li>
+            {% endif %}
+          </ul>
+          <a class="menu-trigger">
+            <span>Menu</span>
+          </a>
+          <!-- ***** Menu End ***** -->
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>

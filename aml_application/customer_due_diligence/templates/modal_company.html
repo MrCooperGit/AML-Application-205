@@ -1,0 +1,66 @@
+<!-- Modal for Adding New Company -->
+<div class="modal fade" id="companyModal" tabindex="-1" aria-labelledby="companyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="companyModalLabel">Add New Company</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Add your form for creating a new company here -->
+        <form id="companyCreateForm" method="post" action="">
+          {% csrf_token %}
+          <div class="d-flex flex-row input-group align-items-center mb-4">
+            <input
+              name="name"
+              id="id_name"
+              type="text"
+              class="form-control"
+              placeholder="Company Name"
+              value="{% if form.name.value %}{{ form.name.value }}{% endif %}"
+            />
+          </div>
+          <div class="d-flex flex-row input-group align-items-center mb-4">
+            <!-- prettier-ignore -->
+            <input
+                    name="company_registration_num"
+                    id="id_company_registration_num"
+                    type="number"
+                    class="form-control"
+                    placeholder="Company Registration Number (NZBN)"
+                    value="{% if form.company_registration_num.value %}{{ form.company_registration_num.value }}{% endif %}"
+                  />
+          </div>
+          <div class="d-flex flex-row input-group align-items-center mb-4">
+            <input
+              name="address"
+              id="id_address"
+              type="text"
+              class="form-control"
+              placeholder="Company Address"
+              value="{% if form.address.value %}{{ form.address.value }}{% endif %}"
+            />
+          </div>
+          <div class="d-flex flex-row align-items-center mb-4">
+            <div class="form-outline flex-fill mb-0 mt-2">
+              {{ form.entity }}
+              <label class="form-label">Select your Entity (debugging/marking only)</label>
+            </div>
+            <div id="id_entity-errors" class="text-danger"></div>
+          </div>
+
+          <!-- Errors displayed dynamically -->
+          <div class="d-flex flex-row align-items-center mb-4">
+            <ul class="list-unstyled error-list"></ul>
+          </div>
+          <!-- Success displayed dynamically -->
+          <div class="d-flex flex-row align-items-center mb-4">
+            <ul class="list-unstyled success-list"></ul>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Create Company</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
